@@ -1,5 +1,5 @@
 package area;
 
-public class normalArea {
+public class NormalArea {
 
 }
