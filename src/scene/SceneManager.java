@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 public class SceneManager {
 	
 	private static Stage primaryStage;
-	private static final int SCENE_WIDTH = 900;
+	private static final int SCENE_WIDTH = 800;
 	private static final int SCENE_HEIGHT = 600;
 	private static Welcome welcome = new Welcome();
 	
