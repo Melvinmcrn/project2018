@@ -12,14 +12,14 @@ import javafx.scene.layout.VBox;
 public class Welcome extends VBox {
 
 	// private BaseButton playButton;
-	private Image bg_image = new Image(ClassLoader.getSystemResource("WelcomeBackground.png").toString());
-	private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 1024, 768);
-	private BackgroundImage bg = new BackgroundImage(bg_wimage, null, null, null, null);
+	//private Image bg_image = new Image(ClassLoader.getSystemResource("WelcomeBackground.png").toString());
+	//private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 1024, 768);
+	//private BackgroundImage bg = new BackgroundImage(bg_wimage, null, null, null, null);
 
 	public Welcome() {
 
 		this.setAlignment(Pos.CENTER);
-		this.setBackground(new Background(bg));
+		//this.setBackground(new Background(bg));
 		//Canvas canvas = new Canvas(300, 300);
 		//GraphicsContext gc = canvas.getGraphicsContext2D();
 
