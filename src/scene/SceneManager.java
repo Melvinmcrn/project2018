@@ -20,6 +20,7 @@ public class SceneManager {
 	public static void gotoScene(String scene) {
 		
 		if(scene.equals("Welcome")) {
+			System.out.print("WELCOME");
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		}

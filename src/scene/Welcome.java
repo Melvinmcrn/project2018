@@ -20,10 +20,10 @@ public class Welcome extends VBox {
 
 		this.setAlignment(Pos.CENTER);
 		this.setBackground(new Background(bg));
-		Canvas canvas = new Canvas(300, 300);
-		GraphicsContext gc = canvas.getGraphicsContext2D();
+		//Canvas canvas = new Canvas(300, 300);
+		//GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		VBox buttonBox = new VBox();
+		//VBox buttonBox = new VBox();
 		// playButton
 
 	}
