@@ -12,7 +12,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			SceneManager.initialize(primaryStage);
-			SceneManager.gotoScene("WelcomeScene");
+			SceneManager.gotoScene("Welcome");
 			primaryStage.setResizable(false);
 			primaryStage.setTitle("Farm Ruk Cafe");
 			primaryStage.centerOnScreen();
