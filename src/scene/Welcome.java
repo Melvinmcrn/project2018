@@ -15,8 +15,10 @@ import javafx.scene.layout.VBox;
 
 public class Welcome extends VBox {
 	
-	String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground2.jpg").toString();
+	private String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground2.jpg").toString();
 	private Image bg_image = new Image(bg_path);
+	private String logo_path = ClassLoader.getSystemResource("images/Logo.png").toString();
+	private Image logo = new Image(logo_path);
 	private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 800, 600);
 	private BackgroundSize bgSize = new BackgroundSize(800, 600, true, true, true, true);
 	private BackgroundImage bg = new BackgroundImage(bg_wimage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
@@ -26,15 +28,16 @@ public class Welcome extends VBox {
 		this.setAlignment(Pos.CENTER);
 		this.setBackground(new Background(bg));
 		
-		Canvas canvas = new Canvas(300, 300);
+		Canvas canvas = new Canvas(500, 300);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.drawImage(logo, 0, 0);
 
 		VBox buttonBox = new VBox();
 		MyButton playButton = new MyButton("Play");
 		MyButton highScoreButton = new MyButton("High Score");
 		MyButton exitButton = new MyButton("Exit");
 		buttonBox.setSpacing(25);
-		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
+		buttonBox.getChildren().addAll(canvas,playButton, highScoreButton, exitButton);
 		buttonBox.setAlignment(Pos.CENTER);
 
 		this.getChildren().add(buttonBox);
