@@ -15,23 +15,28 @@ import javafx.scene.layout.VBox;
 
 public class Welcome extends VBox {
 	
-	// private BaseButton playButton;
-	String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground.png").toString();
+	String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground2.jpg").toString();
 	private Image bg_image = new Image(bg_path);
-	BackgroundImage bg = new BackgroundImage(bg_image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, false));
-	//private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 800, 600);
-	//private BackgroundImage bg = new BackgroundImage(bg_wimage, null, null, null, null);
-
+	private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 800, 600);
+	private BackgroundSize bgSize = new BackgroundSize(800, 600, true, true, true, true);
+	private BackgroundImage bg = new BackgroundImage(bg_wimage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
+	
 	public Welcome() {
 		
 		this.setAlignment(Pos.CENTER);
 		this.setBackground(new Background(bg));
-		//Canvas canvas = new Canvas(300, 300);
-		//GraphicsContext gc = canvas.getGraphicsContext2D();
+		Canvas canvas = new Canvas(300, 300);
+		GraphicsContext gc = canvas.getGraphicsContext2D();
 
-		//VBox buttonBox = new VBox();
-		// playButton
-
+		VBox buttonBox = new VBox();
+		MyButton playButton = new MyButton("Play");
+		MyButton highScoreButton = new MyButton("High Score");
+		MyButton exitButton = new MyButton("Exit");
+		buttonBox.setSpacing(25);
+		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
+		buttonBox.setAlignment(Pos.CENTER);
+		
+		this.getChildren().add(buttonBox);
 	}
 
 }
