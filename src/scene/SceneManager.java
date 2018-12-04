@@ -10,10 +10,12 @@ public class SceneManager {
 	private static final int SCENE_HEIGHT = 600;
 	private static Welcome welcome = new Welcome();
 	private static HighScore highScore = new HighScore();
+	private static CharacterSelect characterSelecet = new CharacterSelect();
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
-
+	private status Scene characterSelectScene = new Scene(characterSelect, SCENE_WIDTH, SCENE_HEIGHT);
+	
 	public static void initialize(Stage stage) {
 		primaryStage = stage;
 		primaryStage.show();
@@ -25,8 +27,8 @@ public class SceneManager {
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		} else if (scene.equals("Play")) {
-			primaryStage.setScene(CharactorSelect);
-			primaryStage.show();
+			//primaryStage.setScene(CharactorSelect);
+			//primaryStage.show();
 		} else if (scene.equals("High Score")) {
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();

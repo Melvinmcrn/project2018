@@ -18,7 +18,7 @@ public class MyButton extends Canvas {
 	private Image buttonLogoGlow = new Image(ClassLoader.getSystemResource("images/WelcomeButtonGlow2.png").toString());
 	private static double width = 250;
 	private static double height = 80;
-	private Font TEXT_FONT = new Font("Cordier New", 25);
+	private Font TEXT_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 25);
 	private double TEXT_WIDTH;
 	private GraphicsContext gc = this.getGraphicsContext2D();
 
@@ -50,9 +50,9 @@ public class MyButton extends Canvas {
 		gc.clearRect(0, 0, width, height);
 		gc.drawImage(buttonLogoNormal, 0, 0, width, height);
 
-		gc.setFill(Color.WHITE);
+		gc.setFill(Color.rgb(251, 205, 109));
 		gc.setFont(TEXT_FONT);
-		gc.fillText(text, (width - TEXT_WIDTH) / 2, height / 2);
+		gc.fillText(text, (width - TEXT_WIDTH) / 2, (height / 2)+5);
 	}
 
 	private void drawButtonGlow() {
@@ -62,6 +62,6 @@ public class MyButton extends Canvas {
 
 		gc.setFill(Color.WHITE);
 		gc.setFont(TEXT_FONT);
-		gc.fillText(text, (width - TEXT_WIDTH) / 2, height / 2);
+		gc.fillText(text, (width - TEXT_WIDTH) / 2, (height / 2)+5);
 	}
 }

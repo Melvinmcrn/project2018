@@ -8,12 +8,12 @@ import javafx.collections.ObservableList;
 public class HighScoreData implements Comparable<HighScoreData>{
 
 	private static ObservableList<HighScoreData> data = FXCollections.observableArrayList();
-	private SimpleStringProperty name;
-	private SimpleIntegerProperty score;
+	private String name;
+	private int score;
 
 	public HighScoreData(String name, int score) {
-		this.name = new SimpleStringProperty (name);
-		this.score = new SimpleIntegerProperty (score);
+		this.name = name;
+		this.score = score;
 		this.add(this);
 	}
 
@@ -24,7 +24,7 @@ public class HighScoreData implements Comparable<HighScoreData>{
 
 	public void remove(String name) {
 		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).name.get().equals(name)) {
+			if (data.get(i).name.equals(name)) {
 				data.remove(i);
 			}
 		}
@@ -33,11 +33,19 @@ public class HighScoreData implements Comparable<HighScoreData>{
 
 	public boolean isExist(String name) {
 		for (int i = 0; i < data.size(); i++) {
-			if (data.get(i).name.get().equals(name)) {
+			if (data.get(i).name.equals(name)) {
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	public static int size() {
+		return data.size();
+	}
+	
+	public static HighScoreData get(int i) {
+		return data.get(i);
 	}
 
 	public static ObservableList<HighScoreData> getData() {
@@ -45,20 +53,20 @@ public class HighScoreData implements Comparable<HighScoreData>{
 	}
 
 	public String getName() {
-		return name.get();
+		return name;
 	}
 
 	public int getScore() {
-		return score.get();
+		return score;
 	}
 
 	@Override
 	public int compareTo(HighScoreData o) {
-		if(this.score.get() == o.score.get() && !this.name.get().equals(o.name.get())) return 0;
-		if(this.score.get() != o.score.get()) {
-			if(this.score.get() > o.score.get()) return -1;
+		if(this.score == o.score && !this.name.equals(o.name)) return 0;
+		if(this.score != o.score) {
+			if(this.score > o.score) return -1;
 			else return 1;
 		}
-		return this.name.get().compareTo(o.name.get());
+		return this.name.compareTo(o.name);
 	}
 }
