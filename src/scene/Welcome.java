@@ -19,9 +19,8 @@ public class Welcome extends VBox {
 	private Image bg_image = new Image(bg_path);
 	private String logo_path = ClassLoader.getSystemResource("images/Logo.png").toString();
 	private Image logo = new Image(logo_path);
-	private WritableImage bg_wimage = new WritableImage(bg_image.getPixelReader(), 0, 0, 800, 600);
 	private BackgroundSize bgSize = new BackgroundSize(800, 600, true, true, true, true);
-	private BackgroundImage bg = new BackgroundImage(bg_wimage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
+	private BackgroundImage bg = new BackgroundImage(bg_image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
 	
 	public Welcome() {
 		

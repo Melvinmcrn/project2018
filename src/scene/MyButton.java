@@ -50,13 +50,6 @@ public class MyButton extends Canvas {
 		gc.clearRect(0, 0, width, height);
 		gc.drawImage(buttonLogoNormal, 0, 0, width, height);
 
-		/*
-		 * gc.setFill(Color.BLUE); gc.fillRect(0, 0, width, height);
-		 * 
-		 * gc.setStroke(Color.BLUE); gc.setLineWidth(5); gc.strokeRect(0, 0, width,
-		 * height);
-		 */
-
 		gc.setFill(Color.WHITE);
 		gc.setFont(TEXT_FONT);
 		gc.fillText(text, (width - TEXT_WIDTH) / 2, height / 2);
@@ -66,14 +59,6 @@ public class MyButton extends Canvas {
 		gc.clearRect(0, 0, width, height);
 
 		gc.drawImage(buttonLogoGlow, 0, 0, width, height);
-
-		/*
-		 * gc.setFill(Color.BLUE); gc.fillRect(0, 0, width, height);
-		 *
-		 * 
-		 * gc.setStroke(Color.WHITE); gc.setLineWidth(5); gc.strokeRect(0, 0, width,
-		 * height);
-		 */
 
 		gc.setFill(Color.WHITE);
 		gc.setFont(TEXT_FONT);
