@@ -22,10 +22,8 @@ public class HighScore extends BorderPane {
 
 	private Label nameHeader;
 	private Label scoreHeader;
-	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"),
-								30);
-	private TableView<HighScoreData> t1;
-	private TableView<HighScoreData> t2;
+	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 30);
+	private TableView<HighScoreData> table;
 	private TableColumn<HighScoreData, String> nameColumn;
 	private TableColumn<HighScoreData, Integer> scoreColumn;
 	private Image logo = new Image(ClassLoader.getSystemResource("images/HighScoreLogo.png").toString());
@@ -33,7 +31,7 @@ public class HighScore extends BorderPane {
 	private GraphicsContext gc;
 	private NavigationButton homeButton;
 
-	@SuppressWarnings({ "deprecation" })
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public HighScore() {
 
 		this.setBackground(new Background(new BackgroundImage(bg, null, null, null, null)));
@@ -76,19 +74,28 @@ public class HighScore extends BorderPane {
 		scoreColumn.impl_setReorderable(false);
 
 		// Set Table
-		HBox table = new HBox(180);
+		table = new TableView<HighScoreData>();
+		table.getColumns().addAll(nameColumn,scoreColumn);
+		table.setItems(HighScoreData.getData());
+		table.setEditable(false);
+		table.setPrefHeight(300);
+		table.setMaxWidth(656);
+		table.getStylesheets().addAll(getClass().getResource("/assets/HighScore.css").toExternalForm());
+		
+		Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 25);
+		// Create Label when there is no Data
+		table.setPlaceholder(new Label(""));
 
-		t1 = new Table(nameColumn);
-		t2 = new Table(scoreColumn);
-		nameColumn.prefWidthProperty().bind(t1.widthProperty().multiply(0.99));
-		scoreColumn.prefWidthProperty().bind(t2.widthProperty().multiply(0.99));
-
-		table.getChildren().addAll(t1, t2);
-		table.setAlignment(Pos.CENTER);
+		nameColumn.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
+		scoreColumn.prefWidthProperty().bind(table.widthProperty().multiply(0.5));
+		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+		table.setPadding(new Insets(35, 0, 0, 0));
 
 		// Create Center Pane
 		VBox center = new VBox();
 		center.getChildren().addAll(header, table);
+		center.setPrefSize(681, 340);
+		center.setAlignment(Pos.CENTER);
 
 		// Draw Home Button
 		this.homeButton = new NavigationButton("Home");
@@ -109,25 +116,21 @@ public class HighScore extends BorderPane {
 		HighScore.setMargin(this.homeButton, insets);
 
 	}
-
-	private class Table extends TableView<HighScoreData> {
-
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		public Table(TableColumn column) {
-			this.getColumns().add(column);
-			this.setPrefSize(250, 245);
-			this.setItems(HighScoreData.getData());
-			this.setEditable(false);
-			this.getStylesheets().addAll(getClass().getResource("/assets/HighScore.css").toExternalForm());
-
-			// Create Label when there is no Data
-			Label noDataText = new Label("No Score Record");
-			noDataText.setFont(new Font("Tahoma", 50));
-			noDataText.setTextFill(Color.WHITE);
-			this.setPlaceholder(noDataText);
-
-		}
-
-	}
-
+	/*
+	 * private class Table extends TableView<HighScoreData> {
+	 * 
+	 * @SuppressWarnings({ "unchecked", "rawtypes" }) public Table(TableColumn
+	 * column) { this.getColumns().add(column); this.setPrefSize(250, 245);
+	 * this.setItems(HighScoreData.getData()); this.setEditable(false);
+	 * this.getStylesheets().addAll(getClass().getResource("/assets/HighScore.css").
+	 * toExternalForm());
+	 * 
+	 * // Create Label when there is no Data Label noDataText = new
+	 * Label("No Score Record"); noDataText.setFont(new Font("Tahoma", 50));
+	 * noDataText.setTextFill(Color.WHITE); this.setPlaceholder(noDataText);
+	 * 
+	 * }
+	 * 
+	 * }
+	 */
 }
