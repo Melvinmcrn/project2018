@@ -25,7 +25,8 @@ public class SceneManager {
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		} else if (scene.equals("Play")) {
-
+			primaryStage.setScene(CharactorSelect);
+			primaryStage.show();
 		} else if (scene.equals("High Score")) {
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
