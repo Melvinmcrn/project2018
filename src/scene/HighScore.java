@@ -1,12 +1,17 @@
 package scene;
 
+import javax.script.Bindings;
+
 import data.HighScoreData;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -75,14 +80,13 @@ public class HighScore extends BorderPane {
 
 		// Set Table
 		table = new TableView<HighScoreData>();
-		table.getColumns().addAll(nameColumn,scoreColumn);
+		table.getColumns().addAll(nameColumn, scoreColumn);
 		table.setItems(HighScoreData.getData());
 		table.setEditable(false);
 		table.setPrefHeight(300);
 		table.setMaxWidth(656);
 		table.getStylesheets().addAll(getClass().getResource("/assets/HighScore.css").toExternalForm());
-		
-		Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 25);
+
 		// Create Label when there is no Data
 		table.setPlaceholder(new Label(""));
 
@@ -116,21 +120,4 @@ public class HighScore extends BorderPane {
 		HighScore.setMargin(this.homeButton, insets);
 
 	}
-	/*
-	 * private class Table extends TableView<HighScoreData> {
-	 * 
-	 * @SuppressWarnings({ "unchecked", "rawtypes" }) public Table(TableColumn
-	 * column) { this.getColumns().add(column); this.setPrefSize(250, 245);
-	 * this.setItems(HighScoreData.getData()); this.setEditable(false);
-	 * this.getStylesheets().addAll(getClass().getResource("/assets/HighScore.css").
-	 * toExternalForm());
-	 * 
-	 * // Create Label when there is no Data Label noDataText = new
-	 * Label("No Score Record"); noDataText.setFont(new Font("Tahoma", 50));
-	 * noDataText.setTextFill(Color.WHITE); this.setPlaceholder(noDataText);
-	 * 
-	 * }
-	 * 
-	 * }
-	 */
 }

@@ -1,9 +1,9 @@
-@font-face {
+/* @font-face {
 	src: url('Otaku_Rant.ttf');
-}
+}*/
 
 .table-view{
-   -fx-background-color: transparent;
+   -fx-background-color: white;
 }
 
 .table-view:focused{
@@ -24,19 +24,20 @@
 }
 
 .table-view .table-cell{
-    -fx-text-fill: red;
+    -fx-text-fill: black;
     -fx-font-family: 'Otaku_Rant';
     -fx-font-size: 20pt;
 }
 
 .table-row-cell{
     -fx-background-color: transparent;
-    -fx-table-cell-border-color: transparent;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
+
 .table-column {
-  -fx-alignment: CENTER;
+  -fx-alignment: center ;
+  /*-fx-padding: 0 0 0 200;*/
 }
 
 .table-view *.scroll-bar:horizontal *.increment-button,
