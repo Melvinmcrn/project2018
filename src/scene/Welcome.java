@@ -25,10 +25,11 @@ public class Welcome extends VBox {
 	
 	public Welcome() {
 		
-		this.setAlignment(Pos.CENTER);
+		this.setAlignment(Pos.TOP_CENTER);
 		this.setBackground(new Background(bg));
+		this.setSpacing(65);
 		
-		Canvas canvas = new Canvas(500, 300);
+		Canvas canvas = new Canvas(350, 186);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
 		gc.drawImage(logo, 0, 0);
 
@@ -37,10 +38,10 @@ public class Welcome extends VBox {
 		MyButton highScoreButton = new MyButton("High Score");
 		MyButton exitButton = new MyButton("Exit");
 		buttonBox.setSpacing(25);
-		buttonBox.getChildren().addAll(canvas,playButton, highScoreButton, exitButton);
+		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
 		buttonBox.setAlignment(Pos.CENTER);
 
-		this.getChildren().add(buttonBox);
+		this.getChildren().addAll(canvas,buttonBox);
 	}
 
 }
