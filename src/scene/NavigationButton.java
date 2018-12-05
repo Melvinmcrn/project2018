@@ -4,8 +4,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 public class NavigationButton extends Canvas{
 	private String goToScene;
@@ -18,19 +16,17 @@ public class NavigationButton extends Canvas{
 	private static double height = 50;
 	private GraphicsContext gc = this.getGraphicsContext2D();
 
-	public NavigationButton(String name) {
+	public NavigationButton(String name, String scene) {
 		super(width, height);
 		this.name = name;
+		this.goToScene = scene;
 		if(name.equals("Next")) {
-			this.goToScene = "MainGame";
 			this.buttonPath = ClassLoader.getSystemResource("images/NextButton.png").toString();
 			this.buttonGlowPath = ClassLoader.getSystemResource("images/NextButtonGlow.png").toString();
 		} else if(name.equals("Back")) {
-			this.goToScene = "Welcome";
 			this.buttonPath = ClassLoader.getSystemResource("images/BackButton.png").toString();
 			this.buttonGlowPath = ClassLoader.getSystemResource("images/BackButtonGlow.png").toString();
 		} else if(name.equals("Home")) {
-			this.goToScene = "Welcome";
 			this.buttonPath = ClassLoader.getSystemResource("images/HomeButton.png").toString();
 			this.buttonGlowPath = ClassLoader.getSystemResource("images/HomeButtonGlow.png").toString();
 		}

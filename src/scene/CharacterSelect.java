@@ -20,7 +20,7 @@ public class CharacterSelect extends StackPane {
 
 	public CharacterSelect() {
 
-		// Video Backgorund
+		// Video Background
 		Media media = new Media(ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());
 		MediaPlayer player = new MediaPlayer(media);
 		player.setAutoPlay(true);
@@ -41,8 +41,8 @@ public class CharacterSelect extends StackPane {
 		// Character Select
 
 		// Navigation Button
-		NavigationButton nextButton = new NavigationButton("Next");
-		NavigationButton backButton = new NavigationButton("Back");
+		NavigationButton nextButton = new NavigationButton("Next", "Main Game");
+		NavigationButton backButton = new NavigationButton("Back", "Welcome");
 
 		HBox navigationBtnBox = new HBox();
 		navigationBtnBox.getChildren().addAll(backButton, nextButton);

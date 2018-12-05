@@ -1,6 +1,5 @@
 package scene;
 
-import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 
 import javafx.scene.canvas.Canvas;
@@ -10,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+@SuppressWarnings("restriction")
 public class MyButton extends Canvas {
 
 	private String goToScene;
@@ -22,7 +22,6 @@ public class MyButton extends Canvas {
 	private double TEXT_WIDTH;
 	private GraphicsContext gc = this.getGraphicsContext2D();
 
-	@SuppressWarnings("restriction")
 	public MyButton(String text) {
 		super(width, height);
 		this.text = text;

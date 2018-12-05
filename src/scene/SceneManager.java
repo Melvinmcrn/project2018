@@ -32,7 +32,8 @@ public class SceneManager {
 		} else if (scene.equals("Hall of Fame")) {
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
-
+		} else if(scene.equals("Main Game")) {
+			//	Dont forget to add
 		} else if (scene.equals("Exit")) {
 			primaryStage.close();
 		}

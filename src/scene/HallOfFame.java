@@ -6,8 +6,6 @@ import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -22,9 +20,6 @@ public class HallOfFame extends BorderPane {
 	private Label nameHeader;
 	private Label scoreHeader;
 	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 30);
-	private TableView<ScoreData> table;
-	private TableColumn<ScoreData, String> nameColumn;
-	private TableColumn<ScoreData, Integer> scoreColumn;
 	private Image logo = new Image(ClassLoader.getSystemResource("images/HighScoreLogo.png").toString());
 	private Image bg = new Image(ClassLoader.getSystemResource("images/HighScoreBackground.jpg").toString());
 	private GraphicsContext gc;
@@ -102,7 +97,7 @@ public class HallOfFame extends BorderPane {
 		center.setAlignment(Pos.TOP_CENTER);
 
 		// Draw Home Button
-		this.homeButton = new NavigationButton("Home");
+		this.homeButton = new NavigationButton("Home", "Welcome");
 
 		this.setTop(logoCanvas);
 		HallOfFame.setAlignment(logoCanvas, Pos.TOP_CENTER);
