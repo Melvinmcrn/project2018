@@ -22,11 +22,11 @@ public class MyButton extends Canvas {
 	private double TEXT_WIDTH;
 	private GraphicsContext gc = this.getGraphicsContext2D();
 
+	@SuppressWarnings("restriction")
 	public MyButton(String text) {
 		super(width, height);
 		this.text = text;
-		FontLoader fl = Toolkit.getToolkit().getFontLoader();
-		TEXT_WIDTH = fl.computeStringWidth(text, TEXT_FONT);
+		TEXT_WIDTH = Toolkit.getToolkit().getFontLoader().computeStringWidth(text, TEXT_FONT);
 
 		this.goToScene = text;
 		this.setEvent();

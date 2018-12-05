@@ -34,7 +34,7 @@ public class Welcome extends VBox {
 
 		VBox buttonBox = new VBox();
 		MyButton playButton = new MyButton("Play");
-		MyButton highScoreButton = new MyButton("High Score");
+		MyButton highScoreButton = new MyButton("Hall of Fame");
 		MyButton exitButton = new MyButton("Exit");
 		buttonBox.setSpacing(25);
 		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
