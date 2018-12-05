@@ -1,5 +1,6 @@
 package scene;
 
+import button.TextButton;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,9 +32,9 @@ public class Welcome extends VBox {
 		gc.drawImage(logo, 0, 0);
 
 		VBox buttonBox = new VBox();
-		MyButton playButton = new MyButton("Play");
-		MyButton highScoreButton = new MyButton("Hall of Fame");
-		MyButton exitButton = new MyButton("Exit");
+		TextButton playButton = new TextButton("Play");
+		TextButton highScoreButton = new TextButton("Hall of Fame");
+		TextButton exitButton = new TextButton("Exit");
 		buttonBox.setSpacing(25);
 		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
 		buttonBox.setAlignment(Pos.CENTER);

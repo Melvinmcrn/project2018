@@ -1,5 +1,6 @@
 package scene;
 
+import button.NavigationButton;
 import data.ScoreData;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

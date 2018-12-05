@@ -1,0 +1,24 @@
+package button;
+
+public class NavigationButton extends MyButton {
+
+	public NavigationButton(String name, String toScene) {
+		super(name, toScene, 50, 50);
+		this.drawButton();
+	}
+
+	@Override
+	public void drawButton() {
+		gc.clearRect(0, 0, width, height);
+		gc.drawImage(buttonLogoNormal, 0, 0, width, height);
+
+	}
+
+	@Override
+	public void drawButtonGlow() {
+		gc.clearRect(0, 0, width, height);
+		gc.drawImage(buttonLogoGlow, 0, 0, width, height);
+
+	}
+
+}

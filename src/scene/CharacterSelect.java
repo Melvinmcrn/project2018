@@ -1,5 +1,6 @@
 package scene;
 
+import button.NavigationButton;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
