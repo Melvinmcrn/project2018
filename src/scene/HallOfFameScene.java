@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class HallOfFame extends BorderPane {
+public class HallOfFameScene extends BorderPane {
 
 	private Label nameHeader;
 	private Label scoreHeader;
@@ -28,7 +28,7 @@ public class HallOfFame extends BorderPane {
 	private Font SCORE_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 	private NavigationButton homeButton;
 
-	public HallOfFame() {
+	public HallOfFameScene() {
 
 		// Draw logo
 		Canvas logoCanvas = new Canvas(245, 130);
@@ -101,16 +101,16 @@ public class HallOfFame extends BorderPane {
 		this.homeButton = new NavigationButton("Home", "Welcome");
 
 		this.setTop(logoCanvas);
-		HallOfFame.setAlignment(logoCanvas, Pos.TOP_CENTER);
-		HallOfFame.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
+		HallOfFameScene.setAlignment(logoCanvas, Pos.TOP_CENTER);
+		HallOfFameScene.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
 
 		this.setCenter(center);
-		HallOfFame.setAlignment(center, Pos.TOP_CENTER);
-		HallOfFame.setMargin(center, new Insets(40, 10, 0, 10));
+		HallOfFameScene.setAlignment(center, Pos.TOP_CENTER);
+		HallOfFameScene.setMargin(center, new Insets(40, 10, 0, 10));
 
 		this.setBottom(this.homeButton);
-		HallOfFame.setAlignment(this.homeButton, Pos.CENTER);
-		HallOfFame.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
+		HallOfFameScene.setAlignment(this.homeButton, Pos.CENTER);
+		HallOfFameScene.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
 
 		this.setBackground(new Background(new BackgroundImage(bg, null, null, null, null)));
 

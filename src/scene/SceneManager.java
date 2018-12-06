@@ -8,8 +8,8 @@ public class SceneManager {
 	private static Stage primaryStage;
 	private static final int SCENE_WIDTH = 800;
 	private static final int SCENE_HEIGHT = 600;
-	private static Welcome welcome = new Welcome();
-	private static HallOfFame highScore = new HallOfFame();
+	private static WelcomeScene welcome = new WelcomeScene();
+	private static HallOfFameScene highScore = new HallOfFameScene();
 	private static CharacterSelect characterSelecet = new CharacterSelect();
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);

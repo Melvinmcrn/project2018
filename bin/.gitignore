@@ -1,9 +1,18 @@
 /application/
 /area/
+/assets/
 /button/
 /customer/
 /data/
+/fonts/
+/images/
 /scene/
 /sharedObject/
+<<<<<<< HEAD
 /assets/
 /images/
+||||||| merged common ancestors
+=======
+/videos/
+/gameScene/
+>>>>>>> eb977b0f0773064f50b0d559d547fe56e2ecd716
