@@ -20,7 +20,7 @@ public class GameScene extends VBox{
 			
 			@Override
 			public void handle(long now) {
-				mainGame.paintComponent();
+				//mainGame.paintComponent();
 				gameLogic.logicUpdate();
 				
 			}
