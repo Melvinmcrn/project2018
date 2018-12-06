@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 public class CharacterSelect extends StackPane {
@@ -23,13 +24,13 @@ public class CharacterSelect extends StackPane {
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
 	private Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
-	private Image character1_notSelect = new Image(
-			ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
+	private Image character1_notSelect = new Image(ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
 	private Image character1_select = new Image(ClassLoader.getSystemResource("images/Player1_select.png").toString());
-	private Image character2_notSelect = new Image(
-			ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
+	private Image character2_notSelect = new Image(ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
 	private Image character2_select = new Image(ClassLoader.getSystemResource("images/Player2_select.png").toString());
+	private Image nameTextFieldBackground = new Image(ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
 	private GraphicsContext gc;
+	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 
 	public CharacterSelect() {
 
@@ -54,10 +55,13 @@ public class CharacterSelect extends StackPane {
 		// Character Select
 		charID = 0;
 		VBox characterSet = new VBox();
-		characterSet.setPadding(new Insets(40, 0, 0, 130));
-		characterSet.setSpacing(40);
+		//characterSet.setPadding(new Insets(40, 0, 0, 130));
+		characterSet.setPadding(new Insets(40, 0, 0, 0));
+		characterSet.setAlignment(Pos.CENTER);
+		characterSet.setSpacing(20);
 
 		HBox characterSelect = new HBox();
+		characterSelect.setAlignment(Pos.CENTER);
 
 		Canvas character1 = new Canvas(250, 297);
 		gc = character1.getGraphicsContext2D();
@@ -74,8 +78,17 @@ public class CharacterSelect extends StackPane {
 		characterSelect.setSpacing(50);
 
 		// Name Set
-		TextField nameSet = new TextField();
-		nameSet.setPrefWidth(100);
+		StackPane nameSet = new StackPane();
+		TextField nameTextField = new TextField();
+		nameTextField.setFont(NAME_FONT);
+		nameTextField.setMaxWidth(300);
+		nameTextField.setAlignment(Pos.CENTER);
+		nameTextField.getStylesheets().add("assets/CharacterSelect.css");
+		Canvas textFieldBackground = new Canvas(340, 70);
+		gc = textFieldBackground.getGraphicsContext2D();
+		gc.drawImage(nameTextFieldBackground, 0, 0);
+		
+		nameSet.getChildren().addAll(textFieldBackground ,nameTextField);
 
 		characterSet.getChildren().addAll(characterSelect, nameSet);
 
