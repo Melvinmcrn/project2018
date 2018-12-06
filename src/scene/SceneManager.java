@@ -11,10 +11,12 @@ public class SceneManager {
 	private static WelcomeScene welcome = new WelcomeScene();
 	private static HallOfFameScene highScore = new HallOfFameScene();
 	private static CharacterSelectScene characterSelecet = new CharacterSelectScene();
+	private static GameScene game = new GameScene();
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
+	private static Scene gameScene = new Scene(game, SCENE_WIDTH, SCENE_HEIGHT);
 	
 	public static void initialize(Stage stage) {
 		primaryStage = stage;
@@ -33,7 +35,8 @@ public class SceneManager {
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
 		} else if(scene.equals("Main Game")) {
-			//	Dont forget to add
+			primaryStage.setScene(gameScene);
+			primaryStage.show();
 		} else if (scene.equals("Exit")) {
 			primaryStage.close();
 		}
