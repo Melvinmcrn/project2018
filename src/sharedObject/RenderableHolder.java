@@ -19,6 +19,7 @@ public class RenderableHolder {
 	}
 	
 	public void add(IRenderable entity) {
+		System.out.print("entities add ");
 		entities.add(entity);
 		//	Sort our list by Z
 		Collections.sort(this.entities, this.comparator);
@@ -26,5 +27,9 @@ public class RenderableHolder {
 	
 	public void update() {
 		//	Don't forget to implement
+	}
+
+	public List<IRenderable> getEntities() {
+		return entities;
 	}
 }
