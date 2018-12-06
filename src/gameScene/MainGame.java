@@ -12,7 +12,7 @@ public class MainGame extends Canvas {
 	private GameLogic gameLogic;
 	
 	public MainGame() {
-		super(800, 400);
+		super(800, 480);
 		this.setVisible(true);
 		gameLogic = new GameLogic();
 		this.paintComponent();
