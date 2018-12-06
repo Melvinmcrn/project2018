@@ -1,9 +1,10 @@
 package area;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.ImageView;
 import sharedObject.IRenderable;
 
-public class EatingArea implements IRenderable{
+public class EatingArea extends ImageView implements IRenderable{
 	
 	private boolean isConstructed;
 	private double x;

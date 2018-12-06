@@ -14,8 +14,8 @@ public class GameLogic {
 	public GameLogic() {
 		this.customerContainer = new ArrayList<Customer>();
 		
-		Area area = new Area();
-		RenderableHolder.getInstance().add(area);
+		//Area area = new Area();
+		//RenderableHolder.getInstance().add(area);
 		
 	}
 	
