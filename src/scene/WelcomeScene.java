@@ -11,8 +11,9 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
-public class Welcome extends VBox {
+public class WelcomeScene extends VBox {
 	
 	private String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground2.jpg").toString();
 	private Image bg_image = new Image(bg_path);
@@ -21,7 +22,7 @@ public class Welcome extends VBox {
 	private BackgroundSize bgSize = new BackgroundSize(800, 600, true, true, true, true);
 	private BackgroundImage bg = new BackgroundImage(bg_image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
 	
-	public Welcome() {
+	public WelcomeScene() {
 		
 		this.setAlignment(Pos.TOP_CENTER);
 		this.setBackground(new Background(bg));
