@@ -6,6 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class RenderableHolder {
+	
+	private static final RenderableHolder instance = new RenderableHolder();
+	
 	private List<IRenderable> entities;
 	private Comparator<IRenderable> comparator;
 	
