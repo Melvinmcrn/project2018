@@ -1,6 +1,7 @@
 package scene;
 
 import button.NavigationButton;
+import exception.CharacterNotSelectedException;
 import exception.CharacterRestrictException;
 import exception.NameLengthRestrictException;
 import exception.NameNotEnteredException;
@@ -152,8 +153,20 @@ public class CharacterSelectScene extends StackPane {
 			@Override
 			protected void setEvent() {
 				this.setOnMouseClicked((MouseEvent event) -> {
-					System.out.println(name);
-					SceneManager.gotoScene(goToScene);
+					try {
+						if(getCharID() == 0) throw new CharacterNotSelectedException();
+						if(getCharName() == null) throw new NameNotEnteredException();
+						System.out.println(name);
+						SceneManager.gotoScene(goToScene);
+					} catch (CharacterNotSelectedException e) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please select your character");
+				  		alert.show();
+					} catch (NameNotEnteredException e) {
+						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please enter player name and click OK");
+				  		alert.show();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
 					drawButtonGlow();
