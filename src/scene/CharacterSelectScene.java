@@ -18,7 +18,7 @@ import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-public class CharacterSelect extends StackPane {
+public class CharacterSelectScene extends StackPane {
 
 	private int charID;
 	private boolean isSelect1 = false;
@@ -32,7 +32,7 @@ public class CharacterSelect extends StackPane {
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 
-	public CharacterSelect() {
+	public CharacterSelectScene() {
 
 		// Video Background
 		Media media = new Media(ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());

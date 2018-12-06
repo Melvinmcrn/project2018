@@ -10,7 +10,7 @@ public class SceneManager {
 	private static final int SCENE_HEIGHT = 600;
 	private static WelcomeScene welcome = new WelcomeScene();
 	private static HallOfFameScene highScore = new HallOfFameScene();
-	private static CharacterSelect characterSelecet = new CharacterSelect();
+	private static CharacterSelectScene characterSelecet = new CharacterSelectScene();
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
