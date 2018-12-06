@@ -1,14 +1,20 @@
 package scene;
 
 import button.NavigationButton;
+import exception.CharacterRestrictException;
+import exception.NameLengthRestrictException;
+import exception.NameNotEnteredException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -27,12 +33,14 @@ public class CharacterSelectScene extends StackPane {
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
 	private Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
-	private Image okButton = new Image(ClassLoader.getSystemResource("images/OkButton.png").toString());
-	private Image character1_notSelect = new Image(ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
+	private Image character1_notSelect = new Image(
+			ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
 	private Image character1_select = new Image(ClassLoader.getSystemResource("images/Player1_select.png").toString());
-	private Image character2_notSelect = new Image(ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
+	private Image character2_notSelect = new Image(
+			ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
 	private Image character2_select = new Image(ClassLoader.getSystemResource("images/Player2_select.png").toString());
-	private Image nameTextFieldBackground = new Image(ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
+	private Image nameTextFieldBackground = new Image(
+			ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 
@@ -81,8 +89,10 @@ public class CharacterSelectScene extends StackPane {
 		characterSelect.getChildren().addAll(character1, character2);
 		characterSelect.setSpacing(50);
 
-		// Name Set
+		// Name Field
 		HBox nameSet = new HBox();
+		nameSet.setAlignment(Pos.CENTER);
+		nameSet.setSpacing(30);
 		StackPane nameField = new StackPane();
 		TextField nameTextField = new TextField();
 		nameTextField.setFont(NAME_FONT);
@@ -91,38 +101,74 @@ public class CharacterSelectScene extends StackPane {
 		nameTextField.getStylesheets().add("assets/CharacterSelect.css");
 		
 		//Restrict Space
-		nameTextField.textProperty().addListener(
-			     (observable, old_value, new_value) -> {
-			          if(new_value.contains(" "))
-			          {
+		nameTextField.textProperty().addListener((observable, old_value, new_value) -> {
+			  	 try {
+			  		if(new_value.contains(" ")) {
 			                nameTextField.setText(old_value); 
+			                throw new CharacterRestrictException();
 			          }
-			     }
-			);
+			  	 } catch (CharacterRestrictException e) {
+			  		 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name cannot be space");
+			  		 alert.show();
+			  	 } catch (Exception e) {
+			  		 e.printStackTrace();
+			  	 }
+		});
 		addTextLimiter(nameTextField, 12);
 		
-		//Add background
+		// Add background
 		Canvas textFieldBackground = new Canvas(340, 70);
 		gc = textFieldBackground.getGraphicsContext2D();
 		gc.drawImage(nameTextFieldBackground, 0, 0);
 		
-		//OK button;
-		Canvas okButtonCanvas = new Canvas(70, 70);
-		gc = okButtonCanvas.getGraphicsContext2D();
-		gc.drawImage(okButton, 0, 0);
+		// OK Button
+		NavigationButton okButton = new NavigationButton("Ok", "");
+		EventHandler<InputEvent> handler = new EventHandler<InputEvent>() {
+            public void handle(InputEvent event) {
+            	try {
+            		if(nameTextField.getText().length() > 0) {
+                		setCharName(nameTextField.getText());
+                        nameTextField.setEditable(false);
+                	} else {
+                		throw new NameLengthRestrictException();
+                	}
+			  	 } catch (NameLengthRestrictException e) {
+			  		 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name should have 1 - 12 characters long");
+			  		 alert.show();
+			  	 } catch (Exception e) {
+			  		 e.printStackTrace();
+			  	 }
+            }
+        };
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED , handler);
 		
+		//	Name Set
 		nameField.getChildren().addAll(textFieldBackground ,nameTextField);
-		
+		nameSet.getChildren().addAll(nameField, okButton);
 		characterSet.getChildren().addAll(characterSelect, nameSet);
 
 		// Navigation Button
-		NavigationButton nextButton = new NavigationButton("Next", "Main Game");
+		NavigationButton nextButton = new NavigationButton("Next", "Main Game") {
+			@Override
+			protected void setEvent() {
+				this.setOnMouseClicked((MouseEvent event) -> {
+					System.out.println(name);
+					SceneManager.gotoScene(goToScene);
+				});
+				this.setOnMouseEntered((MouseEvent event) -> {
+					drawButtonGlow();
+				});
+				this.setOnMouseExited((MouseEvent event) -> {
+					drawButton();
+				});
+			}
+		};
 		NavigationButton backButton = new NavigationButton("Back", "Welcome");
-
+		
 		HBox navigationBtnBox = new HBox();
 		navigationBtnBox.getChildren().addAll(backButton, nextButton);
 		navigationBtnBox.setAlignment(Pos.CENTER_LEFT);
-		navigationBtnBox.setPadding(new Insets(20, 30, 20, 30));
+		navigationBtnBox.setPadding(new Insets(0, 30, 20, 30));
 		navigationBtnBox.setSpacing(650);
 
 		// BorderPane
@@ -154,6 +200,22 @@ public class CharacterSelectScene extends StackPane {
 
 	public void setCharName(String charName) {
 		this.charName = charName;
+	}
+
+	public boolean isSelect1() {
+		return isSelect1;
+	}
+
+	public void setSelect1(boolean isSelect1) {
+		this.isSelect1 = isSelect1;
+	}
+
+	public boolean isSelect2() {
+		return isSelect2;
+	}
+
+	public void setSelect2(boolean isSelect2) {
+		this.isSelect2 = isSelect2;
 	}
 
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
@@ -199,14 +261,24 @@ public class CharacterSelectScene extends StackPane {
 		if (ID == 2)
 			gc.drawImage(character2_select, 0, 0);
 	}
-	
+
 	public static void addTextLimiter(final TextField tf, final int maxLength) {
 		tf.textProperty().addListener(new ChangeListener<String>() {
 			@Override
-			public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
-				if (tf.getText().length() > maxLength) {
-					String s = tf.getText().substring(0, maxLength);
-					tf.setText(s);
+			public void changed(final ObservableValue<? extends String> ov, final String oldValue,
+					final String newValue) {
+				try {
+					if (tf.getText().length() > maxLength) {
+						String s = tf.getText().substring(0, maxLength);
+						tf.setText(s);
+						throw new NameLengthRestrictException();
+					}
+				} catch (NameLengthRestrictException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION,
+							"Player Name should have 1 - 12 characters long");
+					alert.show();
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			}
 		});
