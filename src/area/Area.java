@@ -22,9 +22,9 @@ public class Area implements IRenderable {
 		for (int i = 0; i < this.field.length; i++) {
 			for (int j = 0; j < this.field[i].length; i++) {
 				if (this.field[i][j] == 1) {
-					RenderableHolder.getInstance().add(new EatingArea(i, j, false));
+					RenderableHolder.getInstance().add(new Stove(i, j, false));
 				} else if (this.field[i][j] == 2) {
-					RenderableHolder.getInstance().add(new CookingArea(i, j, false));
+					RenderableHolder.getInstance().add(new Table(i, j, false));
 				}
 			}
 		}
