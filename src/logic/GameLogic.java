@@ -16,5 +16,10 @@ public class GameLogic {
 		
 		Area area = new Area();
 		RenderableHolder.getInstance().add(area);
+		
+	}
+	
+	public void logicUpdate() {
+		
 	}
 }
