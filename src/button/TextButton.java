@@ -1,8 +1,11 @@
 package button;
 
 import com.sun.javafx.tk.Toolkit;
+
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import scene.SceneManager;
 
 @SuppressWarnings("restriction")
 public class TextButton extends MyButton {
@@ -14,8 +17,23 @@ public class TextButton extends MyButton {
 		super("Welcome", name, 250, 80);
 		TEXT_WIDTH = Toolkit.getToolkit().getFontLoader().computeStringWidth(super.goToScene, TEXT_FONT);
 		this.drawButton();
+		this.setEvent();
 	}
-
+	
+	@Override
+	protected void setEvent() {
+		this.setOnMouseClicked((MouseEvent event) -> {
+			System.out.println(name);
+			SceneManager.gotoScene(goToScene);
+		});
+		this.setOnMouseEntered((MouseEvent event) -> {
+			drawButtonGlow();
+		});
+		this.setOnMouseExited((MouseEvent event) -> {
+			drawButton();
+		});
+	}
+	
 	@Override
 	public void drawButton() {
 		gc.clearRect(0, 0, width, height);

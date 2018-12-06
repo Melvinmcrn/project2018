@@ -29,22 +29,9 @@ public abstract class MyButton extends Canvas {
 		this.buttonGlowPath = ClassLoader.getSystemResource("images/" + this.name + "ButtonGlow.png").toString();
 		this.buttonLogoNormal = new Image(this.buttonPath);
 		this.buttonLogoGlow = new Image(this.buttonGlowPath);
-
-		this.setEvent();
 	}
 
-	private void setEvent() {
-		this.setOnMouseClicked((MouseEvent event) -> {
-			System.out.println(name);
-			SceneManager.gotoScene(goToScene);
-		});
-		this.setOnMouseEntered((MouseEvent event) -> {
-			drawButtonGlow();
-		});
-		this.setOnMouseExited((MouseEvent event) -> {
-			drawButton();
-		});
-	}
+	protected abstract void setEvent();
 
 	public abstract void drawButton();
 

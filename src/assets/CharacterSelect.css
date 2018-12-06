@@ -1,0 +1,7 @@
+.text-field:focused {
+    -fx-background-color: transparent;
+}
+
+.text-input {
+	-fx-text-fill: white;
+}

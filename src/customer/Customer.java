@@ -5,13 +5,15 @@ import javafx.scene.control.ProgressBar;
 
 public abstract class Customer {
 	
+	protected String name;
 	protected String image;
 	protected double tipMoney;
 	protected int waitTime;
 	protected ProgressBar waitBar;
 	
-	public Customer(String image, double tipMoney, int waitTime) {
+	public Customer(String name, String image, double tipMoney, int waitTime) {
 		super();
+		this.name = name;
 		this.image = image;
 		this.tipMoney = tipMoney;
 		this.waitTime = waitTime;
@@ -39,6 +41,10 @@ public abstract class Customer {
 			}
 		});
 		
+	}
+
+	public String getName() {
+		return this.name;
 	}
 	
 }

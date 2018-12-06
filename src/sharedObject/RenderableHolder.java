@@ -5,9 +5,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javafx.scene.image.Image;
+
 public class RenderableHolder {
+
+	private static final RenderableHolder instance = new RenderableHolder();
+	
 	private List<IRenderable> entities;
 	private Comparator<IRenderable> comparator;
+	public static Image areaImage = new Image(ClassLoader.getSystemResource("images/GameTile.png").toString());
 	
 	public RenderableHolder() {
 		this.entities = new ArrayList<IRenderable>();
@@ -19,6 +25,7 @@ public class RenderableHolder {
 	}
 	
 	public void add(IRenderable entity) {
+		System.out.print("entities add ");
 		entities.add(entity);
 		//	Sort our list by Z
 		Collections.sort(this.entities, this.comparator);
@@ -26,5 +33,13 @@ public class RenderableHolder {
 	
 	public void update() {
 		//	Don't forget to implement
+	}
+
+	public List<IRenderable> getEntities() {
+		return entities;
+	}
+	
+	public static RenderableHolder getInstance() {
+		return instance;
 	}
 }

@@ -1,10 +1,28 @@
 package button;
 
+import javafx.scene.input.MouseEvent;
+import scene.SceneManager;
+
 public class NavigationButton extends MyButton {
 
 	public NavigationButton(String name, String toScene) {
 		super(name, toScene, 50, 50);
 		this.drawButton();
+		this.setEvent();
+	}
+	
+	@Override
+	protected void setEvent() {
+		this.setOnMouseClicked((MouseEvent event) -> {
+			System.out.println(name);
+			SceneManager.gotoScene(goToScene);
+		});
+		this.setOnMouseEntered((MouseEvent event) -> {
+			drawButtonGlow();
+		});
+		this.setOnMouseExited((MouseEvent event) -> {
+			drawButton();
+		});
 	}
 
 	@Override

@@ -11,7 +11,7 @@ public class Main extends Application {
 			SceneManager.initialize(primaryStage);
 			SceneManager.gotoScene("Welcome");
 			primaryStage.setResizable(false);
-			primaryStage.setTitle("DORA CAFE");
+			primaryStage.setTitle("DORA Cafe");
 			primaryStage.centerOnScreen();
 		} catch (Exception e) {
 			e.printStackTrace();
