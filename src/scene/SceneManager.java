@@ -10,13 +10,13 @@ public class SceneManager {
 	private static final int SCENE_HEIGHT = 600;
 	private static WelcomeScene welcome = new WelcomeScene();
 	private static HallOfFameScene highScore = new HallOfFameScene();
-	private static CharacterSelectScene characterSelecet = new CharacterSelectScene();
-	private static GameScene game = new GameScene();
+	private static CharacterSelectScene characterSelecet;
+	private static GameScene game;
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
-	private static Scene characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
-	private static Scene gameScene = new Scene(game, SCENE_WIDTH, SCENE_HEIGHT);
+	private static Scene characterSelectScene;
+	private static Scene gameScene;
 	
 	public static void initialize(Stage stage) {
 		primaryStage = stage;
@@ -29,12 +29,16 @@ public class SceneManager {
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		} else if (scene.equals("Play")) {
+			characterSelecet = new CharacterSelectScene();
+			characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(characterSelectScene);
 			primaryStage.show();
 		} else if (scene.equals("Hall of Fame")) {
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
 		} else if(scene.equals("Main Game")) {
+			game = new GameScene();
+			gameScene = new Scene(game, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(gameScene);
 			primaryStage.show();
 		} else if (scene.equals("Exit")) {
