@@ -1,6 +1,8 @@
 package scene;
 
 import button.NavigationButton;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
@@ -21,9 +23,11 @@ import javafx.util.Duration;
 public class CharacterSelectScene extends StackPane {
 
 	private int charID;
+	private String charName;
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
 	private Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
+	private Image okButton = new Image(ClassLoader.getSystemResource("images/OkButton.png").toString());
 	private Image character1_notSelect = new Image(ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
 	private Image character1_select = new Image(ClassLoader.getSystemResource("images/Player1_select.png").toString());
 	private Image character2_notSelect = new Image(ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
@@ -78,18 +82,37 @@ public class CharacterSelectScene extends StackPane {
 		characterSelect.setSpacing(50);
 
 		// Name Set
-		StackPane nameSet = new StackPane();
+		HBox nameSet = new HBox();
+		StackPane nameField = new StackPane();
 		TextField nameTextField = new TextField();
 		nameTextField.setFont(NAME_FONT);
 		nameTextField.setMaxWidth(300);
 		nameTextField.setAlignment(Pos.CENTER);
 		nameTextField.getStylesheets().add("assets/CharacterSelect.css");
+		
+		//Restrict Space
+		nameTextField.textProperty().addListener(
+			     (observable, old_value, new_value) -> {
+			          if(new_value.contains(" "))
+			          {
+			                nameTextField.setText(old_value); 
+			          }
+			     }
+			);
+		addTextLimiter(nameTextField, 12);
+		
+		//Add background
 		Canvas textFieldBackground = new Canvas(340, 70);
 		gc = textFieldBackground.getGraphicsContext2D();
 		gc.drawImage(nameTextFieldBackground, 0, 0);
 		
-		nameSet.getChildren().addAll(textFieldBackground ,nameTextField);
-
+		//OK button;
+		Canvas okButtonCanvas = new Canvas(70, 70);
+		gc = okButtonCanvas.getGraphicsContext2D();
+		gc.drawImage(okButton, 0, 0);
+		
+		nameField.getChildren().addAll(textFieldBackground ,nameTextField);
+		
 		characterSet.getChildren().addAll(characterSelect, nameSet);
 
 		// Navigation Button
@@ -117,6 +140,22 @@ public class CharacterSelectScene extends StackPane {
 		this.getChildren().addAll(view, borderPane);
 	}
 
+	public int getCharID() {
+		return charID;
+	}
+
+	public void setCharID(int charID) {
+		this.charID = charID;
+	}
+
+	public String getCharName() {
+		return charName;
+	}
+
+	public void setCharName(String charName) {
+		this.charName = charName;
+	}
+
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
 		thisCanvas.setOnMouseClicked((MouseEvent event) -> {
 			this.charID = thisID;
@@ -125,9 +164,11 @@ public class CharacterSelectScene extends StackPane {
 			if (thisID == 1) {
 				this.isSelect1 = true;
 				this.isSelect2 = false;
+				this.setCharID(1);
 			} else if (thisID == 2) {
 				this.isSelect2 = true;
 				this.isSelect1 = false;
+				this.setCharID(2);
 			}
 		});
 		thisCanvas.setOnMouseEntered((MouseEvent event) -> {
@@ -157,5 +198,17 @@ public class CharacterSelectScene extends StackPane {
 			gc.drawImage(character1_select, 0, 0);
 		if (ID == 2)
 			gc.drawImage(character2_select, 0, 0);
+	}
+	
+	public static void addTextLimiter(final TextField tf, final int maxLength) {
+		tf.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(final ObservableValue<? extends String> ov, final String oldValue, final String newValue) {
+				if (tf.getText().length() > maxLength) {
+					String s = tf.getText().substring(0, maxLength);
+					tf.setText(s);
+				}
+			}
+		});
 	}
 }
