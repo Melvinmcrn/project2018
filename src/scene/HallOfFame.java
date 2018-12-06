@@ -21,7 +21,7 @@ public class HallOfFame extends BorderPane {
 	private Label nameHeader;
 	private Label scoreHeader;
 	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 30);
-	private Image logo = new Image(ClassLoader.getSystemResource("images/HighScoreLogo.png").toString());
+	private Image logo = new Image(ClassLoader.getSystemResource("images/HallOfFameLogo.png").toString());
 	private Image bg = new Image(ClassLoader.getSystemResource("images/HighScoreBackground.jpg").toString());
 	private GraphicsContext gc;
 	private Canvas scoreCanvas;
