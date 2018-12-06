@@ -1,10 +1,10 @@
 package gameScene;
 
-import area.Table;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
+import logic.GameLogic;
 
 public class MainGame extends Pane {
 	
@@ -16,9 +16,7 @@ public class MainGame extends Pane {
 		this.setBackground(new Background(new BackgroundImage(bg, null, null, null, null)));
 		this.setVisible(true);
 		
-		Table table1 = new Table(2,2);
-		
-		this.getChildren().add(table1);
+		this.getChildren().addAll(GameLogic.getTableContainer());
 	}
 	
 }

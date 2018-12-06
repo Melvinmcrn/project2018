@@ -4,13 +4,12 @@ import customer.*;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import logic.GameLogic;
 
-public class Table extends Pane {
+public class Table extends ImageView {
 
 	private boolean isAvailable;
 	private double x;
@@ -23,20 +22,17 @@ public class Table extends Pane {
 
 	private static final String tableNormal = ClassLoader.getSystemResource("images/TableNormal.png").toString();
 	private static final String tableNormalBW = ClassLoader.getSystemResource("images/TableNormalBw.png").toString();
-	private ImageView image;
 
 	public Table(int x, int y) {
+		super(tableNormal);
 		this.x = x;
 		this.y = y;
 		this.isAvailable = true;
 		this.money = 0;
-		this.image = new ImageView(tableNormal);
-		this.image.setX(x * 80);
-		this.image.setY(y * 80);
+		this.setX(x * 80);
+		this.setY(y * 80);
 		this.isClicked = false;
 		this.setEvent();
-
-		this.getChildren().add(image);
 	}
 
 	private void leave() {
@@ -56,19 +52,19 @@ public class Table extends Pane {
 	private void setImage(String action) {
 		if (this.isAvailable) {
 			if (action.equals("Bw")) {
-				this.image.setImage(new Image(tableNormalBW));
+				this.setImage(new Image(tableNormalBW));
 			} else {
-				this.image.setImage(new Image(tableNormal));
+				this.setImage(new Image(tableNormal));
 			}
 		} else {
-			this.image.setImage(new Image(this.getImagePath(action)));
+			this.setImage(new Image(this.getImagePath(action)));
 			if (action.equals("Sit") || action.equals("SitBw") || action.equals("Eat") || action.equals("EatBw")
 					|| action.equals("Bill") || action.equals("BillBw")) {
-				this.image.setX((this.x - 1) * 80);
-				this.image.setY((this.y - 1) * 80);
+				this.setX((this.x - 1) * 80);
+				this.setY((this.y - 1) * 80);
 			} else {
-				this.image.setX((this.x) * 80);
-				this.image.setY((this.y) * 80);
+				this.setX((this.x) * 80);
+				this.setY((this.y) * 80);
 			}
 		}
 	}
@@ -84,7 +80,7 @@ public class Table extends Pane {
 	}
 
 	private void setEvent() {
-		this.image.setOnMouseEntered(new EventHandler<MouseEvent>() {
+		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 
@@ -92,22 +88,23 @@ public class Table extends Pane {
 
 		});
 
-		this.image.setOnMouseClicked(new EventHandler<MouseEvent>() {
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				System.out.println("Click table X:"+x+" Y:"+y);
 				if(isClicked) {
 					setImage("");
 					isClicked = false;
+					System.out.println("Unclick table X:"+x+" Y:"+y);
 				} else {
 					setImage("Bw");
 					isClicked = true;
+					System.out.println("Click table X:"+x+" Y:"+y);
 				}
 
 			}
 		});
 
-		this.image.setOnMouseDragOver(new EventHandler<MouseDragEvent>() {
+		this.setOnMouseDragOver(new EventHandler<MouseDragEvent>() {
 			@Override
 			public void handle(MouseDragEvent event) {
 
@@ -121,6 +118,7 @@ public class Table extends Pane {
 			this.customerName = customer.getName();
 			this.action = "Sit";
 			this.isAvailable = false;
+			customer.setVisible(false);
 		}
 	}
 

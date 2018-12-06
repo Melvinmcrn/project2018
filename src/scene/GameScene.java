@@ -14,7 +14,7 @@ public class GameScene extends VBox{
 		
 		gameLogic = new GameLogic();
 		mainGame = new MainGame();
-		this.getChildren().add(mainGame);
+		this.getChildren().addAll(mainGame);
 		
 		AnimationTimer animation = new AnimationTimer() {
 			
