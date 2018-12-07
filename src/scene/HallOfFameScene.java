@@ -34,15 +34,15 @@ public class HallOfFameScene extends BorderPane {
 		Canvas logoCanvas = new Canvas(245, 130);
 		gc = logoCanvas.getGraphicsContext2D();
 		gc.drawImage(logo, 0, 0);
-/*
-		HighScoreData d = new HighScoreData("a", 100);
-		HighScoreData e = new HighScoreData("a", 200);
-		HighScoreData f = new HighScoreData("a", 300);
 
-		HighScoreData a = new HighScoreData("a", 150);
-		HighScoreData b = new HighScoreData("a", 120);
-		HighScoreData c = new HighScoreData("a", 100);
-*/
+		ScoreData d = new ScoreData("a", 100);
+		ScoreData e = new ScoreData("a", 200);
+		ScoreData f = new ScoreData("a", 300);
+
+		ScoreData a = new ScoreData("a", 150);
+		ScoreData b = new ScoreData("a", 120);
+		ScoreData c = new ScoreData("a", 100);
+
 		// Create Table Header
 		nameHeader = new Label("Name");
 		nameHeader.setFont(HEADER_FONT);
@@ -66,6 +66,8 @@ public class HallOfFameScene extends BorderPane {
 		String score1 = "NO RECORD";
 		String score2 = "NO RECORD";
 		String score3 = "NO RECORD";
+		
+		ScoreData.readFile();
 
 		if (ScoreData.size() >= 1) {
 			name1 = ScoreData.get(0).getName();

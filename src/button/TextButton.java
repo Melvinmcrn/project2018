@@ -23,8 +23,8 @@ public class TextButton extends MyButton {
 	@Override
 	protected void setEvent() {
 		this.setOnMouseClicked((MouseEvent event) -> {
-			System.out.println(name);
-			SceneManager.gotoScene(goToScene);
+			System.out.println(super.goToScene);
+			SceneManager.gotoScene(super.goToScene);
 		});
 		this.setOnMouseEntered((MouseEvent event) -> {
 			drawButtonGlow();
