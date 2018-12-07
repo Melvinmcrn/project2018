@@ -11,11 +11,10 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public class WelcomeScene extends VBox {
 	
-	private String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground2.jpg").toString();
+	private String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground.jpg").toString();
 	private Image bg_image = new Image(bg_path);
 	private String logo_path = ClassLoader.getSystemResource("images/Logo.png").toString();
 	private Image logo = new Image(logo_path);
