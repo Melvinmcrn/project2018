@@ -5,6 +5,12 @@ import java.util.List;
 
 import component.*;
 import customer.*;
+import javafx.event.EventHandler;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 
 public class GameLogic {
 
@@ -20,11 +26,11 @@ public class GameLogic {
 		tableContainer = new ArrayList<Table>();
 		foodContainer = new ArrayList<Food>();
 		this.initialize();
-		
+
 	}
-	
+
 	private void initialize() {
-		tableContainer.add(new Table(2,2));
+		tableContainer.add(new Table(2, 2));
 		tableContainer.add(new Table(4, 2));
 		tableContainer.add(new Table(6, 2));
 		tableContainer.add(new Table(2, 4));
@@ -33,9 +39,10 @@ public class GameLogic {
 		foodContainer.add(new Dorayaki());
 		foodContainer.add(new Curry());
 		foodContainer.add(new Steak());
+		tableContainer.get(0).sit(new Doraemon(1, 1));
 	}
-	
-	private Customer getRandomCustomer() {
+
+	private Customer getRandomCustomer(int x, int y) {
 		int randomNumber;
 		switch (randomNumber) {
 		case 1:
@@ -46,10 +53,24 @@ public class GameLogic {
 			return new Giant();
 		case 4:
 			return new Shizuka();
-		default :
+		default:
 			return new Suneo();
 		}
-	
+
+	}
+
+	private void setDragCustomer(Customer o) {
+
+	}
+
+	private void setDragFood(Food o) {
+
+		
+	}
+
+	private void setDrop(Table o) {
+
+
 	}
 
 	public static void addMoney(int money) {
@@ -71,8 +92,8 @@ public class GameLogic {
 	public static List<Table> getTableContainer() {
 		return tableContainer;
 	}
-	
-	public static List<Food> getFoodContainer(){
+
+	public static List<Food> getFoodContainer() {
 		return foodContainer;
 	}
 }

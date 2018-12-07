@@ -16,15 +16,16 @@ import logic.GameLogic;
 
 public class Table extends ImageView {
 
-	private boolean isAvailable;
+	private boolean available;
 	private double x;
 	private double y;
 	private Customer customer = null;
 	private String customerName = null;
 	private int money;
-	private boolean isClicked;
-	private String action = null; // null, Sit, Eat, Bill
+	private String action = ""; // "", Sit, Eat, Bill
 	private ProgressBar waitBar;
+	private Table thisTable = this;
+	private Thread waitThread;
 
 	private static final String tableNormal = ClassLoader.getSystemResource("images/TableNormal.png").toString();
 	private static final String tableNormalGlow = ClassLoader.getSystemResource("images/TableNormalGlow.png")
@@ -34,26 +35,40 @@ public class Table extends ImageView {
 		super(tableNormal);
 		this.x = x;
 		this.y = y;
-		this.isAvailable = true;
+		this.available = true;
 		this.money = 0;
 		this.setX(x * 80);
 		this.setY((y - 1) * 80);
 		this.waitBar = new ProgressBar(0);
-		this.isClicked = false;
+		this.waitBar.setLayoutX(x * 80);
+		this.waitBar.setLayoutY(y * 80);
 
 		this.setEvent();
 	}
 
-	private void sit(Customer customer) {
-		if (this.isAvailable) {
+	public void sit(Customer customer) {
+		if (this.isAvailable()) {
 			this.customer = customer;
 			this.customerName = customer.getName();
 			this.action = "Sit";
-			this.isAvailable = false;
+			this.setTableImage(action);
+			this.available = false;
 			customer.setVisible(false);
+			System.out.println("Customer sit");
+			
+			this.waiting(this.customer.getWaitTime());
+			this.leave();
 		}
 	}
 
+	private void bill() {
+		this.action = "Bill";
+		this.setTableImage(this.action);
+		
+		this.waiting(this.customer.getWaitTime());
+		this.leave();
+	}
+	
 	private void checkBill() {
 		GameLogic.addMoney(this.money);
 		this.leave();
@@ -61,32 +76,28 @@ public class Table extends ImageView {
 
 	private void leave() {
 		this.customer = null;
-		this.customerName = null;
-		this.action = null;
-		this.isAvailable = true;
+		this.customerName = "";
+		this.action = "";
+		this.available = true;
 		this.money = 0;
 		this.setTableImage("");
 	}
 
 	private void eat() {
 		this.action = "Eat";
-
-	}
-
-	private void setTableImage(String action) {
-		if (this.isAvailable) {
-			if (action.equals("Glow")) {
-				this.setImage(new Image(tableNormalGlow));
-			} else {
-				this.setImage(new Image(tableNormal));
-			}
-		} else {
-			this.setImage(new Image(this.getImagePath(action)));
-		}
+		this.setTableImage(this.action);
+		this.waiting(5);
+		this.bill();
 	}
 
 	private String getImagePath(String action) {
-		if (!this.isAvailable) {
+		System.out.println("Set table image " + action);
+		
+		if (action.equals("EatGlow")) {
+			action = "Eat";
+		}
+
+		if (!this.available) {
 			return ClassLoader
 					.getSystemResource("images/" + this.customerName + "/" + this.customerName + action + ".png")
 					.toString();
@@ -114,9 +125,28 @@ public class Table extends ImageView {
 		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				if (action.equals("Bill")) {
-					checkBill();
+				if (!isAvailable() && action.equals("Bill")) {
+					waitThread.interrupt();
 				}
+			}
+		});
+
+		this.setOnDragOver(new EventHandler<DragEvent>() {
+			@Override
+			public void handle(DragEvent event) {
+				/* data is dragged over the target */
+				System.out.println("onDragOver");
+
+				/*
+				 * accept it only if it is not dragged from the same node and if it has a string
+				 * data
+				 */
+				if (event.getGestureSource() != thisTable && event.getDragboard().hasString()) {
+					/* allow for moving */
+					event.acceptTransferModes(TransferMode.COPY);
+				}
+
+				event.consume();
 			}
 		});
 
@@ -155,7 +185,7 @@ public class Table extends ImageView {
 					// SHOW MESSAGE THAT IT IS WRONG ACTION
 				} else {
 					if (db.getString().equals(customer.getFood())) {
-						eat();
+						waitThread.interrupt();
 						success = true;
 					} else {
 						// SHOW MESSAGE THAT IT IS WRONG FOOD
@@ -168,29 +198,29 @@ public class Table extends ImageView {
 				event.consume();
 			}
 		});
+
 	}
 
 	private void waiting(int waitTime) {
-		Thread wait = new Thread(() -> {
+		waitThread = new Thread(() -> {
 
 			try {
 				while (this.waitBar.getProgress() < 1) {
-					Platform.runLater(new Runnable() {
-
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							setProgress(waitTime);
-						}
-					});
+					setProgress(waitTime);
+					//System.out.println(action+" "+waitBar.getProgress());
 					Thread.sleep(500);
 				}
 
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
+				if(!this.isAvailable() && this.action.equals("Sit")){
+					this.eat();
+				} else if(!this.isAvailable() && this.action.equals("Bill")){
+					this.checkBill();
+				}
 			}
 		});
-		wait.start();
+		waitThread.start();
 	}
 
 	private void setProgress(int waitTime) {
@@ -201,6 +231,54 @@ public class Table extends ImageView {
 		} else {
 			this.waitBar.setProgress(addProgress + nowProgress);
 		}
+	}
+
+	public void setTableImage(String action) {
+		if (this.available) {
+			if (action.equals("Glow")) {
+				this.setImage(new Image(tableNormalGlow));
+			} else {
+				this.setImage(new Image(tableNormal));
+			}
+		} else {
+			this.setImage(new Image(this.getImagePath(action)));
+		}
+	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public String getAction() {
+		return action;
+	}
+
+	public ProgressBar getWaitBar() {
+		return waitBar;
+	}
+
+	public void setAction(String action) {
+		this.action = action;
 	}
 
 }

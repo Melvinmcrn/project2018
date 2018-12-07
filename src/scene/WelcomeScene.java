@@ -1,6 +1,7 @@
 package scene;
 
 import button.TextButton;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -63,6 +64,7 @@ public class WelcomeScene extends StackPane {
 		buttonBox.setAlignment(Pos.CENTER);
 
 		buttonSet.getChildren().addAll(canvas, buttonBox);
+
 		this.getChildren().addAll(vidView, miscView, buttonSet);
 
 	}

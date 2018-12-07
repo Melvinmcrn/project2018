@@ -20,6 +20,12 @@ public abstract class Food extends ImageView {
 	protected int cookTime;
 	protected boolean isCooked;
 	protected ProgressBar cookBar;
+	protected Food thisFood = this;
+
+	private double orgSceneX;
+	private double orgSceneY;
+	private double orgTranslateX;
+	private double orgTranslateY;
 
 	protected final String imagePath;
 	protected final String imageGlowPath;
@@ -41,11 +47,12 @@ public abstract class Food extends ImageView {
 		this.setX(x * 80);
 		this.setY(y * 80);
 		this.isCooked = false;
+		this.setEvent();
 
 		this.startCooking();
 
 	}
-	
+
 	private void startCooking() {
 		this.cookBar.setProgress(0);
 		this.cookBar.setVisible(true);
@@ -75,10 +82,10 @@ public abstract class Food extends ImageView {
 		cooking.start();
 
 	}
-	
+
 	private void setFoodImage(int status) {
 		// 1 = Normal, 2 = Glow
-		switch(status) {
+		switch (status) {
 		case 1:
 			this.setImage(this.image);
 			break;
@@ -86,7 +93,7 @@ public abstract class Food extends ImageView {
 			this.setImage(this.imageGlow);
 			break;
 		}
-		
+
 	}
 
 	private void setProgress() {
@@ -98,33 +105,33 @@ public abstract class Food extends ImageView {
 			this.cookBar.setProgress(addProgress + nowProgress);
 		}
 	}
-	
-	private void setAction() {
-		
+
+	private void setEvent() {
+
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				setFoodImage(2);
 			}
 		});
-		
+
 		this.setOnMouseExited(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
 				setFoodImage(1);
 			}
 		});
-		
+
 		this.setOnDragDetected(new EventHandler<MouseEvent>() {
+
 			@Override
 			public void handle(MouseEvent event) {
 				System.out.println("onDragDetected");
 
-				/* allow COPY transfer mode */
-				ImageView food = new ImageView(imagePath);
-				Dragboard db = food.startDragAndDrop(TransferMode.MOVE);
+				// allow COPY transfer mode
+				Dragboard db = thisFood.startDragAndDrop(TransferMode.COPY);
 
-				/* put a string on dragboard */
+				// put a string on dragboard
 				ClipboardContent content = new ClipboardContent();
 				content.putString(name);
 				db.setContent(content);
@@ -132,21 +139,71 @@ public abstract class Food extends ImageView {
 				event.consume();
 			}
 		});
-		
+		/*
+		 * this.setOnMouseDragged(new EventHandler<MouseEvent>() {
+		 * 
+		 * @Override public void handle(MouseEvent event) {
+		 * System.out.println(event.getX());
+		 * thisFood.setTranslateX(event.getX()-startDragX);
+		 * thisFood.setTranslateY(event.getY()-startDragY); } });
+		 * 
+		 * 
+		 * this.setOnMousePressed(new EventHandler<MouseEvent>() {
+		 * 
+		 * @Override public void handle(MouseEvent e) { orgSceneX = e.getSceneX();
+		 * orgSceneY = e.getSceneY();
+		 * 
+		 * 
+		 * orgSceneX = e.getSceneX(); orgSceneY = e.getSceneY(); orgTranslateX = ((Food)
+		 * (e.getSource())).getTranslateX(); orgTranslateY = ((Food)
+		 * (e.getSource())).getTranslateY(); } });
+		 * 
+		 * this.setOnMouseDragged(new EventHandler<MouseEvent>() {
+		 * 
+		 * @Override public void handle(MouseEvent e) {
+		 * 
+		 * double deltaX = e.getSceneX() - orgSceneX; double deltaY = e.getSceneY() -
+		 * orgSceneY; relocate(getLayoutX() + deltaX, getLayoutY() + deltaY); orgSceneX
+		 * = e.getSceneX(); orgSceneY = e.getSceneY();
+		 * 
+		 * 
+		 * double offsetX = e.getSceneX() - orgSceneX; double offsetY = e.getScreenX() -
+		 * orgSceneY; double newTranslateX = orgTranslateX + offsetX; double
+		 * newTranslateY = orgTranslateY + offsetY;
+		 * 
+		 * ((Food) (e.getSource())).setTranslateX(newTranslateX); ((Food)
+		 * (e.getSource())).setTranslateX(newTranslateY); } });
+		 */
+
 		this.setOnDragDone(new EventHandler<DragEvent>() {
+
 			@Override
 			public void handle(DragEvent event) {
-				/* the drag-and-drop gesture ended */
+				// the drag-and-drop gesture
 				System.out.println("onDragDone");
-				
-				/* if the data was successfully moved, clear it */
-				if (event.getTransferMode() == TransferMode.MOVE) {
-					startCooking();
-				}
+
+				startCooking();
 
 				event.consume();
 			}
 		});
+
+	}
+
+	public int getPrice() {
+		return price;
+	}
+
+	public void setPrice(int price) {
+		this.price = price;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public boolean isCooked() {
+		return isCooked;
 	}
 
 }

@@ -71,4 +71,8 @@ public abstract class Customer extends ImageView {
 		return waitBar;
 	}
 
+	public int getWaitTime() {
+		return waitTime;
+	}
+
 }
