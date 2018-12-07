@@ -1,14 +1,5 @@
-/assets/
-/application/
-/area/
-/button/
-/customer/
-/data/
-/exception/
-/gameScene/
-/logic/
-/scene/
-/sharedObject/
-/images/
 /data.txt
 /furniture/
+/musics/
+/videos/
+/scene/

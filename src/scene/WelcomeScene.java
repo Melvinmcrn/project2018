@@ -10,22 +10,36 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.util.Duration;
 
-public class WelcomeScene extends VBox {
-	
-	private String bg_path = ClassLoader.getSystemResource("images/WelcomeBackground.jpg").toString();
-	private Image bg_image = new Image(bg_path);
+public class WelcomeScene extends StackPane {
+
 	private String logo_path = ClassLoader.getSystemResource("images/Logo.png").toString();
 	private Image logo = new Image(logo_path);
-	private BackgroundSize bgSize = new BackgroundSize(800, 600, true, true, true, true);
-	private BackgroundImage bg = new BackgroundImage(bg_image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, bgSize);
+	private Media media = new Media(ClassLoader.getSystemResource("videos/WelcomeBG.mp4").toExternalForm());
+	private MediaPlayer player = new MediaPlayer(media);
 	
 	public WelcomeScene() {
 		
-		this.setAlignment(Pos.TOP_CENTER);
-		this.setBackground(new Background(bg));
-		this.setSpacing(65);
+		player.setAutoPlay(true);
+		MediaView view = new MediaView(player);
+		player.setOnEndOfMedia(new Runnable() {
+			@Override
+			public void run() {
+				player.seek(Duration.ZERO);
+				player.play();
+			}
+		});
+		
+		VBox buttonSet = new VBox();
+		
+		buttonSet.setAlignment(Pos.TOP_CENTER);
+		buttonSet.setSpacing(65);
 		
 		Canvas canvas = new Canvas(350, 186);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -39,7 +53,8 @@ public class WelcomeScene extends VBox {
 		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
 		buttonBox.setAlignment(Pos.CENTER);
 
-		this.getChildren().addAll(canvas,buttonBox);
+		buttonSet.getChildren().addAll(canvas,buttonBox);
+		this.getChildren().addAll(view, buttonSet);
 	}
 
 }
