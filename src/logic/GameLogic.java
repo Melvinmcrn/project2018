@@ -3,8 +3,8 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import area.*;
 import customer.*;
+import furniture.*;
 
 public class GameLogic {
 
@@ -21,10 +21,6 @@ public class GameLogic {
 		stoveContainer = new ArrayList<Stove>();
 		this.initialize();
 		
-		
-		// Area area = new Area();
-		// RenderableHolder.getInstance().add(area);
-
 	}
 	
 	private void initialize() {

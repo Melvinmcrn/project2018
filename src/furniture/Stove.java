@@ -1,4 +1,4 @@
-package area;
+package furniture;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.ImageView;

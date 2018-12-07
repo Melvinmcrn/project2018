@@ -1,4 +1,4 @@
-package area;
+package furniture;
 
 import customer.*;
 import javafx.event.EventHandler;
