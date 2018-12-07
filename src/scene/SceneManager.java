@@ -1,6 +1,7 @@
 package scene;
 
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer.Status;
 import javafx.stage.Stage;
 
 public class SceneManager {
@@ -17,7 +18,7 @@ public class SceneManager {
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene characterSelectScene;
 	private static Scene gameScene;
-	
+
 	public static void initialize(Stage stage) {
 		primaryStage = stage;
 		primaryStage.show();
@@ -26,17 +27,31 @@ public class SceneManager {
 	public static void gotoScene(String scene) {
 
 		if (scene.equals("Welcome")) {
+			if (WelcomeScene.getMiscPlayer().getStatus().equals(Status.PAUSED)
+					|| WelcomeScene.getMiscPlayer().getStatus().equals(Status.STOPPED))
+				WelcomeScene.getMiscPlayer().play();
+			WelcomeScene.getVidPlayer().play();
+			if (CharacterSelectScene.getVidPlayer().getStatus().equals(Status.PLAYING))
+				CharacterSelectScene.getVidPlayer().pause();
+			if (GameScene.getMiscPlayer().getStatus().equals(Status.PLAYING))
+				GameScene.getMiscPlayer().stop();
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		} else if (scene.equals("Play")) {
+			WelcomeScene.getVidPlayer().pause();
+			CharacterSelectScene.getVidPlayer().play();
 			characterSelecet = new CharacterSelectScene();
 			characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(characterSelectScene);
 			primaryStage.show();
 		} else if (scene.equals("Hall of Fame")) {
+			WelcomeScene.getVidPlayer().pause();
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
-		} else if(scene.equals("Main Game")) {
+		} else if (scene.equals("Main Game")) {
+			WelcomeScene.getVidPlayer().stop();
+			WelcomeScene.getMiscPlayer().stop();
+			CharacterSelectScene.getVidPlayer().stop();
 			game = new GameScene();
 			gameScene = new Scene(game, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(gameScene);

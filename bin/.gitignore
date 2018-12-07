@@ -1,8 +1,7 @@
-/data.txt
 /furniture/
-/musics/
-/videos/
+/gameScene/
+/logic/
+/component/
+/customer/
 /scene/
-/button/
-/data/
 /images/

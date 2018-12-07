@@ -1,9 +1,9 @@
 package customer;
 
-public class Shizuka extends Customer{
+public class Shizuka extends Customer {
 
-	public Shizuka() {
-		super("Shizuka", tipMoney, waitTime);
+	public Shizuka(int x, int y) {
+		super("Shizuka", 25, "Dorayaki", x, y);
 		// TODO Auto-generated constructor stub
 	}
 

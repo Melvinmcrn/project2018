@@ -3,22 +3,22 @@ package logic;
 import java.util.ArrayList;
 import java.util.List;
 
+import component.*;
 import customer.*;
-import furniture.*;
 
 public class GameLogic {
 
-	private List<Customer> customerContainer;
+	private static List<Customer> customerContainer;
 	private static List<Table> tableContainer;
-	private static List<Stove> stoveContainer;
+	private static List<Food> foodContainer;
 	private static int money = 0;
 	private static double tipMoney = 1;
 
 	public GameLogic() {
-		this.customerContainer = new ArrayList<Customer>();
+		GameLogic.customerContainer = new ArrayList<Customer>();
 		money = 0;
 		tableContainer = new ArrayList<Table>();
-		stoveContainer = new ArrayList<Stove>();
+		foodContainer = new ArrayList<Food>();
 		this.initialize();
 		
 	}
@@ -30,6 +30,9 @@ public class GameLogic {
 		tableContainer.add(new Table(2, 4));
 		tableContainer.add(new Table(4, 4));
 		tableContainer.add(new Table(6, 4));
+		foodContainer.add(new Dorayaki());
+		foodContainer.add(new Curry());
+		foodContainer.add(new Steak());
 	}
 	
 	private Customer getRandomCustomer() {
@@ -58,7 +61,7 @@ public class GameLogic {
 	}
 
 	public void setTipMoney(double tipMoney) {
-		this.tipMoney = tipMoney;
+		GameLogic.tipMoney = tipMoney;
 	}
 
 	public List<Customer> getCustomerContainer() {
@@ -69,7 +72,7 @@ public class GameLogic {
 		return tableContainer;
 	}
 	
-	public static List<Stove> getStoveContainer(){
-		return stoveContainer;
+	public static List<Food> getFoodContainer(){
+		return foodContainer;
 	}
 }

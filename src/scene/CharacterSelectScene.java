@@ -45,18 +45,21 @@ public class CharacterSelectScene extends StackPane {
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 
+	private static Media charSelBG = new Media(
+			ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());
+	private static MediaPlayer charSelPlayer = new MediaPlayer(charSelBG);
+
 	public CharacterSelectScene() {
 
 		// Video Background
-		Media media = new Media(ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());
-		MediaPlayer player = new MediaPlayer(media);
-		player.setAutoPlay(true);
-		MediaView view = new MediaView(player);
-		player.setOnEndOfMedia(new Runnable() {
+
+		charSelPlayer.setAutoPlay(true);
+		MediaView view = new MediaView(charSelPlayer);
+		charSelPlayer.setOnEndOfMedia(new Runnable() {
 			@Override
 			public void run() {
-				player.seek(Duration.ZERO);
-				player.play();
+				charSelPlayer.seek(Duration.ZERO);
+				charSelPlayer.play();
 			}
 		});
 
@@ -68,7 +71,7 @@ public class CharacterSelectScene extends StackPane {
 		// Character Select
 		charID = 0;
 		VBox characterSet = new VBox();
-		//characterSet.setPadding(new Insets(40, 0, 0, 130));
+		// characterSet.setPadding(new Insets(40, 0, 0, 130));
 		characterSet.setPadding(new Insets(40, 0, 0, 0));
 		characterSet.setAlignment(Pos.CENTER);
 		characterSet.setSpacing(20);
@@ -100,51 +103,52 @@ public class CharacterSelectScene extends StackPane {
 		nameTextField.setMaxWidth(300);
 		nameTextField.setAlignment(Pos.CENTER);
 		nameTextField.getStylesheets().add("assets/CharacterSelect.css");
-		
-		//Restrict Space
+
+		// Restrict Space
 		nameTextField.textProperty().addListener((observable, old_value, new_value) -> {
-			  	 try {
-			  		if(new_value.contains(" ")) {
-			                nameTextField.setText(old_value); 
-			                throw new CharacterRestrictException();
-			          }
-			  	 } catch (CharacterRestrictException e) {
-			  		 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name cannot be space");
-			  		 alert.show();
-			  	 } catch (Exception e) {
-			  		 e.printStackTrace();
-			  	 }
+			try {
+				if (new_value.contains(" ")) {
+					nameTextField.setText(old_value);
+					throw new CharacterRestrictException();
+				}
+			} catch (CharacterRestrictException e) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name cannot be space");
+				alert.show();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		});
 		addTextLimiter(nameTextField, 12);
-		
+
 		// Add background
 		Canvas textFieldBackground = new Canvas(340, 70);
 		gc = textFieldBackground.getGraphicsContext2D();
 		gc.drawImage(nameTextFieldBackground, 0, 0);
-		
+
 		// OK Button
 		NavigationButton okButton = new NavigationButton("Ok", "");
 		EventHandler<InputEvent> handler = new EventHandler<InputEvent>() {
-            public void handle(InputEvent event) {
-            	try {
-            		if(nameTextField.getText().length() > 0) {
-                		setCharName(nameTextField.getText());
-                        nameTextField.setEditable(false);
-                	} else {
-                		throw new NameLengthRestrictException();
-                	}
-			  	 } catch (NameLengthRestrictException e) {
-			  		 Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name should have 1 - 12 characters long");
-			  		 alert.show();
-			  	 } catch (Exception e) {
-			  		 e.printStackTrace();
-			  	 }
-            }
-        };
-		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED , handler);
-		
-		//	Name Set
-		nameField.getChildren().addAll(textFieldBackground ,nameTextField);
+			public void handle(InputEvent event) {
+				try {
+					if (nameTextField.getText().length() > 0) {
+						charName = nameTextField.getText();
+						nameTextField.setEditable(false);
+					} else {
+						throw new NameLengthRestrictException();
+					}
+				} catch (NameLengthRestrictException e) {
+					Alert alert = new Alert(Alert.AlertType.INFORMATION,
+							"Player Name should have 1 - 12 characters long");
+					alert.show();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
+
+		// Name Set
+		nameField.getChildren().addAll(textFieldBackground, nameTextField);
 		nameSet.getChildren().addAll(nameField, okButton);
 		characterSet.getChildren().addAll(characterSelect, nameSet);
 
@@ -154,16 +158,18 @@ public class CharacterSelectScene extends StackPane {
 			protected void setEvent() {
 				this.setOnMouseClicked((MouseEvent event) -> {
 					try {
-						if(getCharID() == 0) throw new CharacterNotSelectedException();
-						if(getCharName() == null) throw new NameNotEnteredException();
+						if (getCharID() == 0)
+							throw new CharacterNotSelectedException();
+						if (getCharName() == null)
+							throw new NameNotEnteredException();
 						System.out.println(name);
 						SceneManager.gotoScene(goToScene);
 					} catch (CharacterNotSelectedException e) {
 						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please select your character");
-				  		alert.show();
+						alert.show();
 					} catch (NameNotEnteredException e) {
 						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please enter player name and click OK");
-				  		alert.show();
+						alert.show();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -177,7 +183,7 @@ public class CharacterSelectScene extends StackPane {
 			}
 		};
 		NavigationButton backButton = new NavigationButton("Back", "Welcome");
-		
+
 		HBox navigationBtnBox = new HBox();
 		navigationBtnBox.getChildren().addAll(backButton, nextButton);
 		navigationBtnBox.setAlignment(Pos.CENTER_LEFT);
@@ -199,36 +205,24 @@ public class CharacterSelectScene extends StackPane {
 		this.getChildren().addAll(view, borderPane);
 	}
 
-	public int getCharID() {
-		return charID;
+	public static MediaPlayer getVidPlayer() {
+		return charSelPlayer;
 	}
 
-	public void setCharID(int charID) {
-		this.charID = charID;
+	public int getCharID() {
+		return charID;
 	}
 
 	public String getCharName() {
 		return charName;
 	}
 
-	public void setCharName(String charName) {
-		this.charName = charName;
-	}
-
 	public boolean isSelect1() {
 		return isSelect1;
 	}
 
-	public void setSelect1(boolean isSelect1) {
-		this.isSelect1 = isSelect1;
-	}
-
 	public boolean isSelect2() {
 		return isSelect2;
-	}
-
-	public void setSelect2(boolean isSelect2) {
-		this.isSelect2 = isSelect2;
 	}
 
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
@@ -239,11 +233,11 @@ public class CharacterSelectScene extends StackPane {
 			if (thisID == 1) {
 				this.isSelect1 = true;
 				this.isSelect2 = false;
-				this.setCharID(1);
+				this.charID = 1;
 			} else if (thisID == 2) {
 				this.isSelect2 = true;
 				this.isSelect1 = false;
-				this.setCharID(2);
+				this.charID = 2;
 			}
 		});
 		thisCanvas.setOnMouseEntered((MouseEvent event) -> {

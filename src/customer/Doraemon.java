@@ -2,9 +2,8 @@ package customer;
 
 public class Doraemon extends Customer {
 
-	public Doraemon() {
-		super("Doraemon", tipMoney, waitTime);
-		// TODO Auto-generated constructor stub
+	public Doraemon(int x, int y) {
+		super("Doraemon", 17, "Dorayaki", x, y);
 	}
 
 }
