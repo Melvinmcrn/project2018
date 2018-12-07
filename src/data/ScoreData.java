@@ -1,6 +1,8 @@
 package data;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,9 +13,9 @@ import javafx.collections.ObservableList;
 public class ScoreData implements Comparable<ScoreData> {
 
 	private static ObservableList<ScoreData> data = FXCollections.observableArrayList();
+	private static String filePath = ClassLoader.getSystemResource("data/data.txt").toString();
 	private String name;
 	private int score;
-	private String filePath = ClassLoader.getSystemResource("res/data.txt").toString();
 
 	public ScoreData(String name, int score) {
 		this.name = name;
@@ -21,30 +23,47 @@ public class ScoreData implements Comparable<ScoreData> {
 		this.add(this);
 	}
 	
-	private void readFile() {
-		try {
-			FileReader fileReader = new FileReader(new File(this.filePath));
-			
-		}
-	}
-	
-	private void writeFile() {
+	private static void writeFile() {
 		String dataString = "";
 		for(ScoreData x : ScoreData.data) {
 			dataString += x.getName() + " " + x.getScore() + "\n";
 		}
 		
 		try {
-			FileWriter fileWriter = new FileWriter(new File(this.filePath));
+			FileWriter fileWriter = new FileWriter(new File(filePath));
 			fileWriter.write(dataString);
+			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public static void readFile() {
+		try {
+			String directory = System.getProperty("user.home");
+			BufferedReader bufferedReader = new BufferedReader(new FileReader("file:///E:\\javacoding\\project2018\\res\\data\\data.txt"));
+			String line = bufferedReader.readLine();
+			ScoreData.data.clear();
+			while (line!=null) {
+				line.trim();
+				String[] lineSplit = line.split(" ");
+				@SuppressWarnings("unused")
+				ScoreData addData = new ScoreData(lineSplit[0], Integer.parseInt(lineSplit[1]));
+				line = bufferedReader.readLine();
+			}
+			bufferedReader.close();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void add(ScoreData data) {
 		ScoreData.data.add(data);
 		ScoreData.data.sort(null);
+		ScoreData.writeFile();
 	}
 
 	public void remove(String name) {
@@ -53,6 +72,7 @@ public class ScoreData implements Comparable<ScoreData> {
 				data.remove(i);
 			}
 		}
+		ScoreData.writeFile();
 
 	}
 
