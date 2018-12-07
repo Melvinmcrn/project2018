@@ -1,5 +1,10 @@
 package data;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -8,11 +13,33 @@ public class ScoreData implements Comparable<ScoreData> {
 	private static ObservableList<ScoreData> data = FXCollections.observableArrayList();
 	private String name;
 	private int score;
+	private String filePath = ClassLoader.getSystemResource("res/data.txt").toString();
 
 	public ScoreData(String name, int score) {
 		this.name = name;
 		this.score = score;
 		this.add(this);
+	}
+	
+	private void readFile() {
+		try {
+			FileReader fileReader = new FileReader(new File(this.filePath));
+			
+		}
+	}
+	
+	private void writeFile() {
+		String dataString = "";
+		for(ScoreData x : ScoreData.data) {
+			dataString += x.getName() + " " + x.getScore() + "\n";
+		}
+		
+		try {
+			FileWriter fileWriter = new FileWriter(new File(this.filePath));
+			fileWriter.write(dataString);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void add(ScoreData data) {
