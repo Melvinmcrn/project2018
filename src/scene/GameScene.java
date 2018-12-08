@@ -17,6 +17,7 @@ public class GameScene extends VBox {
 	private GameLogic gameLogic;
 
 	private static Pane mainGame;
+	private static Pane statusBar;
 	private Image gameBG = new Image(ClassLoader.getSystemResource("images/GameBackground.png").toString());
 	private static Media gameBGM = new Media(ClassLoader.getSystemResource("musics/GameBGM.mp3").toExternalForm());
 	private static MediaPlayer gameMisc = new MediaPlayer(gameBGM);
@@ -47,9 +48,11 @@ public class GameScene extends VBox {
 		mainGame.getChildren().addAll(GameLogic.getTableContainer());
 		mainGame.getChildren().addAll(GameLogic.getcookBarContainer());
 		
-		//mainGame.getChildren().add(GameLogic.getTableContainer().get(0).getWaitBar());
-
-		this.getChildren().addAll(view, mainGame);
+		//	Set status bar
+		statusBar = new Pane();
+		
+		
+		this.getChildren().addAll(view, mainGame, statusBar);
 
 		AnimationTimer animation = new AnimationTimer() {
 
