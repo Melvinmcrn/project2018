@@ -19,14 +19,14 @@ public abstract class Food extends ImageView {
 	protected final int price;
 	protected final int cookTime;
 	protected final Food thisFood = this;
-	
+
 	protected final String imagePath;
 	protected final String imageGlowPath;
 	protected final String imageBwPath;
 	protected final Image image;
 	protected final Image imageGlow;
 	protected final Image imageBw;
-	
+
 	protected boolean isCooked;
 	protected ProgressBar cookBar;
 
@@ -34,27 +34,30 @@ public abstract class Food extends ImageView {
 		this.name = name;
 		this.price = price;
 		this.cookTime = cookTime;
-		
+
+		// Set image
 		this.imagePath = ClassLoader.getSystemResource("images/" + name + ".png").toString();
 		this.imageGlowPath = ClassLoader.getSystemResource("images/" + name + "Glow.png").toString();
 		this.imageBwPath = ClassLoader.getSystemResource("images/" + name + "Bw.png").toString();
 		this.image = new Image(this.imagePath);
 		this.imageGlow = new Image(this.imageGlowPath);
 		this.imageBw = new Image(this.imageBwPath);
-		this.setFoodImage(1);
-		
+
+		// Set position
 		this.x = x;
 		this.y = y;
 		this.setX(x * 80);
 		this.setY(y * 80);
-		this.isCooked = false;
-		this.setEvent();
-		
+
+		// Set cookBar
 		this.cookBar = new ProgressBar(0);
 		this.cookBar.setPrefWidth(80);
-		this.cookBar.setLayoutX(x*80);
-		this.cookBar.setLayoutY((y+1)*80);
+		this.cookBar.setLayoutX(x * 80);
+		this.cookBar.setLayoutY((y * 80) + 65);
+		this.isCooked = false;
 
+		this.setEvent();
+		this.setFoodImage(3);
 		this.startCooking();
 
 	}
@@ -62,6 +65,8 @@ public abstract class Food extends ImageView {
 	private void startCooking() {
 		this.cookBar.setProgress(0);
 		this.cookBar.setVisible(true);
+		this.setDisable(true);
+		this.setFoodImage(3);
 		this.cooking();
 	}
 
@@ -80,7 +85,9 @@ public abstract class Food extends ImageView {
 					Thread.sleep(500);
 				}
 				this.isCooked = true;
+				this.setDisable(false);
 				this.cookBar.setVisible(false);
+				this.setFoodImage(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -149,15 +156,16 @@ public abstract class Food extends ImageView {
 				event.consume();
 			}
 		});
-		
+
 		this.setOnDragDone(new EventHandler<DragEvent>() {
 
 			@Override
 			public void handle(DragEvent event) {
 				// the drag-and-drop gesture
-				//System.out.println(name + " drag done");
-
-				startCooking();
+				// System.out.println(name + " drag done");
+				if (event.getTransferMode() == TransferMode.COPY) {
+					startCooking();
+				}
 
 				event.consume();
 			}
@@ -176,7 +184,7 @@ public abstract class Food extends ImageView {
 	public boolean isCooked() {
 		return isCooked;
 	}
-	
+
 	public ProgressBar getCookBar() {
 		return cookBar;
 	}

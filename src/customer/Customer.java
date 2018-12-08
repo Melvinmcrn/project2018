@@ -44,6 +44,7 @@ public abstract class Customer extends ImageView {
 		this.waitBar.setLayoutX(x*80);
 		this.waitBar.setLayoutY((y*80)+80);
 		this.waitBar.setPrefWidth(80);
+		this.waitBar.setVisible(false);
 		
 		this.setEvent();
 	}
@@ -109,8 +110,10 @@ public abstract class Customer extends ImageView {
 			@Override
 			public void handle(DragEvent event) {
 				// the drag-and-drop gesture
-				System.out.println(name + " drag done");
-				// thisCustomer.setVisible(false);
+				if (event.getTransferMode() == TransferMode.MOVE) {
+					System.out.println(name + " drag done");
+					thisCustomer.setVisible(false);
+				}		
 
 				event.consume();
 			}
@@ -166,6 +169,9 @@ public abstract class Customer extends ImageView {
 		return waitTime;
 	}
 	
-	//public void set
+	public void setWaitBarLocation(int x, int y) {
+		this.waitBar.setLayoutX(x*80);
+		this.waitBar.setLayoutY((y*80)+80);
+	}
 
 }

@@ -16,16 +16,18 @@ import logic.GameLogic;
 
 public class Table extends ImageView {
 
-	private boolean available;
-	private double x;
-	private double y;
+	private final int x;
+	private final int y;
+	private final Table thisTable = this;
+
 	private Customer customer = null;
 	private String customerName = null;
 	private int eatTime = 0;
 	private int money;
 	private String action = ""; // "", Sit, Eat, Bill
 	private ProgressBar eatBar;
-	private Table thisTable = this;
+	private boolean available;
+
 	private Thread eatThread;
 
 	private static final String tableNormal = ClassLoader.getSystemResource("images/TableNormal.png").toString();
@@ -38,13 +40,14 @@ public class Table extends ImageView {
 		this.y = y;
 		this.available = true;
 		this.money = 0;
-		this.setX(x * 80);
-		this.setY((y - 1) * 80);
+		this.setX(this.x * 80);
+		this.setY((this.y - 1) * 80);
 
 		this.eatBar = new ProgressBar(0);
 		this.eatBar.setLayoutX(x * 80);
 		this.eatBar.setLayoutY((y * 80) + 80);
 		this.eatBar.setPrefWidth(80);
+		this.eatBar.setVisible(false);
 
 		this.setEvent();
 	}
@@ -89,11 +92,21 @@ public class Table extends ImageView {
 	}
 
 	private void eat() {
+		System.out.println(this.customerName + " in eat action");
 		this.action = "Eat";
-		this.money += this.customer.getFood().getPrice();
+		
+		int foodPrice;
+		if(this.customer.getfoodName().equals("Dorayaki")) {
+			foodPrice = new Dorayaki().getPrice();
+		} else if(this.customer.getfoodName().equals("Curry")) {
+			foodPrice = new Curry().getPrice();
+		} else {
+			foodPrice = new Steak().getPrice();
+		}
+		this.money += foodPrice;
+		
 		this.setTableImage(this.action);
-		// this.eating(5);
-		this.bill();
+		this.eating(this.eatTime);
 	}
 
 	private String getImagePath(String action) {
@@ -203,7 +216,7 @@ public class Table extends ImageView {
 					} else {
 						// START EATING
 						// EAT TIME = COOK TIME
-						System.err.println(content[1] + " is served");
+						System.out.println(content[1] + " is served");
 						eatTime = Integer.parseInt(content[2]);
 						success = true;
 						eat();
@@ -217,10 +230,11 @@ public class Table extends ImageView {
 						sit(GameLogic.getWaitArea()[i]);
 						GameLogic.getWaitArea()[i] = null;
 						success = true;
+						customer.setWaitBarLocation(x, y);
 						System.out.println(content[1] + " is seated");
 					} else {
 						// SHOW THAT IT IS NOT AVAILABLE
-						System.out.println("Table is not available");
+						System.err.println("Table is not available");
 					}
 				}
 
@@ -235,22 +249,21 @@ public class Table extends ImageView {
 	}
 
 	private void eating(int eatTime) {
+		System.out.println(this.customerName + " is eating");
 		eatThread = new Thread(() -> {
 
 			try {
+				this.eatBar.setVisible(true);
 				while (this.eatBar.getProgress() < 1) {
 					setProgress(eatTime);
 					// System.out.println(action+" "+eatBar.getProgress());
 					Thread.sleep(500);
 				}
+				this.eatBar.setVisible(false);
+				bill();
 
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
-				if (!this.isAvailable() && this.action.equals("Sit")) {
-					this.eat();
-				} else if (!this.isAvailable() && this.action.equals("Bill")) {
-					this.checkBill();
-				}
 			}
 		});
 		eatThread.start();

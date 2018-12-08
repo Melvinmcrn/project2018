@@ -67,13 +67,12 @@ public class GameLogic {
 			isThreadRunning = true;
 			generateCustomerThread = new Thread(() -> {
 				try {
-					// isThreadRunning = true;
 					// System.out.println("Start generating customer thread");
-					Thread.sleep(GameLogic.generateTime * 1000);
 					int i = this.getAvailableWaitArea();
 					while (i == -1) {
 						i = this.getAvailableWaitArea();
 					}
+					Thread.sleep(GameLogic.generateTime * 1000);
 					// System.out.println("Generate customer at position " + i);
 					newCustomer = this.getRandomCustomer(i + 2, 0);
 					isThreadRunning = false;
