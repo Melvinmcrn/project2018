@@ -1,13 +1,7 @@
-/fonts/
-/musics/
-/videos/
-/application/
-/button/
-/component/
 /customer/
 /data/
 /exception/
-/images/
 /logic/
 /scene/
 /sharedObject/
+/component/

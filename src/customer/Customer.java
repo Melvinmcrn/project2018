@@ -1,26 +1,34 @@
 package customer;
 
-import javafx.application.Platform;
+import component.*;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 
 public abstract class Customer extends ImageView {
 
 	protected String name;
-	protected String food;
+	protected Food food;
+	protected String foodName;
 	protected int waitTime;
 	protected ProgressBar waitBar;
 
 	protected final String imagePath;
 	protected final String imageGlowPath;
+	protected final Image image;
+	protected final Image imageGlow;
 
-	public Customer(String name, int waitTime, String food, int x, int y) {
+	public Customer(String name, int waitTime, Food food, int x, int y) {
 		super();
 		this.name = name;
 		this.food = food;
+		this.setX(x * 80);
+		this.setY(y * 80);
 		this.imagePath = ClassLoader.getSystemResource("images/" + name + "/" + name + ".png").toString();
 		this.imageGlowPath = ClassLoader.getSystemResource("images/" + name + "/" + name + "Glow.png").toString();
+		this.image = new Image(this.imagePath);
+		this.imageGlow = new Image(this.imageGlowPath);
+		this.setImage(this.image);
 		this.waitTime = waitTime;
 		this.waitBar = new ProgressBar(0);
 	}
@@ -40,14 +48,9 @@ public abstract class Customer extends ImageView {
 
 			try {
 				while (this.waitBar.getProgress() < 1) {
-					Platform.runLater(new Runnable() {
 
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							setProgress();
-						}
-					});
+					setProgress();
+
 					Thread.sleep(500);
 				}
 
@@ -63,8 +66,12 @@ public abstract class Customer extends ImageView {
 		return this.name;
 	}
 
-	public String getFood() {
+	public Food getFood() {
 		return food;
+	}
+
+	public String getFoodName() {
+		return foodName;
 	}
 
 	public ProgressBar getWaitBar() {

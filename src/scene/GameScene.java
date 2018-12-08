@@ -16,7 +16,7 @@ public class GameScene extends VBox {
 
 	private GameLogic gameLogic;
 
-	private Pane mainGame;
+	private static Pane mainGame;
 	private Image gameBG = new Image(ClassLoader.getSystemResource("images/GameBackground.png").toString());
 	private static Media gameBGM = new Media(ClassLoader.getSystemResource("musics/GameBGM.mp3").toExternalForm());
 	private static MediaPlayer gameMisc = new MediaPlayer(gameBGM);
@@ -41,9 +41,12 @@ public class GameScene extends VBox {
 		mainGame.setPrefWidth(800);
 		mainGame.setBackground(new Background(new BackgroundImage(gameBG, null, null, null, null)));
 		mainGame.setVisible(true);
-
-		mainGame.getChildren().addAll(GameLogic.getTableContainer());
+		
 		mainGame.getChildren().addAll(GameLogic.getFoodContainer());
+		mainGame.getChildren().addAll(GameLogic.getTableContainer());
+		mainGame.getChildren().addAll(GameLogic.getCustomerContainer());
+		
+		mainGame.getChildren().add(GameLogic.getTableContainer().get(0).getWaitBar());
 
 		this.getChildren().addAll(view, mainGame);
 
@@ -51,7 +54,6 @@ public class GameScene extends VBox {
 
 			@Override
 			public void handle(long now) {
-				// mainGame.paintComponent();
 				gameLogic.logicUpdate();
 
 			}
@@ -61,6 +63,10 @@ public class GameScene extends VBox {
 
 	public static MediaPlayer getMiscPlayer() {
 		return gameMisc;
+	}
+	
+	public static Pane getMainGame() {
+		return mainGame;
 	}
 
 }

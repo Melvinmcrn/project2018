@@ -25,7 +25,7 @@ public class Table extends ImageView {
 	private String action = ""; // "", Sit, Eat, Bill
 	private ProgressBar waitBar;
 	private Table thisTable = this;
-	private Thread waitThread;
+	private Thread eatThread;
 
 	private static final String tableNormal = ClassLoader.getSystemResource("images/TableNormal.png").toString();
 	private static final String tableNormalGlow = ClassLoader.getSystemResource("images/TableNormalGlow.png")
@@ -56,7 +56,8 @@ public class Table extends ImageView {
 			customer.setVisible(false);
 			System.out.println("Customer sit");
 			
-			this.waiting(this.customer.getWaitTime());
+			//this.eating(eatTime);
+			//this.customer.getWaitTime());
 			this.leave();
 		}
 	}
@@ -65,7 +66,7 @@ public class Table extends ImageView {
 		this.action = "Bill";
 		this.setTableImage(this.action);
 		
-		this.waiting(this.customer.getWaitTime());
+		this.eating(this.customer.getWaitTime());
 		this.leave();
 	}
 	
@@ -201,12 +202,12 @@ public class Table extends ImageView {
 
 	}
 
-	private void waiting(int waitTime) {
-		waitThread = new Thread(() -> {
+	private void eating(int eatTime) {
+		eatThread = new Thread(() -> {
 
 			try {
 				while (this.waitBar.getProgress() < 1) {
-					setProgress(waitTime);
+					setProgress(eatTime);
 					//System.out.println(action+" "+waitBar.getProgress());
 					Thread.sleep(500);
 				}
@@ -220,7 +221,7 @@ public class Table extends ImageView {
 				}
 			}
 		});
-		waitThread.start();
+		eatThread.start();
 	}
 
 	private void setProgress(int waitTime) {

@@ -22,11 +22,6 @@ public abstract class Food extends ImageView {
 	protected ProgressBar cookBar;
 	protected Food thisFood = this;
 
-	private double orgSceneX;
-	private double orgSceneY;
-	private double orgTranslateX;
-	private double orgTranslateY;
-
 	protected final String imagePath;
 	protected final String imageGlowPath;
 	protected final Image image;
