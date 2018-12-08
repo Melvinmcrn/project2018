@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -44,7 +45,9 @@ public class CharacterSelectScene extends StackPane {
 			ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
-
+	private AudioClip mouseIn = new AudioClip(ClassLoader.getSystemResource("musics/mouseIn.mp3").toExternalForm());
+	private AudioClip mouseClicked = new AudioClip(
+			ClassLoader.getSystemResource("musics/mouseClicked.mp3").toExternalForm());
 	private static Media charSelBG = new Media(
 			ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());
 	private static MediaPlayer charSelPlayer = new MediaPlayer(charSelBG);
@@ -162,6 +165,7 @@ public class CharacterSelectScene extends StackPane {
 							throw new CharacterNotSelectedException();
 						if (getCharName() == null)
 							throw new NameNotEnteredException();
+						mouseClicked.play();
 						System.out.println(name);
 						SceneManager.gotoScene(goToScene);
 					} catch (CharacterNotSelectedException e) {
@@ -175,6 +179,7 @@ public class CharacterSelectScene extends StackPane {
 					}
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
+					mouseIn.play();
 					drawButtonGlow();
 				});
 				this.setOnMouseExited((MouseEvent event) -> {
@@ -239,9 +244,11 @@ public class CharacterSelectScene extends StackPane {
 				this.isSelect1 = false;
 				this.charID = 2;
 			}
+			mouseClicked.play();
 		});
 		thisCanvas.setOnMouseEntered((MouseEvent event) -> {
 			this.drawCharacterSelected(thisID, thisCanvas);
+			mouseIn.play();
 		});
 		thisCanvas.setOnMouseExited((MouseEvent event) -> {
 			if ((!isSelect1 && thisID == 1) || (!isSelect2 && thisID == 2)) {

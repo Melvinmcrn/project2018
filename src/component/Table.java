@@ -24,7 +24,7 @@ public class Table extends ImageView {
 	private int eatTime = 0;
 	private int money;
 	private String action = ""; // "", Sit, Eat, Bill
-	private ProgressBar waitBar;
+	private ProgressBar eatBar;
 	private Table thisTable = this;
 	private Thread eatThread;
 
@@ -40,9 +40,11 @@ public class Table extends ImageView {
 		this.money = 0;
 		this.setX(x * 80);
 		this.setY((y - 1) * 80);
-		this.waitBar = new ProgressBar(0);
-		this.waitBar.setLayoutX(x * 80);
-		this.waitBar.setLayoutY(y * 80);
+
+		this.eatBar = new ProgressBar(0);
+		this.eatBar.setLayoutX(x * 80);
+		this.eatBar.setLayoutY((y * 80) + 80);
+		this.eatBar.setPrefWidth(80);
 
 		this.setEvent();
 	}
@@ -90,7 +92,7 @@ public class Table extends ImageView {
 		this.action = "Eat";
 		this.money += this.customer.getFood().getPrice();
 		this.setTableImage(this.action);
-		//this.eating(5);
+		// this.eating(5);
 		this.bill();
 	}
 
@@ -236,9 +238,9 @@ public class Table extends ImageView {
 		eatThread = new Thread(() -> {
 
 			try {
-				while (this.waitBar.getProgress() < 1) {
+				while (this.eatBar.getProgress() < 1) {
 					setProgress(eatTime);
-					// System.out.println(action+" "+waitBar.getProgress());
+					// System.out.println(action+" "+eatBar.getProgress());
 					Thread.sleep(500);
 				}
 
@@ -256,11 +258,11 @@ public class Table extends ImageView {
 
 	private void setProgress(int waitTime) {
 		double addProgress = 0.5 / waitTime;
-		double nowProgress = this.waitBar.getProgress();
+		double nowProgress = this.eatBar.getProgress();
 		if (addProgress + nowProgress > 1) {
-			this.waitBar.setProgress(1);
+			this.eatBar.setProgress(1);
 		} else {
-			this.waitBar.setProgress(addProgress + nowProgress);
+			this.eatBar.setProgress(addProgress + nowProgress);
 		}
 	}
 
@@ -304,12 +306,8 @@ public class Table extends ImageView {
 		return action;
 	}
 
-	public ProgressBar getWaitBar() {
-		return waitBar;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
+	public ProgressBar getEatBar() {
+		return eatBar;
 	}
 
 }

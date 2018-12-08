@@ -1,7 +1,6 @@
 package scene;
 
 import button.TextButton;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

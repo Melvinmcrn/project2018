@@ -6,7 +6,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -14,36 +13,47 @@ import javafx.scene.input.TransferMode;
 
 public abstract class Food extends ImageView {
 
-	protected String name;
-	protected int x;
-	protected int y;
-	protected int price;
-	protected int cookTime;
-	protected boolean isCooked;
-	protected ProgressBar cookBar;
-	protected Food thisFood = this;
-
+	protected final String name;
+	protected final int x;
+	protected final int y;
+	protected final int price;
+	protected final int cookTime;
+	protected final Food thisFood = this;
+	
 	protected final String imagePath;
 	protected final String imageGlowPath;
+	protected final String imageBwPath;
 	protected final Image image;
 	protected final Image imageGlow;
+	protected final Image imageBw;
+	
+	protected boolean isCooked;
+	protected ProgressBar cookBar;
 
 	public Food(String name, int price, int cookTime, int x, int y) {
 		this.name = name;
 		this.price = price;
 		this.cookTime = cookTime;
-		this.cookBar = new ProgressBar(0);
+		
 		this.imagePath = ClassLoader.getSystemResource("images/" + name + ".png").toString();
 		this.imageGlowPath = ClassLoader.getSystemResource("images/" + name + "Glow.png").toString();
+		this.imageBwPath = ClassLoader.getSystemResource("images/" + name + "Bw.png").toString();
 		this.image = new Image(this.imagePath);
 		this.imageGlow = new Image(this.imageGlowPath);
+		this.imageBw = new Image(this.imageBwPath);
 		this.setFoodImage(1);
+		
 		this.x = x;
 		this.y = y;
 		this.setX(x * 80);
 		this.setY(y * 80);
 		this.isCooked = false;
 		this.setEvent();
+		
+		this.cookBar = new ProgressBar(0);
+		this.cookBar.setPrefWidth(80);
+		this.cookBar.setLayoutX(x*80);
+		this.cookBar.setLayoutY((y+1)*80);
 
 		this.startCooking();
 
@@ -80,13 +90,16 @@ public abstract class Food extends ImageView {
 	}
 
 	private void setFoodImage(int status) {
-		// 1 = Normal, 2 = Glow
+		// 1 = Normal, 2 = Glow, 3 = Bw
 		switch (status) {
 		case 1:
 			this.setImage(this.image);
 			break;
-		default:
+		case 2:
 			this.setImage(this.imageGlow);
+			break;
+		case 3:
+			this.setImage(this.imageBw);
 			break;
 		}
 
@@ -136,42 +149,7 @@ public abstract class Food extends ImageView {
 				event.consume();
 			}
 		});
-		/*
-		 * this.setOnMouseDragged(new EventHandler<MouseEvent>() {
-		 * 
-		 * @Override public void handle(MouseEvent event) {
-		 * System.out.println(event.getX());
-		 * thisFood.setTranslateX(event.getX()-startDragX);
-		 * thisFood.setTranslateY(event.getY()-startDragY); } });
-		 * 
-		 * 
-		 * this.setOnMousePressed(new EventHandler<MouseEvent>() {
-		 * 
-		 * @Override public void handle(MouseEvent e) { orgSceneX = e.getSceneX();
-		 * orgSceneY = e.getSceneY();
-		 * 
-		 * 
-		 * orgSceneX = e.getSceneX(); orgSceneY = e.getSceneY(); orgTranslateX = ((Food)
-		 * (e.getSource())).getTranslateX(); orgTranslateY = ((Food)
-		 * (e.getSource())).getTranslateY(); } });
-		 * 
-		 * this.setOnMouseDragged(new EventHandler<MouseEvent>() {
-		 * 
-		 * @Override public void handle(MouseEvent e) {
-		 * 
-		 * double deltaX = e.getSceneX() - orgSceneX; double deltaY = e.getSceneY() -
-		 * orgSceneY; relocate(getLayoutX() + deltaX, getLayoutY() + deltaY); orgSceneX
-		 * = e.getSceneX(); orgSceneY = e.getSceneY();
-		 * 
-		 * 
-		 * double offsetX = e.getSceneX() - orgSceneX; double offsetY = e.getScreenX() -
-		 * orgSceneY; double newTranslateX = orgTranslateX + offsetX; double
-		 * newTranslateY = orgTranslateY + offsetY;
-		 * 
-		 * ((Food) (e.getSource())).setTranslateX(newTranslateX); ((Food)
-		 * (e.getSource())).setTranslateX(newTranslateY); } });
-		 */
-
+		
 		this.setOnDragDone(new EventHandler<DragEvent>() {
 
 			@Override
@@ -191,16 +169,16 @@ public abstract class Food extends ImageView {
 		return price;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public boolean isCooked() {
 		return isCooked;
+	}
+	
+	public ProgressBar getCookBar() {
+		return cookBar;
 	}
 
 }

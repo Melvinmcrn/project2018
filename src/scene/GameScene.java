@@ -43,10 +43,11 @@ public class GameScene extends VBox {
 		mainGame.setVisible(true);
 		
 		mainGame.getChildren().addAll(GameLogic.getFoodContainer());
+		mainGame.getChildren().addAll(GameLogic.getEatBarContainer());
 		mainGame.getChildren().addAll(GameLogic.getTableContainer());
-		mainGame.getChildren().addAll(GameLogic.getCustomerContainer());
+		mainGame.getChildren().addAll(GameLogic.getcookBarContainer());
 		
-		mainGame.getChildren().add(GameLogic.getTableContainer().get(0).getWaitBar());
+		//mainGame.getChildren().add(GameLogic.getTableContainer().get(0).getWaitBar());
 
 		this.getChildren().addAll(view, mainGame);
 

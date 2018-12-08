@@ -39,8 +39,12 @@ public abstract class Customer extends ImageView {
 		this.imageGlow = new Image(this.imageGlowPath);
 		this.setImage(this.image);
 		this.waitTime = waitTime;
+		
 		this.waitBar = new ProgressBar(0);
-
+		this.waitBar.setLayoutX(x*80);
+		this.waitBar.setLayoutY((y*80)+80);
+		this.waitBar.setPrefWidth(80);
+		
 		this.setEvent();
 	}
 	
@@ -161,5 +165,7 @@ public abstract class Customer extends ImageView {
 	public int getWaitTime() {
 		return waitTime;
 	}
+	
+	//public void set
 
 }

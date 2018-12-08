@@ -3,8 +3,7 @@ package button;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import scene.SceneManager;
+import javafx.scene.media.AudioClip;
 
 public abstract class MyButton extends Canvas {
 
@@ -14,6 +13,9 @@ public abstract class MyButton extends Canvas {
 	protected String buttonGlowPath;
 	protected Image buttonLogoNormal;
 	protected Image buttonLogoGlow;
+	protected AudioClip mouseIn = new AudioClip(ClassLoader.getSystemResource("musics/mouseIn.mp3").toExternalForm());
+	protected AudioClip mouseClicked = new AudioClip(
+			ClassLoader.getSystemResource("musics/mouseClicked.mp3").toExternalForm());
 	protected final double width;
 	protected final double height;
 	protected GraphicsContext gc = this.getGraphicsContext2D();

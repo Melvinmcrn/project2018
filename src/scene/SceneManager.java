@@ -13,7 +13,6 @@ public class SceneManager {
 	private static HallOfFameScene highScore = new HallOfFameScene();
 	private static CharacterSelectScene characterSelecet;
 	private static GameScene game;
-
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene characterSelectScene;

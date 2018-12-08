@@ -10,15 +10,17 @@ public class NavigationButton extends MyButton {
 		this.drawButton();
 		this.setEvent();
 	}
-	
+
 	@Override
 	protected void setEvent() {
 		this.setOnMouseClicked((MouseEvent event) -> {
 			System.out.println(name);
 			SceneManager.gotoScene(goToScene);
+			mouseClicked.play();
 		});
 		this.setOnMouseEntered((MouseEvent event) -> {
 			drawButtonGlow();
+			mouseIn.play();
 		});
 		this.setOnMouseExited((MouseEvent event) -> {
 			drawButton();

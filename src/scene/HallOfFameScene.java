@@ -12,6 +12,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -20,7 +21,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-public class HallOfFameScene extends BorderPane {
+public class HallOfFameScene extends StackPane {
 
 	private Label nameHeader;
 	private Label scoreHeader;
@@ -116,21 +117,23 @@ public class HallOfFameScene extends BorderPane {
 		center.setAlignment(Pos.TOP_CENTER);
 
 		// Draw Home Button
+		BorderPane setPosPane = new BorderPane();
+
 		this.homeButton = new NavigationButton("Home", "Welcome");
 
-		this.setTop(logoCanvas);
-		HallOfFameScene.setAlignment(logoCanvas, Pos.TOP_CENTER);
-		HallOfFameScene.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
+		setPosPane.setTop(logoCanvas);
+		setPosPane.setAlignment(logoCanvas, Pos.TOP_CENTER);
+		setPosPane.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
 
-		this.setCenter(center);
-		HallOfFameScene.setAlignment(center, Pos.TOP_CENTER);
-		HallOfFameScene.setMargin(center, new Insets(40, 10, 0, 10));
+		setPosPane.setCenter(center);
+		setPosPane.setAlignment(center, Pos.TOP_CENTER);
+		setPosPane.setMargin(center, new Insets(40, 10, 0, 10));
 
-		this.setBottom(this.homeButton);
-		HallOfFameScene.setAlignment(this.homeButton, Pos.CENTER);
-		HallOfFameScene.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
+		setPosPane.setBottom(this.homeButton);
+		setPosPane.setAlignment(this.homeButton, Pos.CENTER);
+		setPosPane.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
 
-		
+		this.getChildren().addAll(view, setPosPane);
 	}
 
 	public static MediaPlayer getVidPlayer() {
