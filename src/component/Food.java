@@ -177,7 +177,7 @@ public abstract class Food extends ImageView {
 			@Override
 			public void handle(DragEvent event) {
 				// the drag-and-drop gesture
-				System.out.println(name + " drag done");
+				//System.out.println(name + " drag done");
 
 				startCooking();
 

@@ -66,10 +66,10 @@ public class Table extends ImageView {
 	private void bill() {
 		this.action = "Bill";
 		this.setTableImage(this.action);
-		
-		//this.customer.wai
-		//this.eating(this.customer.getWaitTime());
-		//this.leave();
+
+		// this.customer.wai
+		// this.eating(this.customer.getWaitTime());
+		// this.leave();
 	}
 
 	private void checkBill() {
@@ -88,13 +88,14 @@ public class Table extends ImageView {
 
 	private void eat() {
 		this.action = "Eat";
+		this.money += this.customer.getFood().getPrice();
 		this.setTableImage(this.action);
-		this.eating(5);
+		//this.eating(5);
 		this.bill();
 	}
 
 	private String getImagePath(String action) {
-		System.out.println("Set table image " + action);
+		// System.out.println("Set table image " + action);
 
 		if (action.equals("EatGlow")) {
 			action = "Eat";
@@ -129,7 +130,8 @@ public class Table extends ImageView {
 			@Override
 			public void handle(MouseEvent event) {
 				if (!isAvailable() && action.equals("Bill")) {
-					eatThread.interrupt();
+					// eatThread.interrupt();
+					checkBill();
 				}
 			}
 		});
@@ -183,27 +185,30 @@ public class Table extends ImageView {
 				System.out.println("onDragDropped");
 				/* if there is a string data on dragboard, read it and use it */
 				Dragboard db = event.getDragboard();
+				System.err.println("content is " + db.getString());
 				String[] content = db.getString().split(" ");
 				boolean success = false;
 
 				if (content[0].equals("Food")) {
+					System.out.println("Food dropped");
 					// It is food
 					if (!action.equals("Sit")) {
 						// SHOW MESSAGE THAT IT IS WRONG ACTION
-						System.out.println("Customer is not waiting for food!");
-					} else if (!customer.getFood().equals(content[1])) {
+						System.err.println("Customer is not waiting for food!");
+					} else if (!customer.getfoodName().equals(content[1])) {
 						// SHOW MESSAGE THAT IT IS WRONG FOOD
-						System.out.println("Wrong food!");
+						System.err.println("Wrong food!");
 					} else {
 						// START EATING
 						// EAT TIME = COOK TIME
-						System.out.println(content[1] + " is served");
+						System.err.println(content[1] + " is served");
 						eatTime = Integer.parseInt(content[2]);
 						success = true;
 						eat();
 					}
 
 				} else {
+					System.out.println("Customer dropped");
 					// It is customer
 					if (isAvailable()) {
 						int i = Integer.parseInt(content[2]);
@@ -259,7 +264,7 @@ public class Table extends ImageView {
 		}
 	}
 
-	public void setTableImage(String action) {
+	private void setTableImage(String action) {
 		if (this.available) {
 			if (action.equals("Glow")) {
 				this.setImage(new Image(tableNormalGlow));

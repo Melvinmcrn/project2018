@@ -11,11 +11,13 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.util.converter.CurrencyStringConverter;
 
 public abstract class Customer extends ImageView {
 
 	protected String name;
-	protected String food;
+	protected Food food;
+	protected String foodName;
 	protected int waitTime;
 	protected ProgressBar waitBar;
 	protected Customer thisCustomer = this;
@@ -25,10 +27,10 @@ public abstract class Customer extends ImageView {
 	protected final Image image;
 	protected final Image imageGlow;
 
-	public Customer(String name, int waitTime, String food, int x, int y) {
+	public Customer(String name, int waitTime, String foodName, int x, int y) {
 		super();
 		this.name = name;
-		this.food = food;
+		this.foodName = foodName;
 		this.setX(x * 80);
 		this.setY(y * 80);
 		this.imagePath = ClassLoader.getSystemResource("images/" + name + "/" + name + ".png").toString();
@@ -40,6 +42,16 @@ public abstract class Customer extends ImageView {
 		this.waitBar = new ProgressBar(0);
 
 		this.setEvent();
+	}
+	
+	private void setFoodObject() {
+		if(this.foodName.equals("Dorayaki")) {
+			this.food = new Dorayaki();
+		} else if(this.foodName.equals("Curry")) {
+			this.food = new Curry();
+		} else {
+			this.food = new Steak();
+		}
 	}
 
 	private void setCustomerImage(int status) {
@@ -134,7 +146,11 @@ public abstract class Customer extends ImageView {
 		return this.name;
 	}
 
-	public String getFood() {
+	public String getfoodName() {
+		return foodName;
+	}
+	
+	public Food getFood() {
 		return food;
 	}
 
