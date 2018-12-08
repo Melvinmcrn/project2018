@@ -34,15 +34,23 @@ public class CharacterSelectScene extends StackPane {
 	private String charName;
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
-	private Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
-	private Image character1_notSelect = new Image(
+	
+	private final Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
+	private final Image character1_notSelect = new Image(
 			ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
-	private Image character1_select = new Image(ClassLoader.getSystemResource("images/Player1_select.png").toString());
-	private Image character2_notSelect = new Image(
+	private final Image character1_select = new Image(
+			ClassLoader.getSystemResource("images/Player1_select.png").toString());
+	private final Image character1_mouseOn = new Image(
+			ClassLoader.getSystemResource("images/Player1_mouseOn.png").toString());
+	private final Image character2_notSelect = new Image(
 			ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
-	private Image character2_select = new Image(ClassLoader.getSystemResource("images/Player2_select.png").toString());
-	private Image nameTextFieldBackground = new Image(
+	private final Image character2_select = new Image(
+			ClassLoader.getSystemResource("images/Player2_select.png").toString());
+	private final Image character2_mouseOn = new Image(
+			ClassLoader.getSystemResource("images/Player2_mouseOn.png").toString());
+	private final Image nameTextFieldBackground = new Image(
 			ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
+	
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 	private AudioClip mouseIn = new AudioClip(ClassLoader.getSystemResource("musics/mouseIn.mp3").toExternalForm());
@@ -123,7 +131,7 @@ public class CharacterSelectScene extends StackPane {
 		});
 		addTextLimiter(nameTextField, 12);
 
-		// Add background
+		// Add text field background
 		Canvas textFieldBackground = new Canvas(340, 70);
 		gc = textFieldBackground.getGraphicsContext2D();
 		gc.drawImage(nameTextFieldBackground, 0, 0);
@@ -233,7 +241,7 @@ public class CharacterSelectScene extends StackPane {
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
 		thisCanvas.setOnMouseClicked((MouseEvent event) -> {
 			this.charID = thisID;
-			this.drawCharacterSelected(thisID, thisCanvas);
+			//this.drawCharacterSelected(thisID, thisCanvas);
 			this.drawCharacter(otherID, otherCanvas);
 			if (thisID == 1) {
 				this.isSelect1 = true;
@@ -247,12 +255,14 @@ public class CharacterSelectScene extends StackPane {
 			mouseClicked.play();
 		});
 		thisCanvas.setOnMouseEntered((MouseEvent event) -> {
-			this.drawCharacterSelected(thisID, thisCanvas);
+			this.drawCharacterMouseOn(thisID, thisCanvas);
 			mouseIn.play();
 		});
 		thisCanvas.setOnMouseExited((MouseEvent event) -> {
 			if ((!isSelect1 && thisID == 1) || (!isSelect2 && thisID == 2)) {
 				this.drawCharacter(thisID, thisCanvas);
+			} else {
+				this.drawCharacterSelected(thisID, thisCanvas);
 			}
 		});
 	}
@@ -274,6 +284,15 @@ public class CharacterSelectScene extends StackPane {
 			gc.drawImage(character1_select, 0, 0);
 		if (ID == 2)
 			gc.drawImage(character2_select, 0, 0);
+	}
+	
+	private void drawCharacterMouseOn(int ID, Canvas canvas) {
+		gc = canvas.getGraphicsContext2D();
+		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+		if (ID == 1)
+			gc.drawImage(character1_mouseOn, 0, 0);
+		if (ID == 2)
+			gc.drawImage(character2_mouseOn, 0, 0);
 	}
 
 	public static void addTextLimiter(final TextField tf, final int maxLength) {

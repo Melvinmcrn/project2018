@@ -16,7 +16,6 @@ import javafx.util.converter.CurrencyStringConverter;
 public abstract class Customer extends ImageView {
 
 	protected String name;
-	protected Food food;
 	protected String foodName;
 	protected int waitTime;
 	protected ProgressBar waitBar;
@@ -39,24 +38,14 @@ public abstract class Customer extends ImageView {
 		this.imageGlow = new Image(this.imageGlowPath);
 		this.setImage(this.image);
 		this.waitTime = waitTime;
-		
+
 		this.waitBar = new ProgressBar(0);
-		this.waitBar.setLayoutX(x*80);
-		this.waitBar.setLayoutY((y*80)+80);
+		this.waitBar.setLayoutX(x * 80);
+		this.waitBar.setLayoutY((y * 80) + 80);
 		this.waitBar.setPrefWidth(80);
 		this.waitBar.setVisible(false);
-		
+
 		this.setEvent();
-	}
-	
-	private void setFoodObject() {
-		if(this.foodName.equals("Dorayaki")) {
-			this.food = new Dorayaki();
-		} else if(this.foodName.equals("Curry")) {
-			this.food = new Curry();
-		} else {
-			this.food = new Steak();
-		}
 	}
 
 	private void setCustomerImage(int status) {
@@ -113,7 +102,7 @@ public abstract class Customer extends ImageView {
 				if (event.getTransferMode() == TransferMode.MOVE) {
 					System.out.println(name + " drag done");
 					thisCustomer.setVisible(false);
-				}		
+				}
 
 				event.consume();
 			}
@@ -130,22 +119,24 @@ public abstract class Customer extends ImageView {
 		}
 	}
 
-	public void waitThread() {
+	private void waitThread() {
 		Thread wait = new Thread(() -> {
 
 			try {
 				while (this.waitBar.getProgress() < 1) {
-
 					setProgress();
-
 					Thread.sleep(500);
 				}
-
+				
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
 		});
 		wait.start();
+
+	}
+
+	public void leave() {
 
 	}
 
@@ -156,10 +147,6 @@ public abstract class Customer extends ImageView {
 	public String getfoodName() {
 		return foodName;
 	}
-	
-	public Food getFood() {
-		return food;
-	}
 
 	public ProgressBar getWaitBar() {
 		return waitBar;
@@ -168,10 +155,10 @@ public abstract class Customer extends ImageView {
 	public int getWaitTime() {
 		return waitTime;
 	}
-	
+
 	public void setWaitBarLocation(int x, int y) {
-		this.waitBar.setLayoutX(x*80);
-		this.waitBar.setLayoutY((y*80)+80);
+		this.waitBar.setLayoutX(x * 80);
+		this.waitBar.setLayoutY((y * 80) + 80);
 	}
 
 }
