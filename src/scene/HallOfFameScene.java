@@ -13,8 +13,12 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 public class HallOfFameScene extends BorderPane {
 
@@ -22,13 +26,25 @@ public class HallOfFameScene extends BorderPane {
 	private Label scoreHeader;
 	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 30);
 	private Image logo = new Image(ClassLoader.getSystemResource("images/HallOfFameLogo.png").toString());
-	private Image bg = new Image(ClassLoader.getSystemResource("images/HighScoreBackground.jpg").toString());
+	private static Media highScoreBG = new Media(
+			ClassLoader.getSystemResource("videos/HighScoreBG.mp4").toExternalForm());
+	private static MediaPlayer highScorePlayer = new MediaPlayer(highScoreBG);
 	private GraphicsContext gc;
 	private Canvas scoreCanvas;
 	private Font SCORE_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 	private NavigationButton homeButton;
 
 	public HallOfFameScene() {
+
+		highScorePlayer.setAutoPlay(true);
+		MediaView view = new MediaView(highScorePlayer);
+		highScorePlayer.setOnEndOfMedia(new Runnable() {
+			@Override
+			public void run() {
+				highScorePlayer.seek(Duration.ZERO);
+				highScorePlayer.play();
+			}
+		});
 
 		// Draw logo
 		Canvas logoCanvas = new Canvas(245, 130);
@@ -66,7 +82,7 @@ public class HallOfFameScene extends BorderPane {
 		String score1 = "NO RECORD";
 		String score2 = "NO RECORD";
 		String score3 = "NO RECORD";
-		
+
 		ScoreData.readFile();
 
 		if (ScoreData.size() >= 1) {
@@ -114,7 +130,10 @@ public class HallOfFameScene extends BorderPane {
 		HallOfFameScene.setAlignment(this.homeButton, Pos.CENTER);
 		HallOfFameScene.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
 
-		this.setBackground(new Background(new BackgroundImage(bg, null, null, null, null)));
+		
+	}
 
+	public static MediaPlayer getVidPlayer() {
+		return highScorePlayer;
 	}
 }

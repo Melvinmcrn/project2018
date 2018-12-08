@@ -6,6 +6,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -128,8 +129,9 @@ public abstract class Food extends ImageView {
 
 				// put a string on dragboard
 				ClipboardContent content = new ClipboardContent();
-				content.putString(name);
+				content.putString("Food " + name + " " + cookTime);
 				db.setContent(content);
+				db.setDragView(image);
 
 				event.consume();
 			}
@@ -175,7 +177,7 @@ public abstract class Food extends ImageView {
 			@Override
 			public void handle(DragEvent event) {
 				// the drag-and-drop gesture
-				System.out.println("onDragDone");
+				System.out.println(name + " drag done");
 
 				startCooking();
 

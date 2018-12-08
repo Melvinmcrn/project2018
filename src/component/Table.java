@@ -21,6 +21,7 @@ public class Table extends ImageView {
 	private double y;
 	private Customer customer = null;
 	private String customerName = null;
+	private int eatTime = 0;
 	private int money;
 	private String action = ""; // "", Sit, Eat, Bill
 	private ProgressBar waitBar;
@@ -46,7 +47,7 @@ public class Table extends ImageView {
 		this.setEvent();
 	}
 
-	public void sit(Customer customer) {
+	private void sit(Customer customer) {
 		if (this.isAvailable()) {
 			this.customer = customer;
 			this.customerName = customer.getName();
@@ -54,11 +55,11 @@ public class Table extends ImageView {
 			this.setTableImage(action);
 			this.available = false;
 			customer.setVisible(false);
-			System.out.println("Customer sit");
-			
-			//this.eating(eatTime);
-			//this.customer.getWaitTime());
-			this.leave();
+			System.out.println(this.customerName + " sit done");
+
+			// this.eating(eatTime);
+			// this.customer.getWaitTime());
+			// this.leave();
 		}
 	}
 
@@ -66,10 +67,11 @@ public class Table extends ImageView {
 		this.action = "Bill";
 		this.setTableImage(this.action);
 		
-		this.eating(this.customer.getWaitTime());
-		this.leave();
+		//this.customer.wai
+		//this.eating(this.customer.getWaitTime());
+		//this.leave();
 	}
-	
+
 	private void checkBill() {
 		GameLogic.addMoney(this.money);
 		this.leave();
@@ -87,13 +89,13 @@ public class Table extends ImageView {
 	private void eat() {
 		this.action = "Eat";
 		this.setTableImage(this.action);
-		this.waiting(5);
+		this.eating(5);
 		this.bill();
 	}
 
 	private String getImagePath(String action) {
 		System.out.println("Set table image " + action);
-		
+
 		if (action.equals("EatGlow")) {
 			action = "Eat";
 		}
@@ -127,7 +129,7 @@ public class Table extends ImageView {
 			@Override
 			public void handle(MouseEvent event) {
 				if (!isAvailable() && action.equals("Bill")) {
-					waitThread.interrupt();
+					eatThread.interrupt();
 				}
 			}
 		});
@@ -144,7 +146,7 @@ public class Table extends ImageView {
 				 */
 				if (event.getGestureSource() != thisTable && event.getDragboard().hasString()) {
 					/* allow for moving */
-					event.acceptTransferModes(TransferMode.COPY);
+					event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 				}
 
 				event.consume();
@@ -181,17 +183,40 @@ public class Table extends ImageView {
 				System.out.println("onDragDropped");
 				/* if there is a string data on dragboard, read it and use it */
 				Dragboard db = event.getDragboard();
+				String[] content = db.getString().split(" ");
 				boolean success = false;
-				if (!action.equals("Sit")) {
-					// SHOW MESSAGE THAT IT IS WRONG ACTION
-				} else {
-					if (db.getString().equals(customer.getFood())) {
-						waitThread.interrupt();
-						success = true;
-					} else {
+
+				if (content[0].equals("Food")) {
+					// It is food
+					if (!action.equals("Sit")) {
+						// SHOW MESSAGE THAT IT IS WRONG ACTION
+						System.out.println("Customer is not waiting for food!");
+					} else if (!customer.getFood().equals(content[1])) {
 						// SHOW MESSAGE THAT IT IS WRONG FOOD
+						System.out.println("Wrong food!");
+					} else {
+						// START EATING
+						// EAT TIME = COOK TIME
+						System.out.println(content[1] + " is served");
+						eatTime = Integer.parseInt(content[2]);
+						success = true;
+						eat();
+					}
+
+				} else {
+					// It is customer
+					if (isAvailable()) {
+						int i = Integer.parseInt(content[2]);
+						sit(GameLogic.getWaitArea()[i]);
+						GameLogic.getWaitArea()[i] = null;
+						success = true;
+						System.out.println(content[1] + " is seated");
+					} else {
+						// SHOW THAT IT IS NOT AVAILABLE
+						System.out.println("Table is not available");
 					}
 				}
+
 				/*
 				 * let the source know whether the string was successfully transferred and used
 				 */
@@ -208,15 +233,15 @@ public class Table extends ImageView {
 			try {
 				while (this.waitBar.getProgress() < 1) {
 					setProgress(eatTime);
-					//System.out.println(action+" "+waitBar.getProgress());
+					// System.out.println(action+" "+waitBar.getProgress());
 					Thread.sleep(500);
 				}
 
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
-				if(!this.isAvailable() && this.action.equals("Sit")){
+				if (!this.isAvailable() && this.action.equals("Sit")) {
 					this.eat();
-				} else if(!this.isAvailable() && this.action.equals("Bill")){
+				} else if (!this.isAvailable() && this.action.equals("Bill")) {
 					this.checkBill();
 				}
 			}

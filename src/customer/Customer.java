@@ -1,24 +1,31 @@
 package customer;
 
 import component.*;
+import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 
 public abstract class Customer extends ImageView {
 
 	protected String name;
-	protected Food food;
-	protected String foodName;
+	protected String food;
 	protected int waitTime;
 	protected ProgressBar waitBar;
+	protected Customer thisCustomer = this;
 
 	protected final String imagePath;
 	protected final String imageGlowPath;
 	protected final Image image;
 	protected final Image imageGlow;
 
-	public Customer(String name, int waitTime, Food food, int x, int y) {
+	public Customer(String name, int waitTime, String food, int x, int y) {
 		super();
 		this.name = name;
 		this.food = food;
@@ -31,6 +38,67 @@ public abstract class Customer extends ImageView {
 		this.setImage(this.image);
 		this.waitTime = waitTime;
 		this.waitBar = new ProgressBar(0);
+
+		this.setEvent();
+	}
+
+	private void setCustomerImage(int status) {
+		// 1 Normal, 2 Glow
+		switch (status) {
+		case 1:
+			this.setImage(this.image);
+			break;
+		case 2:
+			this.setImage(this.imageGlow);
+			break;
+		}
+	}
+
+	private void setEvent() {
+		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				setCustomerImage(2);
+			}
+		});
+
+		this.setOnMouseExited(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				setCustomerImage(1);
+			}
+		});
+
+		this.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent event) {
+				System.out.println("onDragDetected");
+
+				// allow COPY transfer mode
+				Dragboard db = thisCustomer.startDragAndDrop(TransferMode.MOVE);
+
+				// put this customer on dragboard
+				ClipboardContent content = new ClipboardContent();
+				content.putString("Customer " + name + " " + ((int) ((thisCustomer.getX() / 80) - 2)));
+				db.setContent(content);
+				db.setDragView(image);
+
+				event.consume();
+			}
+		});
+
+		this.setOnDragDone(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(DragEvent event) {
+				// the drag-and-drop gesture
+				System.out.println(name + " drag done");
+				// thisCustomer.setVisible(false);
+
+				event.consume();
+			}
+		});
 	}
 
 	private void setProgress() {
@@ -66,12 +134,8 @@ public abstract class Customer extends ImageView {
 		return this.name;
 	}
 
-	public Food getFood() {
+	public String getFood() {
 		return food;
-	}
-
-	public String getFoodName() {
-		return foodName;
 	}
 
 	public ProgressBar getWaitBar() {

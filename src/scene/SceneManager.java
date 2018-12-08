@@ -35,6 +35,8 @@ public class SceneManager {
 				CharacterSelectScene.getVidPlayer().pause();
 			if (GameScene.getMiscPlayer().getStatus().equals(Status.PLAYING))
 				GameScene.getMiscPlayer().stop();
+			if (HallOfFameScene.getVidPlayer().getStatus().equals(Status.PLAYING))
+				HallOfFameScene.getVidPlayer().pause();
 			primaryStage.setScene(welcomeScene);
 			primaryStage.show();
 		} else if (scene.equals("Play")) {
@@ -46,11 +48,13 @@ public class SceneManager {
 			primaryStage.show();
 		} else if (scene.equals("Hall of Fame")) {
 			WelcomeScene.getVidPlayer().pause();
+			HallOfFameScene.getVidPlayer().play();
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
 		} else if (scene.equals("Main Game")) {
 			WelcomeScene.getVidPlayer().stop();
 			WelcomeScene.getMiscPlayer().stop();
+			HallOfFameScene.getVidPlayer().stop();
 			CharacterSelectScene.getVidPlayer().stop();
 			game = new GameScene();
 			gameScene = new Scene(game, SCENE_WIDTH, SCENE_HEIGHT);

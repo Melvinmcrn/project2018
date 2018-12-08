@@ -45,29 +45,32 @@ public class GameLogic {
 		foodContainer.add(new Dorayaki());
 		foodContainer.add(new Curry());
 		foodContainer.add(new Steak());
-		tableContainer.get(0).sit(new Doraemon(1, 1));
-		generateCustomerThread = new Thread(() -> {
-			try {
-				isThreadRunning = true;
-				System.out.println("generate customer thread sleep");
-				Thread.sleep(GameLogic.generateTime*1000);
-				int i = this.getAvailableWaitArea();
-				while (i == -1) {
-					i = this.getAvailableWaitArea();
-				}
-				System.out.println("Generate customer at position " + i);
-				newCustomer = this.getRandomCustomer(i + 2, 0);
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			}
-		});
+		//tableContainer.get(0).sit(new Doraemon(1, 1));
+		
 
 	}
 
 	private void generateCustomer() {
 		if (!isThreadRunning) {
+			System.out.println("Thread is not running");
+			isThreadRunning = true;
+			generateCustomerThread = new Thread(() -> {
+				try {
+					//isThreadRunning = true;
+					System.out.println("Start generating customer thread");
+					Thread.sleep(GameLogic.generateTime*1000);
+					int i = this.getAvailableWaitArea();
+					while (i == -1) {
+						i = this.getAvailableWaitArea();
+					}
+					System.out.println("Generate customer at position " + i);
+					newCustomer = this.getRandomCustomer(i + 2, 0);
+					isThreadRunning = false;
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			});
 			generateCustomerThread.start();
-			isThreadRunning = false;
 		}
 	}
 
@@ -75,19 +78,19 @@ public class GameLogic {
 		int randomNumber = (int) (Math.random() * 5 + 1);
 		switch (randomNumber) {
 		case 1:
-			System.out.println("Doraemon at " + x + " " + y);
+			System.out.println("Generate Doraemon at " + x + " " + y);
 			return new Doraemon(x, y);
 		case 2:
-			System.out.println("Nobita at " + x + " " + y);
+			System.out.println("Generate Nobita at " + x + " " + y);
 			return new Nobita(x, y);
 		case 3:
-			System.out.println("Giant at " + x + " " + y);
+			System.out.println("Generate Giant at " + x + " " + y);
 			return new Giant(x, y);
 		case 4:
-			System.out.println("Shizuka at " + x + " " + y);
+			System.out.println("Generate Shizuka at " + x + " " + y);
 			return new Shizuka(x, y);
 		default:
-			System.out.println("Suneo at " + x + " " + y);
+			System.out.println("Generate Suneo at " + x + " " + y);
 			return new Suneo(x, y);
 		}
 
@@ -102,19 +105,24 @@ public class GameLogic {
 		return -1;
 	}
 
+	public void logicUpdate() {
+		if (newCustomer != null) {
+			System.out.println("Add new customer to container");
+			customerContainer.add(newCustomer);
+			//System.out.println((int) ((newCustomer.getX()/80)-2));
+			waitArea[(int) ((newCustomer.getX()/80)-2)] = newCustomer;
+			GameScene.getMainGame().getChildren().add(customerContainer.get(customerContainer.size() - 1));
+			newCustomer = null;
+		}
+		
+		//	Generate new customer
+		this.generateCustomer();
+	}
+
 	public static void addMoney(int money) {
 		GameLogic.money += (money * GameLogic.tipMoney);
 	}
 
-	public void logicUpdate() {
-		if (newCustomer != null) {
-			customerContainer.add(newCustomer);
-			GameScene.getMainGame().getChildren().add(customerContainer.get(customerContainer.size() - 1));
-			newCustomer = null;
-		}
-
-		this.generateCustomer();
-	}
 
 	public void setTipMoney(double tipMoney) {
 		GameLogic.tipMoney = tipMoney;
