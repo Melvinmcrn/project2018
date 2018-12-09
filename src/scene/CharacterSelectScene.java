@@ -19,6 +19,7 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.AudioClip;
@@ -35,6 +36,8 @@ public class CharacterSelectScene extends StackPane {
 	private String charName;
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
+	private Pane charPane = this;
+	private TextField nameTextField;
 
 	private final Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
 	private final Image character1_notSelect = new Image(
@@ -83,7 +86,6 @@ public class CharacterSelectScene extends StackPane {
 		// Character Select
 		charID = 0;
 		VBox characterSet = new VBox();
-		// characterSet.setPadding(new Insets(40, 0, 0, 130));
 		characterSet.setPadding(new Insets(40, 0, 0, 0));
 		characterSet.setAlignment(Pos.CENTER);
 		characterSet.setSpacing(20);
@@ -110,7 +112,7 @@ public class CharacterSelectScene extends StackPane {
 		nameSet.setAlignment(Pos.CENTER);
 		nameSet.setSpacing(30);
 		StackPane nameField = new StackPane();
-		TextField nameTextField = new TextField();
+		nameTextField = new TextField();
 		nameTextField.setFont(NAME_FONT);
 		nameTextField.setMaxWidth(300);
 		nameTextField.setAlignment(Pos.CENTER);
@@ -126,10 +128,8 @@ public class CharacterSelectScene extends StackPane {
 					throw new NameRestrictException();
 				}
 			} catch (NameRestrictException e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name should be A - Z or 0 - 9");
-				alert.show();
+				e.showAlert(this);
 			} catch (StringIndexOutOfBoundsException e) {
-
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -149,13 +149,13 @@ public class CharacterSelectScene extends StackPane {
 					if (nameTextField.getText().length() > 0) {
 						charName = nameTextField.getText().toUpperCase();
 						nameTextField.setEditable(false);
+						System.out.println("Player name is " + charName);
+						GameLogic.setPlayerName(charName);
 					} else {
 						throw new NameLengthRestrictException();
 					}
 				} catch (NameLengthRestrictException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION,
-							"Player Name should have 1 - 12 characters long");
-					alert.show();
+					e.showAlert(charPane);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -182,11 +182,9 @@ public class CharacterSelectScene extends StackPane {
 						System.out.println(name);
 						SceneManager.gotoScene(goToScene);
 					} catch (CharacterNotSelectedException e) {
-						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please select your character");
-						alert.show();
+						e.showAlert(charPane);
 					} catch (NameNotEnteredException e) {
-						Alert alert = new Alert(Alert.AlertType.INFORMATION, "Please enter player name and click OK");
-						alert.show();
+						e.showAlert(charPane);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -301,7 +299,11 @@ public class CharacterSelectScene extends StackPane {
 			gc.drawImage(character2_mouseOn, 0, 0);
 	}
 
-	public static void addTextLimiter(final TextField tf, final int maxLength) {
+	public TextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public void addTextLimiter(final TextField tf, final int maxLength) {
 		tf.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(final ObservableValue<? extends String> ov, final String oldValue,
@@ -313,9 +315,7 @@ public class CharacterSelectScene extends StackPane {
 						throw new NameLengthRestrictException();
 					}
 				} catch (NameLengthRestrictException e) {
-					Alert alert = new Alert(Alert.AlertType.INFORMATION,
-							"Player Name should have 1 - 12 characters long");
-					alert.show();
+					e.showAlert(charPane);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

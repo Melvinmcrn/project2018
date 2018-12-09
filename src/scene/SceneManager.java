@@ -10,10 +10,13 @@ public class SceneManager {
 	private static final int SCENE_WIDTH = 800;
 	private static final int SCENE_HEIGHT = 600;
 	private static WelcomeScene welcome = new WelcomeScene();
+	private static HowToScene howTo = new HowToScene();
 	private static HallOfFameScene highScore = new HallOfFameScene();
 	private static CharacterSelectScene characterSelecet;
 	private static GameScene game;
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
+	// private static Scene howToScene = new Scene(howTo, SCENE_WIDTH,
+	// SCENE_HEIGHT);
 	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene characterSelectScene;
 	private static Scene gameScene;
@@ -45,7 +48,19 @@ public class SceneManager {
 			characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(characterSelectScene);
 			primaryStage.show();
+		} else if (scene.equals("How to play")) {
+			WelcomeScene.getVidPlayer().pause();
+			// primaryStage.setScene(howToScene);
+			primaryStage.show();
 		} else if (scene.equals("Hall of Fame")) {
+			if (GameScene.getGameMiscPlayer().getStatus().equals(Status.PLAYING)
+					|| GameScene.getGameOverMiscPlayer().getStatus().equals(Status.PLAYING)) {
+				GameScene.getGameMiscPlayer().stop();
+				GameScene.getGameOverMiscPlayer().stop();
+			}
+			if (!WelcomeScene.getMiscPlayer().getStatus().equals(Status.PLAYING)) {
+				WelcomeScene.getMiscPlayer().play();
+			}
 			WelcomeScene.getVidPlayer().pause();
 			HallOfFameScene.getVidPlayer().play();
 			primaryStage.setScene(highScoreScene);

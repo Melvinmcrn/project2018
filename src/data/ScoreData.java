@@ -103,6 +103,15 @@ public class ScoreData implements Comparable<ScoreData> {
 		}
 		return false;
 	}
+	
+	public static int getRank(String name, int score) {
+		for (int i = 0; i < data.size(); i++) {
+			if (data.get(i).name.equals(name) && data.get(i).getScore()==score) {
+				return i+1;
+			}
+		}
+		return -1;
+	}
 
 	public static int size() {
 		return data.size();

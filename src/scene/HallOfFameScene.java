@@ -56,7 +56,7 @@ public class HallOfFameScene extends StackPane {
 		nameHeader = new Label("Name");
 		nameHeader.setFont(HEADER_FONT);
 		nameHeader.setTextFill(Color.rgb(76, 47, 39));
-		scoreHeader = new Label("Score");
+		scoreHeader = new Label("Money");
 		scoreHeader.setFont(HEADER_FONT);
 		scoreHeader.setTextFill(Color.rgb(76, 47, 39));
 

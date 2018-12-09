@@ -1,9 +1,16 @@
 package scene;
 
+import button.NavigationButton;
+import data.ScoreData;
+import exception.NameLengthRestrictException;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.Pane;
@@ -22,17 +29,20 @@ public class GameScene extends Pane {
 
 	private static Pane mainGame;
 	private static Pane statusBar;
+	private static Pane gameOverPane;
 	private static VBox gamePane;
 	private final Image gameBG = new Image(ClassLoader.getSystemResource("images/GameBG.png").toString());
 	private final Image statusBarBG = new Image(
 			ClassLoader.getSystemResource("images/StatusBar/StatusBarBG.jpg").toString());
-	private final Font statusFont = Font
-			.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant italbold.ttf"), 50);
-	private final Font statusMessageFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"),
-			35);
+
+	private final Image gameOverBG = new Image(ClassLoader.getSystemResource("images/GameOverBG.png").toString());
 
 	private static Media gameBGM = new Media(ClassLoader.getSystemResource("musics/GameBGM.mp3").toExternalForm());
 	private static MediaPlayer gameMisc = new MediaPlayer(gameBGM);
+	private static Media gameOverBGM = new Media(
+			ClassLoader.getSystemResource("musics/GameOverBGM.mp3").toExternalForm());
+	private static MediaPlayer gameOverMisc = new MediaPlayer(gameOverBGM);
+
 	private static AnimationTimer animation;
 
 	private static Label statusMessage;
@@ -72,6 +82,9 @@ public class GameScene extends Pane {
 		statusBar.setLayoutY(480);
 		statusBar.setBackground(new Background(new BackgroundImage(statusBarBG, null, null, null, null)));
 		statusBar.setVisible(true);
+
+		Font statusFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant italbold.ttf"), 50);
+		Font statusMessageFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 35);
 
 		statusMessage = new Label();
 		statusMessage.setLayoutX(170);
@@ -128,6 +141,8 @@ public class GameScene extends Pane {
 				if (endTime - System.currentTimeMillis() <= 0 || GameLogic.getScore() <= 0) {
 					animation.stop();
 					GameLogic.endGame();
+					setGameOver();
+					System.err.println("GAME OVER");
 				}
 
 				gameLogic.logicUpdate();
@@ -149,6 +164,61 @@ public class GameScene extends Pane {
 
 	}
 
+	private void setGameOver() {
+		// Game Over
+		gameOverPane = new Pane();
+		gameOverPane.setPrefWidth(800);
+		gameOverPane.setPrefHeight(600);
+		gameOverPane.setBackground(new Background(new BackgroundImage(gameOverBG, null, null, null, null)));
+
+		Font gameOverFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 35);
+
+		// Show Money
+		Label money = new Label(Integer.toString(GameLogic.getMoney()));
+		money.setFont(gameOverFont);
+		money.setTextFill(Color.BLACK);
+		money.setLayoutX(450);
+		money.setLayoutY(283);
+		money.setMaxWidth(205);
+		gameOverPane.getChildren().add(money);
+
+		// Show Rank
+		ScoreData score = new ScoreData(GameLogic.getPlayerName(), GameLogic.getMoney());
+		Label rank = new Label(Integer.toString(ScoreData.getRank(GameLogic.getPlayerName(), GameLogic.getMoney())));
+		rank.setFont(gameOverFont);
+		rank.setTextFill(Color.BLACK);
+		rank.setLayoutX(450);
+		rank.setLayoutY(407);
+		rank.setPrefWidth(205);
+		gameOverPane.getChildren().add(rank);
+
+		// OK Button
+		NavigationButton okButton = new NavigationButton("Ok", "");
+		EventHandler<InputEvent> handler = new EventHandler<InputEvent>() {
+			public void handle(InputEvent event) {
+				try {
+					SceneManager.gotoScene("Hall of Fame");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
+
+		okButton.setLayoutX(375);
+		okButton.setLayoutY(500);
+		gameOverPane.getChildren().add(okButton);
+
+		MediaView gameOverView = new MediaView(gameOverMisc);
+		gameOverPane.getChildren().add(gameOverView);
+
+		this.getChildren().add(gameOverPane);
+
+		gameMisc.stop();
+		gameOverMisc.play();
+
+	}
+
 	public static MediaPlayer getMiscPlayer() {
 		return gameMisc;
 	}
@@ -164,6 +234,14 @@ public class GameScene extends Pane {
 				statusMessage.setText(message);
 			}
 		});
+	}
+
+	public static MediaPlayer getGameMiscPlayer() {
+		return gameMisc;
+	}
+
+	public static MediaPlayer getGameOverMiscPlayer() {
+		return gameOverMisc;
 	}
 
 }

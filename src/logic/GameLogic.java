@@ -24,6 +24,7 @@ public class GameLogic {
 	private static double tipMoney = 1;
 	private static double extraWaitTime = 1;
 	private static boolean gameOver = false;
+	private static String playerName;
 
 	private Customer newCustomer = null;
 	private ImageView playerImage;
@@ -173,7 +174,6 @@ public class GameLogic {
 		for (Thread thread : threadContainer) {
 			thread.interrupt();
 		}
-		// TODO set gameover scene
 	}
 
 	public void setTipMoney(double tipMoney) {
@@ -234,6 +234,14 @@ public class GameLogic {
 
 	public static boolean isGameOver() {
 		return gameOver;
+	}
+
+	public static String getPlayerName() {
+		return playerName;
+	}
+
+	public static void setPlayerName(String playerName) {
+		GameLogic.playerName = playerName;
 	}
 
 }

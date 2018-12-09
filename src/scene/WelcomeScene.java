@@ -48,7 +48,7 @@ public class WelcomeScene extends StackPane {
 		VBox buttonSet = new VBox();
 
 		buttonSet.setAlignment(Pos.TOP_CENTER);
-		buttonSet.setSpacing(65);
+		buttonSet.setSpacing(25);
 
 		Canvas canvas = new Canvas(350, 186);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -56,10 +56,11 @@ public class WelcomeScene extends StackPane {
 
 		VBox buttonBox = new VBox();
 		TextButton playButton = new TextButton("Play");
+		TextButton howToButton = new TextButton("How to play");
 		TextButton highScoreButton = new TextButton("Hall of Fame");
 		TextButton exitButton = new TextButton("Exit");
-		buttonBox.setSpacing(25);
-		buttonBox.getChildren().addAll(playButton, highScoreButton, exitButton);
+		buttonBox.setSpacing(15);
+		buttonBox.getChildren().addAll(playButton, howToButton, highScoreButton, exitButton);
 		buttonBox.setAlignment(Pos.CENTER);
 
 		buttonSet.getChildren().addAll(canvas, buttonBox);
