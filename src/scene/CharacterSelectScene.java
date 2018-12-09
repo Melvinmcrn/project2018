@@ -104,7 +104,7 @@ public class CharacterSelectScene extends StackPane {
 		setChar(1, character1, 2, character2);
 		setChar(2, character2, 1, character1);
 
-		characterSelect.getChildren().addAll(character1, character2);
+		characterSelect.getChildren().addAll(character2, character1);
 		characterSelect.setSpacing(50);
 
 		// Name Field
