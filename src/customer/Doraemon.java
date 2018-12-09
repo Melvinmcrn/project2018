@@ -1,6 +1,7 @@
 package customer;
 
 import logic.GameLogic;
+import scene.GameScene;
 
 public class Doraemon extends Customer implements Complainable {
 
@@ -10,6 +11,8 @@ public class Doraemon extends Customer implements Complainable {
 
 	@Override
 	public void angry() {
+		System.out.println(this.name + " is angry!");
+		GameScene.setStatusMessage(this.name + " is angry!");
 		GameLogic.deductScore();
 		this.waitBar.setStyle("-fx-accent: red");
 		keepComplaining();

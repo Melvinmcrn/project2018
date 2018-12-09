@@ -1,6 +1,5 @@
 package component;
 
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -10,6 +9,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import logic.GameLogic;
 
 public abstract class Food extends ImageView {
 
@@ -29,6 +29,7 @@ public abstract class Food extends ImageView {
 
 	protected boolean isCooked;
 	protected ProgressBar cookBar;
+	protected Thread cookThread;
 
 	public Food(String name, int price, int cookTime, int x, int y) {
 		this.name = name;
@@ -72,29 +73,23 @@ public abstract class Food extends ImageView {
 	}
 
 	private void cooking() {
-		Thread cooking = new Thread(() -> {
+		this.cookThread = new Thread(() -> {
 			try {
 				while (this.cookBar.getProgress() < 1) {
-					Platform.runLater(new Runnable() {
-
-						@Override
-						public void run() {
-							// TODO Auto-generated method stub
-							setProgress();
-						}
-					});
+					setProgress();
 					Thread.sleep(500);
 				}
 				this.isCooked = true;
 				this.setDisable(false);
 				this.cookBar.setVisible(false);
 				this.setFoodImage(1);
+				GameLogic.getThreadContainer().remove(cookThread);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+
 			}
 		});
-		cooking.start();
-
+		GameLogic.getThreadContainer().add(this.cookThread);
+		this.cookThread.start();
 	}
 
 	private void setFoodImage(int status) {
@@ -143,7 +138,7 @@ public abstract class Food extends ImageView {
 
 			@Override
 			public void handle(MouseEvent event) {
-				System.out.println("onDragDetected");
+				System.out.println("Drag " + name);
 
 				// allow COPY transfer mode
 				Dragboard db = thisFood.startDragAndDrop(TransferMode.COPY);
@@ -162,8 +157,6 @@ public abstract class Food extends ImageView {
 
 			@Override
 			public void handle(DragEvent event) {
-				// the drag-and-drop gesture
-				// System.out.println(name + " drag done");
 				if (event.getTransferMode() == TransferMode.COPY) {
 					startCooking();
 				}

@@ -1,18 +1,16 @@
 package component;
 
 import customer.*;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.scene.paint.Color;
 import logic.GameLogic;
+import scene.GameScene;
 
 public class Table extends ImageView {
 
@@ -60,8 +58,9 @@ public class Table extends ImageView {
 			this.action = "Sit";
 			this.setTableImage(action);
 			this.available = false;
-			System.out.println(this.customerName + " sit done");
+			System.out.println(this.customerName + " is seated");
 			
+			this.customer.setTableSeatedIn(thisTable);
 			this.customer.doCustomerFavor();
 			this.customer.setWaitBarLocation(this.x, this.y);
 			this.customer.waitForFood();
@@ -72,7 +71,7 @@ public class Table extends ImageView {
 	private void bill() {
 		this.action = "Bill";
 		this.setTableImage(this.action);
-		
+
 		this.customer.waitForBill();
 	}
 
@@ -83,37 +82,25 @@ public class Table extends ImageView {
 		this.leave();
 	}
 
-	private void leave() {
-		this.customer = null;
-		this.customerName = "";
-		this.action = "";
-		this.available = true;
-		this.money = 0;
-		this.setTableImage("");
-	}
-
 	private void eat() {
-		System.out.println(this.customerName + " in eat action");
 		this.action = "Eat";
 		this.customer.doCustomerFavor();
-		
+
 		int foodPrice;
-		if(this.customer.getfoodName().equals("Dorayaki")) {
+		if (this.customer.getfoodName().equals("Dorayaki")) {
 			foodPrice = new Dorayaki().getPrice();
-		} else if(this.customer.getfoodName().equals("Curry")) {
+		} else if (this.customer.getfoodName().equals("Curry")) {
 			foodPrice = new Curry().getPrice();
 		} else {
 			foodPrice = new Steak().getPrice();
 		}
 		this.money += foodPrice;
-		
+
 		this.setTableImage(this.action);
 		this.eating(this.eatTime);
 	}
 
 	private String getImagePath(String action) {
-		// System.out.println("Set table image " + action);
-
 		if (action.equals("EatGlow")) {
 			action = "Eat";
 		}
@@ -156,9 +143,6 @@ public class Table extends ImageView {
 		this.setOnDragOver(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				/* data is dragged over the target */
-				//System.out.println("onDragOver");
-
 				/*
 				 * accept it only if it is not dragged from the same node and if it has a string
 				 * data
@@ -175,8 +159,6 @@ public class Table extends ImageView {
 		this.setOnDragEntered(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				/* the drag-and-drop gesture entered the target */
-				//System.out.println("onDragEntered");
 				/* show to the user that it is an actual gesture target */
 				if (event.getDragboard().hasString()) {
 					setTableImage(action + "Glow");
@@ -198,26 +180,24 @@ public class Table extends ImageView {
 		this.setOnDragDropped(new EventHandler<DragEvent>() {
 			@Override
 			public void handle(DragEvent event) {
-				/* data dropped */
-				System.out.println("onDragDropped");
 				/* if there is a string data on dragboard, read it and use it */
 				Dragboard db = event.getDragboard();
-				System.err.println("content is " + db.getString());
 				String[] content = db.getString().split(" ");
+				System.out.println("You just dragged " + content[0] + " " + content[1]);
 				boolean success = false;
 
 				if (content[0].equals("Food")) {
-					//System.out.println("Food dropped");
 					// It is food
 					if (!action.equals("Sit")) {
-						// SHOW MESSAGE THAT IT IS WRONG ACTION
-						System.err.println("Customer is not waiting for food!");
+						// WRONG ACTION
+						GameScene.setStatusMessage("This table is not waiting for food!");
+						System.err.println("This table is not waiting for food!");
 					} else if (!customer.getfoodName().equals(content[1])) {
-						// SHOW MESSAGE THAT IT IS WRONG FOOD
-						System.err.println("Wrong food!");
+						// WRONG FOOD
+						GameScene.setStatusMessage("Serve wrong food!");
+						System.err.println("Serve wrong food!");
 					} else {
 						// START EATING
-						// EAT TIME = COOK TIME
 						System.out.println(content[1] + " is served");
 						eatTime = Integer.parseInt(content[2]);
 						success = true;
@@ -225,17 +205,18 @@ public class Table extends ImageView {
 					}
 
 				} else {
-					//System.out.println("Customer dropped");
 					// It is customer
 					if (isAvailable()) {
+						// SEATED SUCCESSFULLY
 						int i = Integer.parseInt(content[2]);
 						sit(GameLogic.getWaitArea()[i]);
 						GameLogic.getWaitArea()[i] = null;
 						success = true;
 						System.out.println(content[1] + " is seated");
 					} else {
-						// SHOW THAT IT IS NOT AVAILABLE
+						// TABLE IS NOT AVAILABLE
 						System.err.println("Table is not available");
+						GameScene.setStatusMessage("Table is not available!");
 					}
 				}
 
@@ -251,7 +232,7 @@ public class Table extends ImageView {
 
 	private void eating(int eatTime) {
 		System.out.println(this.customerName + " is eating");
-		eatThread = new Thread(() -> {
+		this.eatThread = new Thread(() -> {
 
 			try {
 				this.eatBar.setVisible(true);
@@ -260,12 +241,12 @@ public class Table extends ImageView {
 					Thread.sleep(500);
 				}
 				this.eatBar.setVisible(false);
+				GameLogic.getThreadContainer().remove(eatThread);
 				bill();
-
 			} catch (InterruptedException e1) {
-				e1.printStackTrace();
 			}
 		});
+		GameLogic.getThreadContainer().add(this.eatThread);
 		eatThread.start();
 	}
 
@@ -289,6 +270,15 @@ public class Table extends ImageView {
 		} else {
 			this.setImage(new Image(this.getImagePath(action)));
 		}
+	}
+	
+	public void leave() {
+		this.customer = null;
+		this.customerName = "";
+		this.action = "";
+		this.available = true;
+		this.money = 0;
+		this.setTableImage("");
 	}
 
 	public boolean isAvailable() {

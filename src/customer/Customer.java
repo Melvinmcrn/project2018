@@ -1,5 +1,6 @@
 package customer;
 
+import component.Table;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
@@ -12,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import logic.GameLogic;
 import scene.GameScene;
-import scene.SceneManager;
 
 public abstract class Customer extends ImageView {
 
@@ -23,6 +23,7 @@ public abstract class Customer extends ImageView {
 	protected ProgressBar waitBar;
 	protected Thread waitThread;
 	protected Customer thisCustomer = this;
+	protected Table tableSeatedIn = null;
 
 	protected final String imagePath;
 	protected final String imageGlowPath;
@@ -84,7 +85,7 @@ public abstract class Customer extends ImageView {
 
 			@Override
 			public void handle(MouseEvent event) {
-				System.out.println("onDragDetected");
+				System.out.println("Drag " + name);
 
 				// allow COPY transfer mode
 				Dragboard db = thisCustomer.startDragAndDrop(TransferMode.MOVE);
@@ -105,7 +106,6 @@ public abstract class Customer extends ImageView {
 			public void handle(DragEvent event) {
 				// the drag-and-drop gesture
 				if (event.getTransferMode() == TransferMode.MOVE) {
-					System.out.println(name + " drag done");
 					GameScene.getMainGame().getChildren().remove(thisCustomer);
 				}
 
@@ -134,14 +134,18 @@ public abstract class Customer extends ImageView {
 					Thread.sleep(500);
 				}
 				this.waitBar.setVisible(false);
+				GameLogic.getThreadContainer().remove(waitThread);
 				this.angry();
 			} catch (InterruptedException e1) {
-				// e1.printStackTrace();
-				this.waitBar.setVisible(false);
-				this.waitBar.setStyle("-fx-accent: LawnGreen");
-				System.out.println(this.name + " feel good :D");
+				if (!GameLogic.isGameOver()) {
+					this.waitBar.setVisible(false);
+					this.waitBar.setStyle("-fx-accent: LawnGreen");
+					System.out.println(this.name + " is treated");
+					GameLogic.getThreadContainer().remove(waitThread);
+				}
 			}
 		});
+		GameLogic.getThreadContainer().add(waitThread);
 		this.waitThread.start();
 
 	}
@@ -170,7 +174,10 @@ public abstract class Customer extends ImageView {
 	}
 
 	public void angry() {
+		System.out.println(this.name + " is angry!");
+		GameScene.setStatusMessage(this.name + " is angry!");
 		GameLogic.deductScore();
+
 		this.leave();
 	}
 
@@ -179,14 +186,18 @@ public abstract class Customer extends ImageView {
 		if (this.action == 1) {
 			GameLogic.getWaitArea()[(int) ((this.getX() / 80) - 2)] = null;
 		}
-		
+
 		Platform.runLater(new Runnable() {
-		    @Override
-		    public void run() {
-		    	GameScene.getMainGame().getChildren().remove(thisCustomer);
-		    	GameScene.getMainGame().getChildren().remove(waitBar);
-		    }
+			@Override
+			public void run() {
+				GameScene.getMainGame().getChildren().remove(thisCustomer);
+				GameScene.getMainGame().getChildren().remove(waitBar);
+			}
 		});
+
+		if (this.action > 1) {
+			this.tableSeatedIn.leave();
+		}
 	}
 
 	public String getName() {
@@ -212,6 +223,10 @@ public abstract class Customer extends ImageView {
 
 	public void setAction(int action) {
 		this.action = action;
+	}
+
+	public void setTableSeatedIn(Table table) {
+		this.tableSeatedIn = table;
 	}
 
 }

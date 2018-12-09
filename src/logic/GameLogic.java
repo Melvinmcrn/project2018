@@ -16,19 +16,20 @@ public class GameLogic {
 	private static List<Food> foodContainer;
 	private static List<ProgressBar> eatBarContainer;
 	private static List<ProgressBar> cookBarContainer;
+	private static List<Thread> threadContainer;
 	private static Customer[] waitArea = { null, null, null, null, null };
 	private static int player = 1;
 	private static int money = 0;
 	private static int score = 100;
 	private static double tipMoney = 1;
 	private static double extraWaitTime = 1;
-	private static long generateTime = 5;
-	
+	private static boolean gameOver = false;
+
 	private Customer newCustomer = null;
 	private ImageView playerImage;
 
 	private Thread generateCustomerThread;
-	private boolean isThreadRunning = false;
+	private boolean isGenerateCustomerStart = false;
 
 	public GameLogic() {
 		GameLogic.customerContainer = new ArrayList<Customer>();
@@ -36,11 +37,12 @@ public class GameLogic {
 		GameLogic.foodContainer = new ArrayList<Food>();
 		GameLogic.eatBarContainer = new ArrayList<ProgressBar>();
 		GameLogic.cookBarContainer = new ArrayList<ProgressBar>();
+		GameLogic.threadContainer = new ArrayList<Thread>();
 		this.initialize();
 	}
 
 	private void initialize() {
-		//	Set table and eat bar
+		// Set table and eat bar
 		for (int i = 2; i <= 6; i += 2) {
 			for (int j = 2; j <= 4; j += 2) {
 				Table table = new Table(i, j);
@@ -48,23 +50,25 @@ public class GameLogic {
 				eatBarContainer.add(table.getEatBar());
 			}
 		}
-		
-		//	Set food and cook bar
+
+		// Set food and cook bar
 		foodContainer.add(new Dorayaki());
 		foodContainer.add(new Curry());
 		foodContainer.add(new Steak());
-		for(int i=0; i<foodContainer.size(); i++) {
+		for (int i = 0; i < foodContainer.size(); i++) {
 			cookBarContainer.add(foodContainer.get(i).getCookBar());
 		}
-		
-		//	Set player image
-		this.playerImage = new ImageView(ClassLoader.getSystemResource("images/StatusBar/Player"+player+".png").toString());
+
+		// Set player image
+		this.playerImage = new ImageView(
+				ClassLoader.getSystemResource("images/StatusBar/Player" + player + ".png").toString());
 		this.playerImage.setX(20);
 		this.playerImage.setY(0);
-		//	Set player's special action
-		switch(player) {
+		// Set player's special action
+		switch (player) {
 		case 1:
 			// Daddy make customer wait longer
+			GameLogic.extraWaitTime = 1.5;
 			break;
 		case 2:
 			// Mummy get more money
@@ -74,22 +78,26 @@ public class GameLogic {
 	}
 
 	private void generateCustomer() {
-		if (!isThreadRunning) {
-			isThreadRunning = true;
-			generateCustomerThread = new Thread(() -> {
+		if (!isGenerateCustomerStart) {
+			this.isGenerateCustomerStart = true;
+			this.generateCustomerThread = new Thread(() -> {
 				try {
 					int i = this.getAvailableWaitArea();
 					while (i == -1) {
 						i = this.getAvailableWaitArea();
 					}
-					Thread.sleep(GameLogic.generateTime * 1000);
+					Thread.sleep(5 * 1000);
 					newCustomer = this.getRandomCustomer(i + 2, 0);
-					isThreadRunning = false;
+					isGenerateCustomerStart = false;
+					GameLogic.getThreadContainer().remove(generateCustomerThread);
 				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					if (!GameLogic.gameOver) {
+						e1.printStackTrace();
+					}
 				}
 			});
-			generateCustomerThread.start();
+			GameLogic.getThreadContainer().add(generateCustomerThread);
+			this.generateCustomerThread.start();
 		}
 	}
 
@@ -97,19 +105,19 @@ public class GameLogic {
 		int randomNumber = (int) (Math.random() * 5 + 1);
 		switch (randomNumber) {
 		case 1:
-			System.out.println("Generate Doraemon at " + x + " " + y);
+			System.out.println("Generate Doraemon at position " + (x - 1));
 			return new Doraemon(x, y);
 		case 2:
-			System.out.println("Generate Nobita at " + x + " " + y);
+			System.out.println("Generate Nobita at position " + (x - 1));
 			return new Nobita(x, y);
 		case 3:
-			System.out.println("Generate Giant at " + x + " " + y);
+			System.out.println("Generate Giant at position " + (x - 1));
 			return new Giant(x, y);
 		case 4:
-			System.out.println("Generate Shizuka at " + x + " " + y);
+			System.out.println("Generate Shizuka at position " + (x - 1));
 			return new Shizuka(x, y);
 		default:
-			System.out.println("Generate Suneo at " + x + " " + y);
+			System.out.println("Generate Suneo at position " + (x - 1));
 			return new Suneo(x, y);
 		}
 
@@ -125,12 +133,8 @@ public class GameLogic {
 	}
 
 	public void logicUpdate() {
-		if (score == 0) {
-			//	GAME OVER
-		}
-		
 		if (newCustomer != null) {
-			//	Add new customer
+			// Add new customer
 			customerContainer.add(newCustomer);
 			waitArea[(int) ((newCustomer.getX() / 80) - 2)] = newCustomer;
 
@@ -164,10 +168,18 @@ public class GameLogic {
 		}
 	}
 
+	public static void endGame() {
+		gameOver = true;
+		for (Thread thread : threadContainer) {
+			thread.interrupt();
+		}
+		// TODO set gameover scene
+	}
+
 	public void setTipMoney(double tipMoney) {
 		GameLogic.tipMoney = tipMoney;
 	}
-	
+
 	public ImageView getPlayerImage() {
 		return playerImage;
 	}
@@ -192,28 +204,36 @@ public class GameLogic {
 		return cookBarContainer;
 	}
 
+	public static List<Thread> getThreadContainer() {
+		return threadContainer;
+	}
+
 	public static Customer[] getWaitArea() {
 		return waitArea;
 	}
-	
+
 	public static int getMoney() {
 		return money;
 	}
-	
+
 	public static int getScore() {
 		return score;
 	}
-	
+
 	public static void setPlayer(int player) {
 		GameLogic.player = player;
 	}
-	
+
 	public static int getPlayer() {
 		return player;
 	}
-	
+
 	public static double getExtraWaitTime() {
 		return extraWaitTime;
+	}
+
+	public static boolean isGameOver() {
+		return gameOver;
 	}
 
 }

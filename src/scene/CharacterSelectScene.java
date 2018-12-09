@@ -2,7 +2,7 @@ package scene;
 
 import button.NavigationButton;
 import exception.CharacterNotSelectedException;
-import exception.CharacterRestrictException;
+import exception.NameRestrictException;
 import exception.NameLengthRestrictException;
 import exception.NameNotEnteredException;
 import javafx.beans.value.ChangeListener;
@@ -35,7 +35,7 @@ public class CharacterSelectScene extends StackPane {
 	private String charName;
 	private boolean isSelect1 = false;
 	private boolean isSelect2 = false;
-	
+
 	private final Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
 	private final Image character1_notSelect = new Image(
 			ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
@@ -51,7 +51,7 @@ public class CharacterSelectScene extends StackPane {
 			ClassLoader.getSystemResource("images/Player2_mouseOn.png").toString());
 	private final Image nameTextFieldBackground = new Image(
 			ClassLoader.getSystemResource("images/NameTextFieldBG.png").toString());
-	
+
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
 	private AudioClip mouseIn = new AudioClip(ClassLoader.getSystemResource("musics/mouseIn.mp3").toExternalForm());
@@ -119,13 +119,17 @@ public class CharacterSelectScene extends StackPane {
 		// Restrict Space
 		nameTextField.textProperty().addListener((observable, old_value, new_value) -> {
 			try {
-				if (new_value.contains(" ")) {
+				if ((new_value.substring(new_value.length() - 1).matches("[^A-Z]"))
+						&& (new_value.substring(new_value.length() - 1).matches("[^\\d]"))
+						&& (new_value.substring(new_value.length() - 1).matches("[^a-z]"))) {
 					nameTextField.setText(old_value);
-					throw new CharacterRestrictException();
+					throw new NameRestrictException();
 				}
-			} catch (CharacterRestrictException e) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name cannot be space");
+			} catch (NameRestrictException e) {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION, "Player Name should be A - Z or 0 - 9");
 				alert.show();
+			} catch (StringIndexOutOfBoundsException e) {
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -143,7 +147,7 @@ public class CharacterSelectScene extends StackPane {
 			public void handle(InputEvent event) {
 				try {
 					if (nameTextField.getText().length() > 0) {
-						charName = nameTextField.getText();
+						charName = nameTextField.getText().toUpperCase();
 						nameTextField.setEditable(false);
 					} else {
 						throw new NameLengthRestrictException();
@@ -242,7 +246,7 @@ public class CharacterSelectScene extends StackPane {
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
 		thisCanvas.setOnMouseClicked((MouseEvent event) -> {
 			this.charID = thisID;
-			//this.drawCharacterSelected(thisID, thisCanvas);
+			// this.drawCharacterSelected(thisID, thisCanvas);
 			this.drawCharacter(otherID, otherCanvas);
 			if (thisID == 1) {
 				this.isSelect1 = true;
@@ -287,7 +291,7 @@ public class CharacterSelectScene extends StackPane {
 		if (ID == 2)
 			gc.drawImage(character2_select, 0, 0);
 	}
-	
+
 	private void drawCharacterMouseOn(int ID, Canvas canvas) {
 		gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
