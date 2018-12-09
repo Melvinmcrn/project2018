@@ -28,7 +28,7 @@ public class HallOfFameScene extends StackPane {
 	private Font HEADER_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant Bold.ttf"), 30);
 	private Image logo = new Image(ClassLoader.getSystemResource("images/HallOfFameLogo.png").toString());
 	private static Media highScoreBG = new Media(
-			ClassLoader.getSystemResource("videos/HighScoreBG.mp4").toExternalForm());
+			ClassLoader.getSystemResource("videos/HallOfFameBG.mp4").toExternalForm());
 	private static MediaPlayer highScorePlayer = new MediaPlayer(highScoreBG);
 	private GraphicsContext gc;
 	private Canvas scoreCanvas;

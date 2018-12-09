@@ -49,7 +49,7 @@ public class CharacterSelectScene extends StackPane {
 	private final Image character2_mouseOn = new Image(
 			ClassLoader.getSystemResource("images/Player2_mouseOn.png").toString());
 	private final Image nameTextFieldBackground = new Image(
-			ClassLoader.getSystemResource("images/NameTextFieldBackground.png").toString());
+			ClassLoader.getSystemResource("images/NameTextFieldBG.png").toString());
 	
 	private GraphicsContext gc;
 	private Font NAME_FONT = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku_Rant.ttf"), 30);
@@ -57,7 +57,7 @@ public class CharacterSelectScene extends StackPane {
 	private AudioClip mouseClicked = new AudioClip(
 			ClassLoader.getSystemResource("musics/mouseClicked.mp3").toExternalForm());
 	private static Media charSelBG = new Media(
-			ClassLoader.getSystemResource("videos/CharacterSelectBackground.mp4").toExternalForm());
+			ClassLoader.getSystemResource("videos/CharacterSelectBG.mp4").toExternalForm());
 	private static MediaPlayer charSelPlayer = new MediaPlayer(charSelBG);
 
 	public CharacterSelectScene() {
