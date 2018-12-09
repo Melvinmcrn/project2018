@@ -1,24 +1,24 @@
 package customer;
 
-import component.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import javafx.util.converter.CurrencyStringConverter;
+import logic.GameLogic;
 
 public abstract class Customer extends ImageView {
 
 	protected String name;
 	protected String foodName;
+	protected int action; // 1 = wait in queue, 2 = wait for food, 3 = wait for bill
 	protected int waitTime;
 	protected ProgressBar waitBar;
+	protected Thread waitThread;
 	protected Customer thisCustomer = this;
 
 	protected final String imagePath;
@@ -46,9 +46,10 @@ public abstract class Customer extends ImageView {
 		this.waitBar.setVisible(false);
 
 		this.setEvent();
+		this.waitForTable();
 	}
 
-	private void setCustomerImage(int status) {
+	protected void setCustomerImage(int status) {
 		// 1 Normal, 2 Glow
 		switch (status) {
 		case 1:
@@ -60,7 +61,7 @@ public abstract class Customer extends ImageView {
 		}
 	}
 
-	private void setEvent() {
+	protected void setEvent() {
 		this.setOnMouseEntered(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -109,7 +110,7 @@ public abstract class Customer extends ImageView {
 		});
 	}
 
-	private void setProgress() {
+	protected void setProgress() {
 		double addProgress = 0.5 / this.waitTime;
 		double nowProgress = this.waitBar.getProgress();
 		if (addProgress + nowProgress > 1) {
@@ -119,25 +120,55 @@ public abstract class Customer extends ImageView {
 		}
 	}
 
-	private void waitThread() {
-		Thread wait = new Thread(() -> {
-
+	protected void waiting() {
+		this.waitThread = new Thread(() -> {
 			try {
+				this.waitBar.setProgress(0);
+				this.waitBar.setVisible(true);
 				while (this.waitBar.getProgress() < 1) {
-					setProgress();
+					this.setProgress();
 					Thread.sleep(500);
 				}
-				
+				this.waitBar.setVisible(false);
+				this.angry();
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
+				this.waitBar.setVisible(false);
 			}
 		});
-		wait.start();
+		this.waitThread.start();
 
 	}
 
-	public void leave() {
+	public void deductScore() {
+		GameLogic.deductScore();
+	}
+	
+	public void doCustomerFavor() {
+		this.waitThread.interrupt();
+	}
+	
+	public void waitForTable() {
+		this.action = 1;
+		this.waiting();
+	}
 
+	public void waitForFood() {
+		this.action = 2;
+		this.waiting();
+	}
+
+	public void waitForBill() {
+		this.action = 3;
+		this.waiting();
+	}
+
+	public void angry() {
+		this.leave();
+	}
+
+	public void leave() {
+		GameLogic.getCustomerContainer().remove(this);
 	}
 
 	public String getName() {
@@ -159,6 +190,10 @@ public abstract class Customer extends ImageView {
 	public void setWaitBarLocation(int x, int y) {
 		this.waitBar.setLayoutX(x * 80);
 		this.waitBar.setLayoutY((y * 80) + 80);
+	}
+
+	public void setAction(int action) {
+		this.action = action;
 	}
 
 }

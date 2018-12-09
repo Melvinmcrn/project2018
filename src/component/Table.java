@@ -61,25 +61,22 @@ public class Table extends ImageView {
 			this.available = false;
 			customer.setVisible(false);
 			System.out.println(this.customerName + " sit done");
-
-			// this.eating(eatTime);
-			// this.customer.getWaitTime());
-			// this.leave();
+			
+			this.customer.waitForFood();
 		}
 	}
 
 	private void bill() {
 		this.action = "Bill";
 		this.setTableImage(this.action);
-
-		// this.customer.wai
-		// this.eating(this.customer.getWaitTime());
-		// this.leave();
+		
+		this.customer.waitForBill();
 	}
 
 	private void checkBill() {
 		GameLogic.addMoney(this.money);
 		this.leave();
+		this.customer.leave();
 	}
 
 	private void leave() {
@@ -218,6 +215,7 @@ public class Table extends ImageView {
 						// EAT TIME = COOK TIME
 						System.out.println(content[1] + " is served");
 						eatTime = Integer.parseInt(content[2]);
+						customer.doCustomerFavor();
 						success = true;
 						eat();
 					}
@@ -229,8 +227,9 @@ public class Table extends ImageView {
 						int i = Integer.parseInt(content[2]);
 						sit(GameLogic.getWaitArea()[i]);
 						GameLogic.getWaitArea()[i] = null;
-						success = true;
 						customer.setWaitBarLocation(x, y);
+						customer.doCustomerFavor();
+						success = true;
 						System.out.println(content[1] + " is seated");
 					} else {
 						// SHOW THAT IT IS NOT AVAILABLE
@@ -256,7 +255,6 @@ public class Table extends ImageView {
 				this.eatBar.setVisible(true);
 				while (this.eatBar.getProgress() < 1) {
 					setProgress(eatTime);
-					// System.out.println(action+" "+eatBar.getProgress());
 					Thread.sleep(500);
 				}
 				this.eatBar.setVisible(false);

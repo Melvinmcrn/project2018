@@ -1,6 +1,6 @@
 package customer;
 
-public class Doraemon extends Customer implements Madable{
+public class Doraemon extends Customer implements Complainable{
 
 	public Doraemon(int x, int y) {
 		super("Doraemon", 17, "Dorayaki", x, y);
@@ -8,8 +8,13 @@ public class Doraemon extends Customer implements Madable{
 
 	@Override
 	public void angry() {
-		// TODO Auto-generated method stub
+		keepComplaining();
 		
+	}
+	
+	@Override
+	public void keepComplaining() {
+		waiting();
 	}
 
 }

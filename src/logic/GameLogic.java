@@ -33,11 +33,10 @@ public class GameLogic {
 
 	public GameLogic() {
 		GameLogic.customerContainer = new ArrayList<Customer>();
-		money = 0;
-		tableContainer = new ArrayList<Table>();
-		foodContainer = new ArrayList<Food>();
-		eatBarContainer = new ArrayList<ProgressBar>();
-		cookBarContainer = new ArrayList<ProgressBar>();
+		GameLogic.tableContainer = new ArrayList<Table>();
+		GameLogic.foodContainer = new ArrayList<Food>();
+		GameLogic.eatBarContainer = new ArrayList<ProgressBar>();
+		GameLogic.cookBarContainer = new ArrayList<ProgressBar>();
 		this.initialize();
 	}
 
@@ -56,24 +55,18 @@ public class GameLogic {
 		for(int i=0; i<foodContainer.size(); i++) {
 			cookBarContainer.add(foodContainer.get(i).getCookBar());
 		}
-
-		// tableContainer.get(0).sit(new Doraemon(1, 1));
-
 	}
 
 	private void generateCustomer() {
 		if (!isThreadRunning) {
-			// System.out.println("Thread is not running");
 			isThreadRunning = true;
 			generateCustomerThread = new Thread(() -> {
 				try {
-					// System.out.println("Start generating customer thread");
 					int i = this.getAvailableWaitArea();
 					while (i == -1) {
 						i = this.getAvailableWaitArea();
 					}
 					Thread.sleep(GameLogic.generateTime * 1000);
-					// System.out.println("Generate customer at position " + i);
 					newCustomer = this.getRandomCustomer(i + 2, 0);
 					isThreadRunning = false;
 				} catch (InterruptedException e1) {
@@ -119,11 +112,10 @@ public class GameLogic {
 		if (score == 0) {
 			//	GAME OVER
 		}
-
+		
 		if (newCustomer != null) {
-			// System.out.println("Add new customer to container");
+			//	Add new customer
 			customerContainer.add(newCustomer);
-			// System.out.println((int) ((newCustomer.getX()/80)-2));
 			waitArea[(int) ((newCustomer.getX() / 80) - 2)] = newCustomer;
 
 			GameScene.getMainGame().getChildren().add(customerContainer.get(customerContainer.size() - 1));
@@ -183,4 +175,13 @@ public class GameLogic {
 	public static Customer[] getWaitArea() {
 		return waitArea;
 	}
+	
+	public static int getMoney() {
+		return score;
+	}
+	
+	public static int getScore() {
+		return score;
+	}
+
 }
