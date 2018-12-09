@@ -10,6 +10,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import logic.GameLogic;
+import scene.GameScene;
 
 public abstract class Customer extends ImageView {
 
@@ -43,6 +44,7 @@ public abstract class Customer extends ImageView {
 		this.waitBar.setLayoutX(x * 80);
 		this.waitBar.setLayoutY((y * 80) + 80);
 		this.waitBar.setPrefWidth(80);
+		this.waitBar.setStyle("-fx-accent: red");
 		this.waitBar.setVisible(false);
 
 		this.setEvent();
@@ -102,7 +104,7 @@ public abstract class Customer extends ImageView {
 				// the drag-and-drop gesture
 				if (event.getTransferMode() == TransferMode.MOVE) {
 					System.out.println(name + " drag done");
-					thisCustomer.setVisible(false);
+					GameScene.getMainGame().getChildren().remove(thisCustomer);
 				}
 
 				event.consume();
@@ -129,11 +131,12 @@ public abstract class Customer extends ImageView {
 					this.setProgress();
 					Thread.sleep(500);
 				}
-				this.waitBar.setVisible(false);
+				//this.waitBar.setVisible(false);
 				this.angry();
 			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-				this.waitBar.setVisible(false);
+				//e1.printStackTrace();
+				//this.waitBar.setVisible(false);
+				System.out.println(this.name+" feel good :D");
 			}
 		});
 		this.waitThread.start();
@@ -169,6 +172,10 @@ public abstract class Customer extends ImageView {
 
 	public void leave() {
 		GameLogic.getCustomerContainer().remove(this);
+		if(this.action == 1) {
+			GameLogic.getWaitArea()[(int) ((this.getX()/80)-2)] = null;
+		}
+		GameScene.getMainGame().getChildren().remove(this);
 	}
 
 	public String getName() {

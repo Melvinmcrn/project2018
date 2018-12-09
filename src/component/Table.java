@@ -59,10 +59,12 @@ public class Table extends ImageView {
 			this.action = "Sit";
 			this.setTableImage(action);
 			this.available = false;
-			customer.setVisible(false);
 			System.out.println(this.customerName + " sit done");
 			
+			this.customer.doCustomerFavor();
+			this.customer.setWaitBarLocation(this.x, this.y+160);
 			this.customer.waitForFood();
+			this.customer.getWaitBar().setVisible(true);
 		}
 	}
 
@@ -75,8 +77,9 @@ public class Table extends ImageView {
 
 	private void checkBill() {
 		GameLogic.addMoney(this.money);
-		this.leave();
+		this.customer.doCustomerFavor();
 		this.customer.leave();
+		this.leave();
 	}
 
 	private void leave() {
@@ -152,7 +155,7 @@ public class Table extends ImageView {
 			@Override
 			public void handle(DragEvent event) {
 				/* data is dragged over the target */
-				System.out.println("onDragOver");
+				//System.out.println("onDragOver");
 
 				/*
 				 * accept it only if it is not dragged from the same node and if it has a string
@@ -171,7 +174,7 @@ public class Table extends ImageView {
 			@Override
 			public void handle(DragEvent event) {
 				/* the drag-and-drop gesture entered the target */
-				System.out.println("onDragEntered");
+				//System.out.println("onDragEntered");
 				/* show to the user that it is an actual gesture target */
 				if (event.getDragboard().hasString()) {
 					setTableImage(action + "Glow");
@@ -215,7 +218,6 @@ public class Table extends ImageView {
 						// EAT TIME = COOK TIME
 						System.out.println(content[1] + " is served");
 						eatTime = Integer.parseInt(content[2]);
-						customer.doCustomerFavor();
 						success = true;
 						eat();
 					}
@@ -227,8 +229,6 @@ public class Table extends ImageView {
 						int i = Integer.parseInt(content[2]);
 						sit(GameLogic.getWaitArea()[i]);
 						GameLogic.getWaitArea()[i] = null;
-						customer.setWaitBarLocation(x, y);
-						customer.doCustomerFavor();
 						success = true;
 						System.out.println(content[1] + " is seated");
 					} else {

@@ -7,6 +7,8 @@ import component.*;
 import customer.*;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -21,12 +23,15 @@ public class GameLogic {
 	private static List<Food> foodContainer;
 	private static List<ProgressBar> eatBarContainer;
 	private static List<ProgressBar> cookBarContainer;
-	private Customer newCustomer = null;
 	private static Customer[] waitArea = { null, null, null, null, null };
+	private static int player = 1;
 	private static int money = 0;
 	private static int score = 100;
 	private static double tipMoney = 1;
 	private static long generateTime = 5;
+	
+	private Customer newCustomer = null;
+	private ImageView playerImage;
 
 	private Thread generateCustomerThread;
 	private boolean isThreadRunning = false;
@@ -41,6 +46,7 @@ public class GameLogic {
 	}
 
 	private void initialize() {
+		//	Set table and eat bar
 		for (int i = 2; i <= 6; i += 2) {
 			for (int j = 2; j <= 4; j += 2) {
 				Table table = new Table(i, j);
@@ -48,13 +54,23 @@ public class GameLogic {
 				eatBarContainer.add(table.getEatBar());
 			}
 		}
+		
+		//	Set food and cook bar
 		foodContainer.add(new Dorayaki());
 		foodContainer.add(new Curry());
 		foodContainer.add(new Steak());
-		
 		for(int i=0; i<foodContainer.size(); i++) {
 			cookBarContainer.add(foodContainer.get(i).getCookBar());
 		}
+		
+		//	Set player image
+		this.playerImage = new ImageView(ClassLoader.getSystemResource("images/StatusBar/Player"+player+".png").toString());
+		this.playerImage.setX(20);
+		this.playerImage.setY(0);
+		//switch(player) {
+		//case 1:
+		//	this.playerImage = new Image(ClassLoader.getSystemResource(name))
+		//}
 	}
 
 	private void generateCustomer() {
@@ -151,6 +167,10 @@ public class GameLogic {
 	public void setTipMoney(double tipMoney) {
 		GameLogic.tipMoney = tipMoney;
 	}
+	
+	public ImageView getPlayerImage() {
+		return playerImage;
+	}
 
 	public static List<Customer> getCustomerContainer() {
 		return customerContainer;
@@ -182,6 +202,14 @@ public class GameLogic {
 	
 	public static int getScore() {
 		return score;
+	}
+	
+	public static void setPlayer(int player) {
+		GameLogic.player = player;
+	}
+	
+	public static int getPlayer() {
+		return player;
 	}
 
 }

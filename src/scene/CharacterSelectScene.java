@@ -27,6 +27,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
+import logic.GameLogic;
 
 public class CharacterSelectScene extends StackPane {
 
@@ -252,6 +253,7 @@ public class CharacterSelectScene extends StackPane {
 				this.isSelect1 = false;
 				this.charID = 2;
 			}
+			GameLogic.setPlayer(thisID);
 			mouseClicked.play();
 		});
 		thisCanvas.setOnMouseEntered((MouseEvent event) -> {

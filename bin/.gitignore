@@ -1,6 +1,12 @@
+/images/
+/musics/
 /videos/
+/button/
 /component/
 /customer/
+/exception/
 /logic/
 /scene/
-/images/
+/sharedObject/
+/application/
+/data/
