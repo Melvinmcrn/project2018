@@ -54,6 +54,7 @@ public abstract class Food extends ImageView {
 		this.cookBar.setPrefWidth(80);
 		this.cookBar.setLayoutX(x * 80);
 		this.cookBar.setLayoutY((y * 80) + 65);
+		this.cookBar.setStyle("-fx-accent: LightSkyBlue");
 		this.isCooked = false;
 
 		this.setEvent();

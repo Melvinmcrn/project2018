@@ -1,11 +1,6 @@
 package data;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,7 +8,7 @@ import javafx.collections.ObservableList;
 public class ScoreData implements Comparable<ScoreData> {
 
 	private static ObservableList<ScoreData> data = FXCollections.observableArrayList();
-	private static String filePath = ClassLoader.getSystemResource("data/data.txt").toString();
+	private static File scoreFile = new File("highscore.dat");
 	private String name;
 	private int score;
 
@@ -22,44 +17,68 @@ public class ScoreData implements Comparable<ScoreData> {
 		this.score = score;
 		this.add(this);
 	}
-	
+
 	private static void writeFile() {
 		String dataString = "";
-		for(ScoreData x : ScoreData.data) {
-			dataString += x.getName() + " " + x.getScore() + "\n";
+		for (ScoreData x : ScoreData.data) {
+			dataString += x.getName() + " " + x.getScore() + " ";
+			// System.out.println("dataString = " + dataString + " ");
 		}
-		
+		if (!scoreFile.exists()) {
+			try {
+				scoreFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		FileWriter writeFile = null;
+		BufferedWriter writer = null;
 		try {
-			FileWriter fileWriter = new FileWriter(new File(filePath));
-			fileWriter.write(dataString);
-			fileWriter.close();
-		} catch (IOException e) {
+			writeFile = new FileWriter(scoreFile);
+			writer = new BufferedWriter(writeFile);
+			writer.write(dataString);
+		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null)
+					writer.close();
+			} catch (Exception e) {
+			}
 		}
 	}
 
 	public static void readFile() {
+		String line = null;
+		FileReader readFile = null;
+		BufferedReader reader = null;
+
 		try {
-			String directory = System.getProperty("user.home");
-			BufferedReader bufferedReader = new BufferedReader(new FileReader("file:///E:\\javacoding\\project2018\\res\\data\\data.txt"));
-			String line = bufferedReader.readLine();
-			ScoreData.data.clear();
-			while (line!=null) {
+			readFile = new FileReader(scoreFile);
+			reader = new BufferedReader(readFile);
+			line = reader.readLine();
+			if (line != null) {
+				ScoreData.data.clear();
 				line.trim();
 				String[] lineSplit = line.split(" ");
-				@SuppressWarnings("unused")
-				ScoreData addData = new ScoreData(lineSplit[0], Integer.parseInt(lineSplit[1]));
-				line = bufferedReader.readLine();
+				int size = lineSplit.length;
+				for (int i = 0; i < size / 2; i++) {
+					@SuppressWarnings("unused")
+					ScoreData addData = new ScoreData(lineSplit[i * 2], Integer.parseInt(lineSplit[(i * 2) + 1]));
+				}
 			}
-			bufferedReader.close();
+			reader.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-			
+			try {
+				scoreFile.createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Error Reading file");
 		}
 	}
-	
+
 	public void add(ScoreData data) {
 		ScoreData.data.add(data);
 		ScoreData.data.sort(null);

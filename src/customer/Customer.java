@@ -1,5 +1,6 @@
 package customer;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
@@ -11,6 +12,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import logic.GameLogic;
 import scene.GameScene;
+import scene.SceneManager;
 
 public abstract class Customer extends ImageView {
 
@@ -44,7 +46,7 @@ public abstract class Customer extends ImageView {
 		this.waitBar.setLayoutX(x * 80);
 		this.waitBar.setLayoutY((y * 80) + 80);
 		this.waitBar.setPrefWidth(80);
-		this.waitBar.setStyle("-fx-accent: red");
+		this.waitBar.setStyle("-fx-accent: LawnGreen");
 		this.waitBar.setVisible(false);
 
 		this.setEvent();
@@ -131,12 +133,13 @@ public abstract class Customer extends ImageView {
 					this.setProgress();
 					Thread.sleep(500);
 				}
-				//this.waitBar.setVisible(false);
+				this.waitBar.setVisible(false);
 				this.angry();
 			} catch (InterruptedException e1) {
-				//e1.printStackTrace();
-				//this.waitBar.setVisible(false);
-				System.out.println(this.name+" feel good :D");
+				// e1.printStackTrace();
+				this.waitBar.setVisible(false);
+				this.waitBar.setStyle("-fx-accent: LawnGreen");
+				System.out.println(this.name + " feel good :D");
 			}
 		});
 		this.waitThread.start();
@@ -146,11 +149,11 @@ public abstract class Customer extends ImageView {
 	public void deductScore() {
 		GameLogic.deductScore();
 	}
-	
+
 	public void doCustomerFavor() {
 		this.waitThread.interrupt();
 	}
-	
+
 	public void waitForTable() {
 		this.action = 1;
 		this.waiting();
@@ -167,15 +170,23 @@ public abstract class Customer extends ImageView {
 	}
 
 	public void angry() {
+		GameLogic.deductScore();
 		this.leave();
 	}
 
 	public void leave() {
 		GameLogic.getCustomerContainer().remove(this);
-		if(this.action == 1) {
-			GameLogic.getWaitArea()[(int) ((this.getX()/80)-2)] = null;
+		if (this.action == 1) {
+			GameLogic.getWaitArea()[(int) ((this.getX() / 80) - 2)] = null;
 		}
-		GameScene.getMainGame().getChildren().remove(this);
+		
+		Platform.runLater(new Runnable() {
+		    @Override
+		    public void run() {
+		    	GameScene.getMainGame().getChildren().remove(thisCustomer);
+		    	GameScene.getMainGame().getChildren().remove(waitBar);
+		    }
+		});
 	}
 
 	public String getName() {

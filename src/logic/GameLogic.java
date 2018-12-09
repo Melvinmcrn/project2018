@@ -5,15 +5,8 @@ import java.util.List;
 
 import component.*;
 import customer.*;
-import javafx.event.EventHandler;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import scene.GameScene;
 
 public class GameLogic {
@@ -28,6 +21,7 @@ public class GameLogic {
 	private static int money = 0;
 	private static int score = 100;
 	private static double tipMoney = 1;
+	private static double extraWaitTime = 1;
 	private static long generateTime = 5;
 	
 	private Customer newCustomer = null;
@@ -67,10 +61,16 @@ public class GameLogic {
 		this.playerImage = new ImageView(ClassLoader.getSystemResource("images/StatusBar/Player"+player+".png").toString());
 		this.playerImage.setX(20);
 		this.playerImage.setY(0);
-		//switch(player) {
-		//case 1:
-		//	this.playerImage = new Image(ClassLoader.getSystemResource(name))
-		//}
+		//	Set player's special action
+		switch(player) {
+		case 1:
+			// Daddy make customer wait longer
+			break;
+		case 2:
+			// Mummy get more money
+			GameLogic.tipMoney = 1.5;
+			break;
+		}
 	}
 
 	private void generateCustomer() {
@@ -197,7 +197,7 @@ public class GameLogic {
 	}
 	
 	public static int getMoney() {
-		return score;
+		return money;
 	}
 	
 	public static int getScore() {
@@ -210,6 +210,10 @@ public class GameLogic {
 	
 	public static int getPlayer() {
 		return player;
+	}
+	
+	public static double getExtraWaitTime() {
+		return extraWaitTime;
 	}
 
 }

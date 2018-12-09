@@ -47,6 +47,7 @@ public class Table extends ImageView {
 		this.eatBar.setLayoutX(x * 80);
 		this.eatBar.setLayoutY((y * 80) + 80);
 		this.eatBar.setPrefWidth(80);
+		this.eatBar.setStyle("-fx-accent: LightPink");
 		this.eatBar.setVisible(false);
 
 		this.setEvent();
@@ -62,7 +63,7 @@ public class Table extends ImageView {
 			System.out.println(this.customerName + " sit done");
 			
 			this.customer.doCustomerFavor();
-			this.customer.setWaitBarLocation(this.x, this.y+160);
+			this.customer.setWaitBarLocation(this.x, this.y);
 			this.customer.waitForFood();
 			this.customer.getWaitBar().setVisible(true);
 		}
@@ -94,6 +95,7 @@ public class Table extends ImageView {
 	private void eat() {
 		System.out.println(this.customerName + " in eat action");
 		this.action = "Eat";
+		this.customer.doCustomerFavor();
 		
 		int foodPrice;
 		if(this.customer.getfoodName().equals("Dorayaki")) {
@@ -205,7 +207,7 @@ public class Table extends ImageView {
 				boolean success = false;
 
 				if (content[0].equals("Food")) {
-					System.out.println("Food dropped");
+					//System.out.println("Food dropped");
 					// It is food
 					if (!action.equals("Sit")) {
 						// SHOW MESSAGE THAT IT IS WRONG ACTION
@@ -223,7 +225,7 @@ public class Table extends ImageView {
 					}
 
 				} else {
-					System.out.println("Customer dropped");
+					//System.out.println("Customer dropped");
 					// It is customer
 					if (isAvailable()) {
 						int i = Integer.parseInt(content[2]);

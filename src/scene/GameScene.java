@@ -24,6 +24,9 @@ public class GameScene extends VBox {
 	private final Image gameBG = new Image(ClassLoader.getSystemResource("images/GameBG.png").toString());
 	private final Image statusBarBG = new Image(
 			ClassLoader.getSystemResource("images/StatusBar/StatusBarBG.jpg").toString());
+	private final Font statusFont = Font
+			.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant italbold.ttf"), 50);
+
 	private static Media gameBGM = new Media(ClassLoader.getSystemResource("musics/GameBGM.mp3").toExternalForm());
 	private static MediaPlayer gameMisc = new MediaPlayer(gameBGM);
 	private static AnimationTimer animation;
@@ -31,7 +34,6 @@ public class GameScene extends VBox {
 	private Label clock;
 	private Label money;
 	private Label score;
-	private Font statusFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("fonts/Otaku Rant italbold.ttf"), 50);
 
 	public GameScene() {
 
@@ -80,11 +82,13 @@ public class GameScene extends VBox {
 		this.money.setLayoutX(420);
 		this.money.setLayoutY(58);
 		this.money.setFont(statusFont);
+		System.err.println("money = " + gameLogic.getMoney());
 
 		this.score = new Label(Integer.toString(GameLogic.getScore()));
 		this.score.setLayoutX(620);
 		this.score.setLayoutY(58);
 		this.score.setFont(statusFont);
+		System.err.println("score = " + GameLogic.getScore());
 
 		statusBar.getChildren().add(gameLogic.getPlayerImage());
 		statusBar.getChildren().add(this.clock);

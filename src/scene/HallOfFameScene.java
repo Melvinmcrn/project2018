@@ -8,8 +8,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -52,13 +50,7 @@ public class HallOfFameScene extends StackPane {
 		gc = logoCanvas.getGraphicsContext2D();
 		gc.drawImage(logo, 0, 0);
 
-		ScoreData d = new ScoreData("a", 100);
-		ScoreData e = new ScoreData("a", 200);
-		ScoreData f = new ScoreData("a", 300);
-
-		ScoreData a = new ScoreData("a", 150);
-		ScoreData b = new ScoreData("a", 120);
-		ScoreData c = new ScoreData("a", 100);
+		ScoreData.readFile();
 
 		// Create Table Header
 		nameHeader = new Label("Name");
@@ -83,8 +75,6 @@ public class HallOfFameScene extends StackPane {
 		String score1 = "NO RECORD";
 		String score2 = "NO RECORD";
 		String score3 = "NO RECORD";
-
-		ScoreData.readFile();
 
 		if (ScoreData.size() >= 1) {
 			name1 = ScoreData.get(0).getName();
@@ -122,16 +112,16 @@ public class HallOfFameScene extends StackPane {
 		this.homeButton = new NavigationButton("Home", "Welcome");
 
 		setPosPane.setTop(logoCanvas);
-		setPosPane.setAlignment(logoCanvas, Pos.TOP_CENTER);
-		setPosPane.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
+		BorderPane.setAlignment(logoCanvas, Pos.TOP_CENTER);
+		BorderPane.setMargin(logoCanvas, new Insets(0, 10, 0, 10));
 
 		setPosPane.setCenter(center);
-		setPosPane.setAlignment(center, Pos.TOP_CENTER);
-		setPosPane.setMargin(center, new Insets(40, 10, 0, 10));
+		BorderPane.setAlignment(center, Pos.TOP_CENTER);
+		BorderPane.setMargin(center, new Insets(40, 10, 0, 10));
 
 		setPosPane.setBottom(this.homeButton);
-		setPosPane.setAlignment(this.homeButton, Pos.CENTER);
-		setPosPane.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
+		BorderPane.setAlignment(this.homeButton, Pos.CENTER);
+		BorderPane.setMargin(this.homeButton, new Insets(0, 5, 25, 0));
 
 		this.getChildren().addAll(view, setPosPane);
 	}
