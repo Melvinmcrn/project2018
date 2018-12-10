@@ -22,7 +22,7 @@ public class HowToScene extends StackPane {
 	private NavigationButton nextButton;
 	private NavigationButton backButton;
 
-	HowToScene() {
+	public HowToScene() {
 		howtoPlayer.setAutoPlay(true);
 		MediaView vidView = new MediaView(howtoPlayer);
 		howtoPlayer.setOnEndOfMedia(new Runnable() {
