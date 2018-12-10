@@ -35,8 +35,8 @@ public class SceneManager {
 			WelcomeScene.getVidPlayer().play();
 			if (CharacterSelectScene.getVidPlayer().getStatus().equals(Status.PLAYING))
 				CharacterSelectScene.getVidPlayer().pause();
-			if (GameScene.getMiscPlayer().getStatus().equals(Status.PLAYING))
-				GameScene.getMiscPlayer().stop();
+			if (GameScene.getGameMiscPlayer().getStatus().equals(Status.PLAYING))
+				GameScene.getGameMiscPlayer().stop();
 			if (HallOfFameScene.getVidPlayer().getStatus().equals(Status.PLAYING))
 				HallOfFameScene.getVidPlayer().pause();
 			primaryStage.setScene(welcomeScene);
