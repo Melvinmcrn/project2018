@@ -50,8 +50,6 @@ public class HallOfFameScene extends StackPane {
 		gc = logoCanvas.getGraphicsContext2D();
 		gc.drawImage(logo, 0, 0);
 
-		ScoreData.readFile();
-
 		// Create Table Header
 		nameHeader = new Label("Name");
 		nameHeader.setFont(HEADER_FONT);

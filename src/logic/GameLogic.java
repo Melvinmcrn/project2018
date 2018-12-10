@@ -39,10 +39,18 @@ public class GameLogic {
 		GameLogic.eatBarContainer = new ArrayList<ProgressBar>();
 		GameLogic.cookBarContainer = new ArrayList<ProgressBar>();
 		GameLogic.threadContainer = new ArrayList<Thread>();
-		this.initialize();
-	}
 
-	private void initialize() {
+		GameLogic.money = 0;
+		GameLogic.score = 100;
+		GameLogic.tipMoney = 1;
+		GameLogic.extraWaitTime = 1;
+		gameOver = false;
+
+		// Set wait are null
+		for (int i = 0; i < waitArea.length; i++) {
+			waitArea[i] = null;
+		}
+
 		// Set table and eat bar
 		for (int i = 2; i <= 6; i += 2) {
 			for (int j = 2; j <= 4; j += 2) {
@@ -76,6 +84,7 @@ public class GameLogic {
 			GameLogic.tipMoney = 1.5;
 			break;
 		}
+
 	}
 
 	private void generateCustomer() {
@@ -92,9 +101,7 @@ public class GameLogic {
 					isGenerateCustomerStart = false;
 					GameLogic.getThreadContainer().remove(generateCustomerThread);
 				} catch (InterruptedException e1) {
-					if (!GameLogic.gameOver) {
-						e1.printStackTrace();
-					}
+					
 				}
 			});
 			GameLogic.getThreadContainer().add(generateCustomerThread);

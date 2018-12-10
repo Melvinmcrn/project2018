@@ -1,5 +1,6 @@
 package application;
 
+import data.ScoreData;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -14,7 +15,7 @@ public class Main extends Application {
 	            Platform.exit();
 	            System.exit(0);
 	        });
-			
+			ScoreData.readFile();
 			SceneManager.initialize(primaryStage);
 			SceneManager.gotoScene("Welcome");
 			primaryStage.setResizable(false);
