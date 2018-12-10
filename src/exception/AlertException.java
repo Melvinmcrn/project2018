@@ -24,7 +24,6 @@ public abstract class AlertException extends Exception {
 				if (pane instanceof CharacterSelectScene)
 					((CharacterSelectScene) pane).getNameTextField().setEditable(true);
 				pane.getChildren().removeAll(alertBox, okBox);
-				System.out.println(pane.getChildren().toString());
 			}
 		};
 		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
