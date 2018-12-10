@@ -2,13 +2,11 @@ package scene;
 
 import button.NavigationButton;
 import data.ScoreData;
-import exception.NameLengthRestrictException;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -183,6 +181,7 @@ public class GameScene extends Pane {
 		gameOverPane.getChildren().add(money);
 
 		// Show Rank
+		@SuppressWarnings("unused")
 		ScoreData score = new ScoreData(GameLogic.getPlayerName(), GameLogic.getMoney());
 		Label rank = new Label(Integer.toString(ScoreData.getRank(GameLogic.getPlayerName(), GameLogic.getMoney())));
 		rank.setFont(gameOverFont);
