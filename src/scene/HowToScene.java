@@ -19,8 +19,8 @@ public class HowToScene extends StackPane {
 	private static MediaPlayer howtoPlayer = new MediaPlayer(howtoBG);
 	private ImageView howtoPic;
 	private int position;
-	NavigationButton nextButton;
-	NavigationButton backButton;
+	private NavigationButton nextButton;
+	private NavigationButton backButton;
 
 	HowToScene() {
 		howtoPlayer.setAutoPlay(true);
