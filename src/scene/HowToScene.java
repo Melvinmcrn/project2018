@@ -14,14 +14,14 @@ import javafx.scene.media.MediaView;
 import javafx.util.Duration;
 
 public class HowToScene extends StackPane {
-	
+
 	private static Media howtoBG = new Media(ClassLoader.getSystemResource("videos/HowToBG.mp4").toExternalForm());
 	private static MediaPlayer howtoPlayer = new MediaPlayer(howtoBG);
 	private ImageView howtoPic;
 	private int position;
 	NavigationButton nextButton;
 	NavigationButton backButton;
-	
+
 	HowToScene() {
 		howtoPlayer.setAutoPlay(true);
 		MediaView vidView = new MediaView(howtoPlayer);
@@ -32,7 +32,7 @@ public class HowToScene extends StackPane {
 				howtoPlayer.play();
 			}
 		});
-		
+
 		howtoPic = new ImageView(new Image(ClassLoader.getSystemResource("howto/HowtoPic1.png").toString()));
 		position = 1;
 		HBox navigationBtnBox = new HBox();
@@ -42,9 +42,12 @@ public class HowToScene extends StackPane {
 				this.setOnMouseClicked((MouseEvent event) -> {
 					position++;
 					mouseClicked.play();
-					if(position < 10) {
-						howtoPic.setImage(new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
-						System.out.println(name + " now " + position);
+					howtoPic.setImage(
+							new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
+					System.out.println(name + " now " + position);
+					backButton.setVisible(true);
+					if (position == 9) {
+						nextButton.setVisible(false);
 					}
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
@@ -56,21 +59,21 @@ public class HowToScene extends StackPane {
 				});
 			}
 		};
-		if(position == 9) {
-			nextButton.setVisible(false);
-		} else if (position < 9) {
-			nextButton.setVisible(true);
-		}
+
 		backButton = new NavigationButton("Back", "") {
 			@Override
 			protected void setEvent() {
 				this.setOnMouseClicked((MouseEvent event) -> {
 					position--;
 					mouseClicked.play();
-					if(position > 0) {
-						howtoPic.setImage(new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
-						System.out.println(name);
+					howtoPic.setImage(
+							new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
+					System.out.println(name);
+					nextButton.setVisible(true);
+					if (position == 1) {
+						backButton.setVisible(false);
 					}
+
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
 					mouseIn.play();
@@ -81,17 +84,14 @@ public class HowToScene extends StackPane {
 				});
 			}
 		};
-		if(position == 1) {
-			backButton.setVisible(false);
-		} else if (position > 1) {
-			backButton.setVisible(true);
-		}
 		NavigationButton homeButton = new NavigationButton("Home", "Welcome");
 		navigationBtnBox.setAlignment(Pos.BOTTOM_LEFT);
 		navigationBtnBox.setPadding(new Insets(0, 30, 20, 30));
 		navigationBtnBox.setSpacing(300);
 		navigationBtnBox.getChildren().addAll(backButton, homeButton, nextButton);
-		
+
+		backButton.setVisible(false);
+
 		this.getChildren().addAll(vidView, howtoPic, navigationBtnBox);
 	}
 }
