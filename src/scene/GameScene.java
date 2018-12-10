@@ -218,10 +218,6 @@ public class GameScene extends Pane {
 
 	}
 
-	public static MediaPlayer getMiscPlayer() {
-		return gameMisc;
-	}
-
 	public static Pane getMainGame() {
 		return mainGame;
 	}
