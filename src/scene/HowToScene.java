@@ -19,6 +19,8 @@ public class HowToScene extends StackPane {
 	private static MediaPlayer howtoPlayer = new MediaPlayer(howtoBG);
 	private ImageView howtoPic;
 	private int position;
+	NavigationButton nextButton;
+	NavigationButton backButton;
 	
 	HowToScene() {
 		howtoPlayer.setAutoPlay(true);
@@ -34,7 +36,7 @@ public class HowToScene extends StackPane {
 		howtoPic = new ImageView(new Image(ClassLoader.getSystemResource("howto/HowtoPic1.png").toString()));
 		position = 1;
 		HBox navigationBtnBox = new HBox();
-		NavigationButton nextButton = new NavigationButton("Next", "") {
+		nextButton = new NavigationButton("Next", "") {
 			@Override
 			protected void setEvent() {
 				this.setOnMouseClicked((MouseEvent event) -> {
@@ -42,12 +44,7 @@ public class HowToScene extends StackPane {
 					mouseClicked.play();
 					if(position < 10) {
 						howtoPic.setImage(new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
-						System.out.println(name);
-					}
-					else {
-						position = 0;
-						SceneManager.gotoScene("Welcome");
-						System.out.println("Welcome");
+						System.out.println(name + " now " + position);
 					}
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
@@ -59,7 +56,12 @@ public class HowToScene extends StackPane {
 				});
 			}
 		};
-		NavigationButton backButton = new NavigationButton("Back", "") {
+		if(position == 9) {
+			nextButton.setVisible(false);
+		} else if (position < 9) {
+			nextButton.setVisible(true);
+		}
+		backButton = new NavigationButton("Back", "") {
 			@Override
 			protected void setEvent() {
 				this.setOnMouseClicked((MouseEvent event) -> {
@@ -69,11 +71,6 @@ public class HowToScene extends StackPane {
 						howtoPic.setImage(new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
 						System.out.println(name);
 					}
-					else {
-						position = 0;
-						SceneManager.gotoScene("Welcome");
-						System.out.println("Welcome");
-					}
 				});
 				this.setOnMouseEntered((MouseEvent event) -> {
 					mouseIn.play();
@@ -84,6 +81,11 @@ public class HowToScene extends StackPane {
 				});
 			}
 		};
+		if(position == 1) {
+			backButton.setVisible(false);
+		} else if (position > 1) {
+			backButton.setVisible(true);
+		}
 		NavigationButton homeButton = new NavigationButton("Home", "Welcome");
 		navigationBtnBox.setAlignment(Pos.BOTTOM_LEFT);
 		navigationBtnBox.setPadding(new Insets(0, 30, 20, 30));
