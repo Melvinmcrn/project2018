@@ -12,7 +12,7 @@ public class SceneManager {
 	private static WelcomeScene welcome = new WelcomeScene();
 	private static HowToScene howTo;
 	private static HallOfFameScene highScore;
-	private static CharacterSelectScene characterSelecet;
+	private static CharacterSelectScene characterSelect;
 	private static GameScene game;
 
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
@@ -29,9 +29,9 @@ public class SceneManager {
 	public static void gotoScene(String scene) {
 
 		if (scene.equals("Welcome")) {
-			if (WelcomeScene.getMiscPlayer().getStatus().equals(Status.PAUSED)
-					|| WelcomeScene.getMiscPlayer().getStatus().equals(Status.STOPPED))
+			if (!WelcomeScene.getMiscPlayer().getStatus().equals(Status.PLAYING)) {
 				WelcomeScene.getMiscPlayer().play();
+			}
 			WelcomeScene.getVidPlayer().play();
 			if (CharacterSelectScene.getVidPlayer().getStatus().equals(Status.PLAYING))
 				CharacterSelectScene.getVidPlayer().pause();
@@ -44,8 +44,8 @@ public class SceneManager {
 		} else if (scene.equals("Play")) {
 			WelcomeScene.getVidPlayer().pause();
 			CharacterSelectScene.getVidPlayer().play();
-			characterSelecet = new CharacterSelectScene();
-			characterSelectScene = new Scene(characterSelecet, SCENE_WIDTH, SCENE_HEIGHT);
+			characterSelect = new CharacterSelectScene();
+			characterSelectScene = new Scene(characterSelect, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(characterSelectScene);
 			primaryStage.show();
 		} else if (scene.equals("How to play")) {

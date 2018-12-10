@@ -12,7 +12,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.InputEvent;
@@ -40,18 +39,19 @@ public class CharacterSelectScene extends StackPane {
 	private TextField nameTextField;
 
 	private final Image logo = new Image(ClassLoader.getSystemResource("images/CharSelectLogo.png").toString());
-	private final Image character1_notSelect = new Image(
-			ClassLoader.getSystemResource("images/Player1_notSelect.png").toString());
-	private final Image character1_select = new Image(
-			ClassLoader.getSystemResource("images/Player1_select.png").toString());
-	private final Image character1_mouseOn = new Image(
-			ClassLoader.getSystemResource("images/Player1_mouseOn.png").toString());
-	private final Image character2_notSelect = new Image(
-			ClassLoader.getSystemResource("images/Player2_notSelect.png").toString());
-	private final Image character2_select = new Image(
-			ClassLoader.getSystemResource("images/Player2_select.png").toString());
-	private final Image character2_mouseOn = new Image(
-			ClassLoader.getSystemResource("images/Player2_mouseOn.png").toString());
+
+	private final String character1_notSelectPath = ClassLoader.getSystemResource("images/Player1_notSelect.png")
+			.toString();
+	private final String character1_selectPath = ClassLoader.getSystemResource("images/Player1_select.png").toString();
+	private final String character1_mouseOnPath = ClassLoader.getSystemResource("images/Player1_mouseOn.png")
+			.toString();
+
+	private final String character2_notSelectPath = ClassLoader.getSystemResource("images/Player2_notSelect.png")
+			.toString();
+	private final String character2_selectPath = ClassLoader.getSystemResource("images/Player2_select.png").toString();
+	private final String character2_mouseOnPath = ClassLoader.getSystemResource("images/Player2_mouseOn.png")
+			.toString();
+
 	private final Image nameTextFieldBackground = new Image(
 			ClassLoader.getSystemResource("images/NameTextFieldBG.png").toString());
 
@@ -63,6 +63,10 @@ public class CharacterSelectScene extends StackPane {
 	private static Media charSelBG = new Media(
 			ClassLoader.getSystemResource("videos/CharacterSelectBG.mp4").toExternalForm());
 	private static MediaPlayer charSelPlayer = new MediaPlayer(charSelBG);
+
+	private NavigationButton okButton;
+	private NavigationButton nextButton;
+	private NavigationButton backButton;
 
 	public CharacterSelectScene() {
 
@@ -95,11 +99,11 @@ public class CharacterSelectScene extends StackPane {
 
 		Canvas character1 = new Canvas(250, 297);
 		gc = character1.getGraphicsContext2D();
-		gc.drawImage(character1_notSelect, 0, 0);
+		gc.drawImage(new Image(character1_notSelectPath), 0, 0);
 
 		Canvas character2 = new Canvas(250, 297);
 		gc = character2.getGraphicsContext2D();
-		gc.drawImage(character2_notSelect, 0, 0);
+		gc.drawImage(new Image(character2_notSelectPath), 0, 0);
 
 		setChar(1, character1, 2, character2);
 		setChar(2, character2, 1, character1);
@@ -134,71 +138,20 @@ public class CharacterSelectScene extends StackPane {
 				e.printStackTrace();
 			}
 		});
-		addTextLimiter(nameTextField, 12);
+		this.addTextLimiter(nameTextField, 12);
 
 		// Add text field background
 		Canvas textFieldBackground = new Canvas(340, 70);
 		gc = textFieldBackground.getGraphicsContext2D();
 		gc.drawImage(nameTextFieldBackground, 0, 0);
 
-		// OK Button
-		NavigationButton okButton = new NavigationButton("Ok", "");
-		EventHandler<InputEvent> handler = new EventHandler<InputEvent>() {
-			public void handle(InputEvent event) {
-				try {
-					if (nameTextField.getText().length() > 0) {
-						charName = nameTextField.getText().toUpperCase();
-						nameTextField.setEditable(false);
-						System.out.println("Player name is " + charName);
-						GameLogic.setPlayerName(charName);
-					} else {
-						throw new NameLengthRestrictException();
-					}
-				} catch (NameLengthRestrictException e) {
-					e.showAlert(charPane);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		};
-		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
+		// OK Button and Navigation Button
+		this.setNavigationButtonEvent();
 
 		// Name Set
 		nameField.getChildren().addAll(textFieldBackground, nameTextField);
 		nameSet.getChildren().addAll(nameField, okButton);
 		characterSet.getChildren().addAll(characterSelect, nameSet);
-
-		// Navigation Button
-		NavigationButton nextButton = new NavigationButton("Next", "Main Game") {
-			@Override
-			protected void setEvent() {
-				this.setOnMouseClicked((MouseEvent event) -> {
-					try {
-						if (getCharID() == 0)
-							throw new CharacterNotSelectedException();
-						if (getCharName() == null)
-							throw new NameNotEnteredException();
-						mouseClicked.play();
-						System.out.println(name);
-						SceneManager.gotoScene(goToScene);
-					} catch (CharacterNotSelectedException e) {
-						e.showAlert(charPane);
-					} catch (NameNotEnteredException e) {
-						e.showAlert(charPane);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				});
-				this.setOnMouseEntered((MouseEvent event) -> {
-					mouseIn.play();
-					drawButtonGlow();
-				});
-				this.setOnMouseExited((MouseEvent event) -> {
-					drawButton();
-				});
-			}
-		};
-		NavigationButton backButton = new NavigationButton("Back", "Welcome");
 
 		HBox navigationBtnBox = new HBox();
 		navigationBtnBox.getChildren().addAll(backButton, nextButton);
@@ -219,32 +172,12 @@ public class CharacterSelectScene extends StackPane {
 		BorderPane.setAlignment(navigationBtnBox, Pos.BOTTOM_CENTER);
 
 		this.getChildren().addAll(view, borderPane);
-	}
 
-	public static MediaPlayer getVidPlayer() {
-		return charSelPlayer;
-	}
-
-	public int getCharID() {
-		return charID;
-	}
-
-	public String getCharName() {
-		return charName;
-	}
-
-	public boolean isSelect1() {
-		return isSelect1;
-	}
-
-	public boolean isSelect2() {
-		return isSelect2;
 	}
 
 	private void setChar(int thisID, Canvas thisCanvas, int otherID, Canvas otherCanvas) {
 		thisCanvas.setOnMouseClicked((MouseEvent event) -> {
 			this.charID = thisID;
-			// this.drawCharacterSelected(thisID, thisCanvas);
 			this.drawCharacter(otherID, otherCanvas);
 			if (thisID == 1) {
 				this.isSelect1 = true;
@@ -275,9 +208,9 @@ public class CharacterSelectScene extends StackPane {
 		gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		if (ID == 1) {
-			gc.drawImage(character1_notSelect, 0, 0);
+			gc.drawImage(new Image(character1_notSelectPath), 0, 0);
 		} else if (ID == 2) {
-			gc.drawImage(character2_notSelect, 0, 0);
+			gc.drawImage(new Image(character2_notSelectPath), 0, 0);
 		}
 	}
 
@@ -285,25 +218,75 @@ public class CharacterSelectScene extends StackPane {
 		gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		if (ID == 1)
-			gc.drawImage(character1_select, 0, 0);
+			gc.drawImage(new Image(character1_selectPath), 0, 0);
 		if (ID == 2)
-			gc.drawImage(character2_select, 0, 0);
+			gc.drawImage(new Image(character2_selectPath), 0, 0);
 	}
 
 	private void drawCharacterMouseOn(int ID, Canvas canvas) {
 		gc = canvas.getGraphicsContext2D();
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		if (ID == 1)
-			gc.drawImage(character1_mouseOn, 0, 0);
+			gc.drawImage(new Image(character1_mouseOnPath), 0, 0);
 		if (ID == 2)
-			gc.drawImage(character2_mouseOn, 0, 0);
+			gc.drawImage(new Image(character2_mouseOnPath), 0, 0);
 	}
 
-	public TextField getNameTextField() {
-		return nameTextField;
+	private void setNavigationButtonEvent() {
+		okButton = new NavigationButton("Ok", "");
+		EventHandler<InputEvent> handler = new EventHandler<InputEvent>() {
+			public void handle(InputEvent event) {
+				try {
+					if (nameTextField.getText().length() > 0) {
+						charName = nameTextField.getText().toUpperCase();
+						nameTextField.setEditable(false);
+						System.out.println("Player name is " + charName);
+						GameLogic.setPlayerName(charName);
+					} else {
+						throw new NameLengthRestrictException();
+					}
+				} catch (NameLengthRestrictException e) {
+					e.showAlert(charPane);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		okButton.addEventHandler(MouseEvent.MOUSE_CLICKED, handler);
+
+		nextButton = new NavigationButton("Next", "Main Game") {
+			@Override
+			protected void setEvent() {
+				this.setOnMouseClicked((MouseEvent event) -> {
+					try {
+						if (getCharID() == 0)
+							throw new CharacterNotSelectedException();
+						if (getCharName() == null)
+							throw new NameNotEnteredException();
+						mouseClicked.play();
+						System.out.println(name);
+						SceneManager.gotoScene(goToScene);
+					} catch (CharacterNotSelectedException e) {
+						e.showAlert(charPane);
+					} catch (NameNotEnteredException e) {
+						e.showAlert(charPane);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				});
+				this.setOnMouseEntered((MouseEvent event) -> {
+					mouseIn.play();
+					drawButtonGlow();
+				});
+				this.setOnMouseExited((MouseEvent event) -> {
+					drawButton();
+				});
+			}
+		};
+		backButton = new NavigationButton("Back", "Welcome");
 	}
 
-	public void addTextLimiter(final TextField tf, final int maxLength) {
+	private void addTextLimiter(final TextField tf, final int maxLength) {
 		tf.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(final ObservableValue<? extends String> ov, final String oldValue,
@@ -322,4 +305,29 @@ public class CharacterSelectScene extends StackPane {
 			}
 		});
 	}
+
+	public TextField getNameTextField() {
+		return nameTextField;
+	}
+
+	public static MediaPlayer getVidPlayer() {
+		return charSelPlayer;
+	}
+
+	public int getCharID() {
+		return charID;
+	}
+
+	public String getCharName() {
+		return charName;
+	}
+
+	public boolean isSelect1() {
+		return isSelect1;
+	}
+
+	public boolean isSelect2() {
+		return isSelect2;
+	}
+
 }
