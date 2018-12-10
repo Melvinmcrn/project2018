@@ -116,7 +116,7 @@ public class CharacterSelectScene extends StackPane {
 		nameTextField.setFont(NAME_FONT);
 		nameTextField.setMaxWidth(300);
 		nameTextField.setAlignment(Pos.CENTER);
-		nameTextField.getStylesheets().add("assets/CharacterSelect.css");
+		nameTextField.getStylesheets().add("scene/CharacterSelect.css");
 
 		// Restrict Space
 		nameTextField.textProperty().addListener((observable, old_value, new_value) -> {
