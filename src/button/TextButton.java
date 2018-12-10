@@ -37,7 +37,7 @@ public class TextButton extends MyButton {
 	}
 
 	@Override
-	public void drawButton() {
+	protected void drawButton() {
 		gc.clearRect(0, 0, width, height);
 		gc.drawImage(buttonLogoNormal, 0, 0, width, height);
 
@@ -47,7 +47,7 @@ public class TextButton extends MyButton {
 	}
 
 	@Override
-	public void drawButtonGlow() {
+	protected void drawButtonGlow() {
 		gc.clearRect(0, 0, width, height);
 
 		gc.drawImage(buttonLogoGlow, 0, 0, width, height);

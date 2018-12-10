@@ -35,7 +35,7 @@ public abstract class MyButton extends Canvas {
 
 	protected abstract void setEvent();
 
-	public abstract void drawButton();
+	protected abstract void drawButton();
 
-	public abstract void drawButtonGlow();
+	protected abstract void drawButtonGlow();
 }
