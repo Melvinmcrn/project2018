@@ -44,7 +44,7 @@ public class HowToScene extends StackPane {
 					mouseClicked.play();
 					howtoPic.setImage(
 							new Image(ClassLoader.getSystemResource("howto/HowtoPic" + position + ".png").toString()));
-					System.out.println(name + " now " + position);
+					System.out.println(name);
 					backButton.setVisible(true);
 					if (position == 9) {
 						nextButton.setVisible(false);
