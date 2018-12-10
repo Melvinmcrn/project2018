@@ -11,12 +11,12 @@ public class SceneManager {
 	private static final int SCENE_HEIGHT = 600;
 	private static WelcomeScene welcome = new WelcomeScene();
 	private static HowToScene howTo;
-	private static HallOfFameScene highScore = new HallOfFameScene();
+	private static HallOfFameScene highScore;
 	private static CharacterSelectScene characterSelecet;
 	private static GameScene game;
 	private static Scene welcomeScene = new Scene(welcome, SCENE_WIDTH, SCENE_HEIGHT);
 	private static Scene howToScene;
-	private static Scene highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
+	private static Scene highScoreScene;
 	private static Scene characterSelectScene;
 	private static Scene gameScene;
 
@@ -64,6 +64,8 @@ public class SceneManager {
 			}
 			WelcomeScene.getVidPlayer().pause();
 			HallOfFameScene.getVidPlayer().play();
+			highScore = new HallOfFameScene();
+			highScoreScene = new Scene(highScore, SCENE_WIDTH, SCENE_HEIGHT);
 			primaryStage.setScene(highScoreScene);
 			primaryStage.show();
 		} else if (scene.equals("Main Game")) {
