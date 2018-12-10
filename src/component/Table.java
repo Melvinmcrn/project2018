@@ -59,7 +59,7 @@ public class Table extends ImageView {
 			this.setTableImage(action);
 			this.available = false;
 			System.out.println(this.customerName + " is seated");
-			
+
 			this.customer.setTableSeatedIn(thisTable);
 			this.customer.doCustomerFavor();
 			this.customer.setWaitBarLocation(this.x, this.y);
@@ -235,6 +235,7 @@ public class Table extends ImageView {
 		this.eatThread = new Thread(() -> {
 
 			try {
+				this.eatBar.setProgress(0);
 				this.eatBar.setVisible(true);
 				while (this.eatBar.getProgress() < 1) {
 					setProgress(eatTime);
@@ -271,7 +272,7 @@ public class Table extends ImageView {
 			this.setImage(new Image(this.getImagePath(action)));
 		}
 	}
-	
+
 	public void leave() {
 		this.customer = null;
 		this.customerName = "";

@@ -1,8 +1,6 @@
-/alert/
-/assets/
-/fonts/
-/howto/
 /images/
+/musics/
+/videos/
 /application/
 /button/
 /component/
@@ -12,4 +10,4 @@
 /logic/
 /scene/
 /sharedObject/
-/videos/
+/howto/
